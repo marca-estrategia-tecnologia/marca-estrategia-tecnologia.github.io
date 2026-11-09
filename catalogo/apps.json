@@ -11,8 +11,14 @@
       "versao": "9.3.3",
       "classificacao": "NECESSITA DE AJUSTES",
       "papel": "Produto principal de CRM",
-      "pendencias": ["Licença central assinada", "Remover painel admin local e senha padrão", "Unificar as 6 cópias em uma fonte"],
-      "fase_na_central": 3
+      "pendencias": [
+        "Licença central assinada",
+        "Remover painel admin local e senha padrão",
+        "Unificar as 6 cópias em uma fonte"
+      ],
+      "fase_na_central": 3,
+      "organizacao_github": "prospectarion",
+      "endereco_novo": "https://prospectarion.github.io/"
     },
     {
       "id": "pro-imobiliaria",
@@ -22,17 +28,31 @@
       "origem": "aap29/prospectarion/pro-imobiliaria",
       "classificacao": "PRONTO PARA TESTE (uso próprio) / NECESSITA DE REESTRUTURAÇÃO (venda)",
       "papel": "Edição imobiliária do Prospectarion",
-      "pendencias": ["Versão sem dados e nome do criador", "Cadastro de clientes e licença", "Conversa prévia com a Innovar"],
-      "fase_na_central": 3
+      "pendencias": [
+        "Versão sem dados e nome do criador",
+        "Cadastro de clientes e licença",
+        "Conversa prévia com a Innovar"
+      ],
+      "fase_na_central": 3,
+      "organizacao_github": "pro-imobiliaria",
+      "endereco_novo": "https://pro-imobiliaria.github.io/"
     },
     {
-      "id": "social-imob-pro",
-      "nome": "Social Imob 360 PRO",
+      "id": "social-imob-360",
+      "nome": "Social Imob 360",
       "linha": "Conteúdo e redes sociais",
-      "origem": "aap29/prospectarion/social-imob-pro",
+      "origem": "aap29/prospectarion/social-imob (versão pessoal, com painel do criador) e /social-imob-pro (versão de venda gerada por script)",
       "classificacao": "NECESSITA DE AJUSTES",
-      "pendencias": ["Trocar códigos de ativação locais pela licença central"],
-      "fase_na_central": 5
+      "pendencias": [
+        "Trocar códigos de ativação locais pela licença central"
+      ],
+      "fase_na_central": 5,
+      "organizacao_github": "social-imob-360",
+      "endereco_novo": "https://social-imob-360.github.io/",
+      "versoes": [
+        "Social Imob (pessoal)",
+        "Social Imob 360 PRO (venda)"
+      ]
     },
     {
       "id": "musicalis",
@@ -42,7 +62,9 @@
       "versao": "3.46",
       "classificacao": "EM OPERAÇÃO",
       "observacao": "Já possui licença assinada, planilha central e atualização automática. Não mover de endereço sem redirecionamento.",
-      "fase_na_central": 1
+      "fase_na_central": 1,
+      "organizacao_github": "musicalis",
+      "endereco_novo": "https://musicalis.github.io/"
     },
     {
       "id": "mesa-de-editais",
@@ -50,7 +72,9 @@
       "linha": "Editais culturais",
       "origem": "MESA-DE-EDITAIS-BR/mesa-de-editais-br.github.io",
       "classificacao": "EM DESENVOLVIMENTO (pré-lançamento)",
-      "fase_na_central": 1
+      "fase_na_central": 1,
+      "organizacao_github": "MESA-DE-EDITAIS-BR",
+      "endereco_novo": "https://mesa-de-editais-br.github.io/"
     },
     {
       "id": "imoveis-investimentos-rs",
@@ -59,12 +83,35 @@
       "origem": "aap29/prospectarion/imoveis",
       "classificacao": "NECESSITA DE AJUSTES",
       "observacao": "Portfólio para venda de sites e microsites.",
-      "fase_na_central": 1
+      "fase_na_central": 1,
+      "organizacao_github": "imoveis-e-investimentos-rs",
+      "endereco_novo": "https://imoveis-e-investimentos-rs.github.io/"
     }
   ],
   "arquivados": [
-    {"nome": "Prospecta", "motivo": "Exige servidor e API possivelmente paga; funcionalidades migram para o Prospectarion"},
-    {"nome": "CorretoR PRO", "motivo": "Duplica o PRO IMOBILIÁRIA; login padrão no código; avaliação por IA é simulada"}
+    {
+      "nome": "Prospecta",
+      "motivo": "Exige servidor e API possivelmente paga; funcionalidades migram para o Prospectarion"
+    },
+    {
+      "nome": "CorretoR PRO",
+      "motivo": "Duplica o PRO IMOBILIÁRIA; login padrão no código; avaliação por IA é simulada"
+    }
   ],
-  "nao_encontrados": ["Cliente Direto 360"]
+  "nao_encontrados": [
+    "Cliente Direto 360"
+  ],
+  "regra_enderecos": "Um repositório e uma organização GitHub por app, sem aap29 no endereço. Nome ocupado: acrescentar -br. Endereço antigo vira redirecionamento com exportação de dados; nunca é apagado.",
+  "central": {
+    "organizacao_github": "marca-estrategia-tecnologia",
+    "endereco": "https://marca-estrategia-tecnologia.github.io/"
+  },
+  "ordem_de_migracao": [
+    "marca-estrategia-tecnologia",
+    "pro-imobiliaria",
+    "social-imob-360",
+    "imoveis-investimentos-rs",
+    "prospectarion",
+    "musicalis"
+  ]
 }
