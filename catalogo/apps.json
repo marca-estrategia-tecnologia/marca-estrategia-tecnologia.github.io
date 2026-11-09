@@ -1,0 +1,70 @@
+{
+  "atualizado_em": "2026-11-09",
+  "observacao": "Classificação a partir da auditoria do código. Nenhum app está liberado para venda pela Central até a Fase 3.",
+  "apps": [
+    {
+      "id": "prospectarion",
+      "nome": "Prospectarion",
+      "linha": "CRM e prospecção",
+      "publico": "Corretores, consultores e pequenas empresas",
+      "origem": "aap29/prospectarion (raiz)",
+      "versao": "9.3.3",
+      "classificacao": "NECESSITA DE AJUSTES",
+      "papel": "Produto principal de CRM",
+      "pendencias": ["Licença central assinada", "Remover painel admin local e senha padrão", "Unificar as 6 cópias em uma fonte"],
+      "fase_na_central": 3
+    },
+    {
+      "id": "pro-imobiliaria",
+      "nome": "PRO IMOBILIÁRIA",
+      "linha": "CRM imobiliário",
+      "publico": "Corretores e imobiliárias",
+      "origem": "aap29/prospectarion/pro-imobiliaria",
+      "classificacao": "PRONTO PARA TESTE (uso próprio) / NECESSITA DE REESTRUTURAÇÃO (venda)",
+      "papel": "Edição imobiliária do Prospectarion",
+      "pendencias": ["Versão sem dados e nome do criador", "Cadastro de clientes e licença", "Conversa prévia com a Innovar"],
+      "fase_na_central": 3
+    },
+    {
+      "id": "social-imob-pro",
+      "nome": "Social Imob 360 PRO",
+      "linha": "Conteúdo e redes sociais",
+      "origem": "aap29/prospectarion/social-imob-pro",
+      "classificacao": "NECESSITA DE AJUSTES",
+      "pendencias": ["Trocar códigos de ativação locais pela licença central"],
+      "fase_na_central": 5
+    },
+    {
+      "id": "musicalis",
+      "nome": "Musicalis",
+      "linha": "Educação musical",
+      "origem": "aap29/prospectarion/musicalis",
+      "versao": "3.46",
+      "classificacao": "EM OPERAÇÃO",
+      "observacao": "Já possui licença assinada, planilha central e atualização automática. Não mover de endereço sem redirecionamento.",
+      "fase_na_central": 1
+    },
+    {
+      "id": "mesa-de-editais",
+      "nome": "Mesa de Editais",
+      "linha": "Editais culturais",
+      "origem": "MESA-DE-EDITAIS-BR/mesa-de-editais-br.github.io",
+      "classificacao": "EM DESENVOLVIMENTO (pré-lançamento)",
+      "fase_na_central": 1
+    },
+    {
+      "id": "imoveis-investimentos-rs",
+      "nome": "Imóveis e Investimentos RS",
+      "linha": "Case de serviço de site",
+      "origem": "aap29/prospectarion/imoveis",
+      "classificacao": "NECESSITA DE AJUSTES",
+      "observacao": "Portfólio para venda de sites e microsites.",
+      "fase_na_central": 1
+    }
+  ],
+  "arquivados": [
+    {"nome": "Prospecta", "motivo": "Exige servidor e API possivelmente paga; funcionalidades migram para o Prospectarion"},
+    {"nome": "CorretoR PRO", "motivo": "Duplica o PRO IMOBILIÁRIA; login padrão no código; avaliação por IA é simulada"}
+  ],
+  "nao_encontrados": ["Cliente Direto 360"]
+}
