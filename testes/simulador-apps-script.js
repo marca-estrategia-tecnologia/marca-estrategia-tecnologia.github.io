@@ -33,7 +33,8 @@ function criarSimulador(props){
       getSheetByName(n){ return abas[n] || null; },
       insertSheet(n){ return (abas[n] = new Sheet(n)); }
     }; } },
-    PropertiesService:{ getScriptProperties(){ return { getProperty(k){ return props[k] ?? null; } }; } },
+    PropertiesService:{ getScriptProperties(){ return { getProperty(k){ return props[k] ?? null; }, setProperty(k, v){ props[k] = v; } }; } },
+    Session:{ getEffectiveUser(){ return { getEmail(){ return "criador@teste.com"; } }; } },
     Utilities:{
       DigestAlgorithm:{SHA_256:"sha256"}, Charset:{UTF_8:"utf8"},
       getUuid(){ return crypto.randomUUID(); },

@@ -9,11 +9,9 @@
  * COMO ATIVAR (uma vez) — passo a passo completo em docs/PUBLICAR.md
  * 1. Crie a planilha "Central • Contas e Licenças" no Google Drive.
  * 2. Extensões → Apps Script → apague o conteúdo → cole este arquivo → Salvar.
- * 3. Engrenagem (Configurações do projeto) → Propriedades do script → adicionar:
- *      CRIADOR_EMAILS = seu e-mail (vários separados por vírgula)
- *      PIMENTA        = texto longo e aleatório (40+ letras e números). Nunca compartilhe.
- *      NOME_REMETENTE = Marca & Estratégia Tecnologia   (opcional)
- * 4. Rode a função "instalar" uma vez (botão Executar) e autorize o acesso ao e-mail.
+ * 3. Rode a função "instalar" uma vez (botão Executar) e autorize o acesso ao e-mail.
+ *    Ela cria as abas, gera a PIMENTA (chave secreta) e define você como criador.
+ * 4. Opcional: Propriedades do script → CRIADOR_EMAILS = outros e-mails do criador, separados por vírgula.
  * 5. Implantar → Nova implantação → App da Web → Executar como: Eu → Acesso: Qualquer pessoa.
  * 6. Copie o endereço que termina em /exec e cole em CENTRAL_URL nos apps.
  *
@@ -532,6 +530,13 @@ function contaPublica_(c){
 /* ============================== PLANILHA ============================== */
 
 function instalar(){
+  var props = PropertiesService.getScriptProperties();
+  if(String(props.getProperty("PIMENTA") || "").length < 20) // chave secreta gerada aqui: ninguém precisa digitar
+    props.setProperty("PIMENTA", Utilities.getUuid() + Utilities.getUuid() + Utilities.getUuid());
+  if(!props.getProperty("CRIADOR_EMAILS")){
+    var eu = String(Session.getEffectiveUser().getEmail() || "").toLowerCase();
+    if(eu) props.setProperty("CRIADOR_EMAILS", eu);
+  }
   Object.keys(ABAS).forEach(function(n){ aba_(n); });
   var apps = aba_("Apps");
   if(apps.getLastRow() < 2) APPS_PADRAO.forEach(function(r){ apps.appendRow(r); });

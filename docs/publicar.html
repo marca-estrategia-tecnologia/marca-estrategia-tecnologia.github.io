@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roteiro de publicação — Central e apps</title>
+<style>body{margin:0;background:#F5F7FB;color:#1A2433;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:32px 20px 60px;background:#fff}h1{color:#0A1628;font-family:Georgia,serif;font-size:30px;line-height:1.2}
+h2{color:#1B3A6B;font-size:21px;margin-top:34px;border-bottom:2px solid #E8B84B;padding-bottom:4px}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0;display:block;overflow-x:auto}th,td{border:1px solid #DCE3EE;padding:8px;text-align:left;vertical-align:top}th{background:#EEF2F8;color:#1B3A6B}
+code{background:#EEF2F8;padding:1px 5px;border-radius:4px;font-size:.92em;word-break:break-word}pre{background:#0A1628;color:#E6ECF5;padding:14px;border-radius:8px;overflow:auto}pre code{background:none;color:inherit}
+a{color:#1B3A6B;word-break:break-all}li{margin:4px 0}</style></head><body><main><h1>Roteiro de publicação — Central e apps em repositórios próprios</h1>
+<p>Tudo já está construído e testado. Estes passos dependem da sua conta (Google e GitHub).
+Faça na ordem. Cada passo leva poucos minutos.</p>
+<h2>Passo 1 — Criar as organizações e repositórios no GitHub (você)</h2>
+<p>Para cada linha: <strong>+</strong> → <strong>New organization</strong> → plano <strong>Free</strong> → nome da organização.
+Dentro dela: <strong>New repository</strong> → nome do repositório → <strong>Public</strong> → <strong>sem README</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Organização</th>
+<th>Repositório</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>marca-estrategia-tecnologia</code></td>
+<td><code>marca-estrategia-tecnologia.github.io</code></td>
+</tr>
+<tr>
+<td><code>prospectarion</code></td>
+<td><code>prospectarion.github.io</code></td>
+</tr>
+<tr>
+<td><code>pro-imobiliaria</code></td>
+<td><code>pro-imobiliaria.github.io</code></td>
+</tr>
+<tr>
+<td><code>social-imob-360</code></td>
+<td><code>social-imob-360.github.io</code></td>
+</tr>
+<tr>
+<td><code>musicalis</code></td>
+<td><code>musicalis.github.io</code></td>
+</tr>
+<tr>
+<td><code>imoveis-e-investimentos-rs</code></td>
+<td><code>imoveis-e-investimentos-rs.github.io</code></td>
+</tr>
+</tbody>
+</table>
+<p>Nome ocupado? Use o mesmo com <code>-br</code> no final e avise o Claude (os endereços são trocados automaticamente).</p>
+<h2>Passo 2 — Ligar o servidor da Central (você, uma vez)</h2>
+<ol>
+<li>No Google Drive, crie a planilha <strong>Central • Contas e Licenças</strong> (com a conta que vai enviar os e-mails).</li>
+<li><strong>Extensões → Apps Script</strong> → apague o conteúdo → cole o arquivo <code>servidor/central.gs</code> → <strong>Salvar</strong>.</li>
+<li>Engrenagem <strong>Configurações do projeto</strong> → <strong>Propriedades do script</strong> → adicionar:</li>
+<li><code>CRIADOR_EMAILS</code> = seu e-mail de login (o mesmo que você vai usar na Central)</li>
+<li><code>PIMENTA</code> = um texto longo e aleatório, 40+ letras e números. Guarde em lugar seguro e nunca compartilhe.</li>
+<li>No topo, escolha a função <strong>instalar</strong> → <strong>Executar</strong> → autorize (Google pede permissão para planilha e e-mail).</li>
+<li><strong>Implantar → Nova implantação</strong> → tipo <strong>App da Web</strong> → Executar como: <strong>Eu</strong> → Quem pode acessar: <strong>Qualquer pessoa</strong> → <strong>Implantar</strong>.</li>
+<li>Copie o endereço que termina em <strong>/exec</strong> e mande para o Claude.</li>
+<li>Opcional: <strong>Acionadores</strong> → adicionar → função <code>limparExpirados</code> → diário.</li>
+</ol>
+<p>Limite gratuito do Google para e-mails: confira em https://developers.google.com/apps-script/guides/services/quotas (conta Gmail comum tem cota diária menor que Google Workspace).</p>
+<h2>Passo 3 — Publicar (Claude)</h2>
+<p>Com o endereço /exec e os repositórios criados, o Claude:
+1. grava o endereço em <code>config/central.json</code>, na Mesa (<code>CONFIG.CENTRAL_URL</code>) e remonta os apps;
+2. envia cada repositório e liga o GitHub Pages;
+3. roda os testes de novo.</p>
+<p>Para você ligar o GitHub Pages em cada repositório (se o Claude não tiver permissão): <strong>Settings → Pages → Deploy from a branch → main → / (root) → Save</strong>.</p>
+<h2>Passo 4 — Primeiro acesso (você)</h2>
+<ol>
+<li>Abra <code>https://marca-estrategia-tecnologia.github.io/</code> → <strong>Entrar → Criar conta</strong> com o e-mail de <code>CRIADOR_EMAILS</code>.</li>
+<li>Confirme o código do e-mail. O <strong>Painel do Criador</strong> aparece logo abaixo de Meus apps.</li>
+<li>Na aba <strong>Apps</strong> da planilha você ajusta nome, descrição, link de venda, status inicial (<code>teste</code>, <code>analise</code>, <code>lista</code>, <code>ativo</code>) e dias de teste de cada app.</li>
+</ol>
+<h2>Passo 5 — Mesa de Editais (você aprova)</h2>
+<p>O ramo <code>correcao-inscricao-central</code> do repositório da Mesa tem a correção da inscrição.
+Só junte ao <code>main</code> <strong>depois</strong> do Passo 3 (o Claude coloca o endereço da Central nele):
+https://github.com/MESA-DE-EDITAIS-BR/mesa-de-editais-br.github.io/compare/main...correcao-inscricao-central</p>
+<h2>Passo 6 — Aviso de mudança nos endereços antigos (você aprova)</h2>
+<p>O ramo <code>aviso-mudanca-endereco</code> do repositório <code>aap29/prospectarion</code> coloca a faixa "Este app mudou de endereço"
+(com "Levar meus dados") e redireciona páginas de venda e o site de imóveis.
+Só junte ao <code>main</code> <strong>depois</strong> que os apps novos estiverem no ar:
+https://github.com/aap29/prospectarion/compare/main...aviso-mudanca-endereco</p>
+<p>Nada é apagado do repositório antigo. A sua cópia de criador (<code>index.html</code>) não foi alterada.</p>
+<h2>O que muda para cada usuário</h2>
+<table>
+<thead>
+<tr>
+<th>App</th>
+<th>Usuário atual</th>
+<th>O que ele faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PRO IMOBILIÁRIA</td>
+<td>Você</td>
+<td>No endereço antigo: Levar meus dados. No novo: criar conta → Minha conta → Cópia de segurança → Restaurar.</td>
+</tr>
+<tr>
+<td>Prospectarion</td>
+<td>Clientes do app antigo</td>
+<td>Mesmo caminho do PRO IMOBILIÁRIA. Libere cada cliente no Painel do Criador.</td>
+</tr>
+<tr>
+<td>Social Imob 360</td>
+<td>Você e clientes</td>
+<td>Backup pelo próprio app (menu de backup) e importar no endereço novo.</td>
+</tr>
+<tr>
+<td>Musicalis</td>
+<td>2 alunos no plano gratuito</td>
+<td>Abrem o novo endereço e entram de novo. A licença própria do Musicalis continua.</td>
+</tr>
+<tr>
+<td>Mesa de Editais</td>
+<td>Lista de lançamento</td>
+<td>Nada: o endereço não muda.</td>
+</tr>
+</tbody>
+</table>
+<h2>Testes automáticos</h2>
+<pre><code>node testes/teste-servidor.js                    # 33 verificações do servidor
+python3 testes/teste-navegador.py                # portal, login, esqueci a senha, painel
+python3 testes/teste-mesa.py &lt;pasta da mesa&gt;     # inscrição da Mesa
+python3 testes/teste-apps.py &lt;pasta do prospectarion antigo&gt;   # apps separados
+</code></pre></main></body></html>
