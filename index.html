@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marca &amp; Estratégia Tecnologia — Assessoria Empresarial</title>
+<meta name="description" content="Apps comerciais, sites, páginas de vendas, conexão de redes sociais e WhatsApp, com suporte e manutenção. Vale dos Sinos e Grande Porto Alegre.">
+<meta name="theme-color" content="#0A1628">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{--noite:#0A1628;--royal:#1B3A6B;--ouro:#C9960C;--ouro2:#E8B84B;--papel:#F5F7FB;--texto:#1A2433;--borda:#DCE3EE}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--texto);background:#fff}
+a{color:var(--royal)}img{max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif;line-height:1.15;color:var(--noite);margin:0 0 12px}
+h1{font-size:clamp(34px,5vw,56px);color:#fff;font-weight:900}h2{font-size:clamp(28px,3.4vw,40px)}h3{font-size:21px}
+.dourado{background:linear-gradient(90deg,var(--ouro),var(--ouro2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.rotulo{font:700 12px/1 Inter,sans-serif;letter-spacing:1.6px;text-transform:uppercase;color:var(--ouro);margin:0 0 12px}
+.btn{display:inline-block;font:700 15px Inter,sans-serif;border-radius:10px;padding:13px 20px;text-decoration:none;border:0;cursor:pointer}
+.btn-ouro{background:linear-gradient(90deg,var(--ouro),var(--ouro2));color:var(--noite)}.btn-claro{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.35)}
+.btn-escuro{background:var(--noite);color:#fff}.btn-linha{background:#fff;color:var(--royal);border:1.5px solid var(--borda)}
+header{position:sticky;top:0;z-index:50;background:rgba(10,22,40,.97);backdrop-filter:blur(6px)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px}
+.logo{font:900 17px "Playfair Display",serif;color:#fff;text-decoration:none;line-height:1.1}.logo small{display:block;font:600 10px Inter,sans-serif;letter-spacing:1.4px;color:var(--ouro2);text-transform:uppercase}
+nav{display:flex;gap:18px;align-items:center}nav a{color:#D6DEEA;text-decoration:none;font-weight:600;font-size:14px}nav a:hover{color:#fff}
+#nav-conta{padding:9px 14px;font-size:14px}
+@media(max-width:760px){nav a.n-opc{display:none}}
+.hero{background:radial-gradient(1200px 500px at 80% -10%,#1B3A6B 0,transparent 60%),var(--noite);color:#D6DEEA;padding:84px 0 92px}
+.hero p.lead{font-size:19px;max-width:640px;margin:16px 0 28px}.hero .acoes{display:flex;gap:12px;flex-wrap:wrap}
+.selos{display:flex;gap:22px;flex-wrap:wrap;margin-top:34px;font-size:14px;color:#AFC0D6}.selos b{color:#fff}
+section{padding:80px 0}.cinza{background:var(--papel)}
+.grade{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.cartao{background:#fff;border:1px solid var(--borda);border-radius:16px;padding:24px;display:flex;flex-direction:column}
+.cartao p{margin:0 0 16px;color:#46546A;flex:1}.cartao .tag{align-self:flex-start;font:700 11px Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:#EEF2F8;color:var(--royal);margin-bottom:12px}
+.cartao .tag.ok{background:#E8F5EC;color:#1E5B32}.cartao .tag.em{background:#FFF6E0;color:#6B4E00}.cartao .tag.no{background:#FDECEC;color:#8A1C1C}
+.cartao .acoes{display:flex;gap:8px;flex-wrap:wrap}.cartao .btn{padding:10px 14px;font-size:14px}
+.passos{counter-reset:p;display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.passo{padding:22px;border-left:3px solid var(--ouro);background:#fff;border-radius:0 12px 12px 0}
+.passo::before{counter-increment:p;content:"0" counter(p);font:900 30px "Playfair Display",serif;color:var(--ouro);display:block}
+.servico ul{margin:0 0 16px;padding-left:18px;color:#46546A}
+#meus-apps,#painel{display:none}
+.tab{width:100%;border-collapse:collapse;font-size:14px;background:#fff}.tab th,.tab td{border-bottom:1px solid var(--borda);padding:10px 8px;text-align:left;vertical-align:top}
+.tab th{background:#EEF2F8;color:var(--royal);font-weight:700;position:sticky;top:64px}
+.tab select,.tab input{font:inherit;padding:6px;border:1px solid var(--borda);border-radius:8px;max-width:150px}
+.rolagem{overflow:auto;border:1px solid var(--borda);border-radius:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:0 0 24px}
+.kpi{background:#fff;border:1px solid var(--borda);border-radius:12px;padding:16px}.kpi b{display:block;font:900 30px "Playfair Display",serif;color:var(--noite)}
+.aviso{padding:12px 14px;border-radius:10px;background:#FFF6E0;color:#6B4E00;margin:0 0 18px}
+.lic{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:3px 0}
+.chamado{background:#fff;border:1px solid var(--borda);border-radius:12px;padding:14px;margin-bottom:12px}.chamado textarea{width:100%;font:inherit;border:1px solid var(--borda);border-radius:8px;padding:8px;margin:8px 0}
+@media(max-width:700px){.tab thead{display:none}.tab tr,.tab td{display:block;width:100%}.tab tr{border-bottom:2px solid var(--borda)}.tab td{border:0}}
+footer{background:var(--noite);color:#AFC0D6;padding:40px 0;font-size:14px}footer a{color:#E8B84B}
+footer .wrap{display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="logo" href="#topo">Marca &amp; Estratégia<small>Tecnologia • Assessoria Empresarial</small></a>
+  <nav aria-label="Principal"><a class="n-opc" href="#apps">Apps</a><a class="n-opc" href="#servicos">Serviços</a><a class="n-opc" href="#como">Como funciona</a>
+  <button class="btn btn-ouro" id="nav-conta" type="button">Entrar</button></nav>
+</div></header>
+
+<main id="topo">
+<section class="hero"><div class="wrap">
+  <p class="rotulo">Estratégia para vender • Tecnologia para crescer</p>
+  <h1>Ferramentas comerciais <span class="dourado">prontas para usar</span>, com quem entende de vendas.</h1>
+  <p class="lead">Apps de prospecção, atendimento e conteúdo, sites e páginas de vendas, conexão com redes sociais e WhatsApp. Implantação, suporte e manutenção em um só lugar.</p>
+  <div class="acoes"><a class="btn btn-ouro" href="#apps">Conhecer os apps</a><a class="btn btn-claro" href="#servicos">Contratar um serviço</a></div>
+  <div class="selos"><span><b>Uma conta</b> para todos os apps</span><span><b>Suporte</b> pela própria plataforma</span><span><b>Vale dos Sinos</b> e Grande Porto Alegre</span></div>
+</div></section>
+
+<section id="meus-apps" class="cinza" aria-labelledby="t-meus"><div class="wrap">
+  <p class="rotulo">Área do cliente</p><h2 id="t-meus">Meus apps</h2>
+  <p id="ola"></p>
+  <div class="grade" id="grade-meus"></div>
+  <p style="margin-top:22px"><button class="btn btn-linha" id="btn-suporte" type="button">Pedir suporte</button> <button class="btn btn-linha" id="btn-sair" type="button">Sair</button></p>
+</div></section>
+
+<section id="painel" aria-labelledby="t-painel"><div class="wrap">
+  <p class="rotulo">Somente o criador</p><h2 id="t-painel">Painel do Criador</h2>
+  <div class="kpis" id="kpis"></div>
+  <h3>Contas e acessos</h3>
+  <p>Mude o status e o vencimento de cada app e clique em Salvar. Marque "avisar" para mandar o link do app por e-mail ao cliente.</p>
+  <div class="rolagem"><table class="tab" id="tab-contas"><thead><tr><th>Cliente</th><th>Conta</th><th>Apps e licenças</th></tr></thead><tbody></tbody></table></div>
+  <h3 style="margin-top:34px">Liberar um app para um e-mail</h3>
+  <form id="f-liberar" class="lic"><input id="l-email" type="email" placeholder="e-mail do cliente" required><select id="l-app"></select>
+    <select id="l-status"><option value="ativo">ativo</option><option value="teste">teste</option><option value="analise">análise</option><option value="lista">lista</option><option value="bloqueado">bloqueado</option></select>
+    <input id="l-plano" placeholder="plano (ex.: mensal)"><input id="l-venc" type="date"><label><input id="l-avisar" type="checkbox" checked> avisar</label><button class="btn btn-escuro" type="submit">Salvar</button></form>
+  <h3 style="margin-top:34px">Chamados</h3><div id="chamados"></div>
+</div></section>
+
+<section id="apps" aria-labelledby="t-apps"><div class="wrap">
+  <p class="rotulo">Catálogo</p><h2 id="t-apps">Apps da Marca &amp; Estratégia</h2>
+  <p>Funcionam no celular e no computador, instaláveis como aplicativo. Uma conta só dá acesso a todos.</p>
+  <div class="grade" id="grade-apps"></div>
+</div></section>
+
+<section id="servicos" class="cinza" aria-labelledby="t-serv"><div class="wrap">
+  <p class="rotulo">Serviços</p><h2 id="t-serv">Construção, conexão e manutenção</h2>
+  <div class="grade">
+    <div class="cartao servico"><h3>Sites e microsites</h3><ul><li>Site institucional ou comercial</li><li>Microsites por cidade, produto ou campanha</li><li>Google Meu Negócio</li></ul><button class="btn btn-escuro pedir" data-servico="Sites" type="button">Pedir orçamento</button></div>
+    <div class="cartao servico"><h3>Páginas de vendas</h3><ul><li>Landing pages com captação de contatos</li><li>Formulário ligado a planilha e e-mail</li><li>Página de produto ou serviço</li></ul><button class="btn btn-escuro pedir" data-servico="Páginas de vendas" type="button">Pedir orçamento</button></div>
+    <div class="cartao servico"><h3>Redes sociais e WhatsApp</h3><ul><li>Conexão de Instagram, Facebook e WhatsApp Business</li><li>Botões e links de atendimento</li><li>Organização de perfis e canais</li></ul><button class="btn btn-escuro pedir" data-servico="Redes e WhatsApp" type="button">Pedir orçamento</button></div>
+    <div class="cartao servico"><h3>Apps: implantação e manutenção</h3><ul><li>Implantação e treinamento</li><li>Melhorias e ajustes sob medida</li><li>Suporte pela plataforma</li></ul><button class="btn btn-escuro pedir" data-servico="Apps" type="button">Pedir orçamento</button></div>
+  </div>
+</div></section>
+
+<section id="como" aria-labelledby="t-como"><div class="wrap">
+  <p class="rotulo">Como funciona</p><h2 id="t-como">Do cadastro ao app funcionando</h2>
+  <div class="passos">
+    <div class="passo"><h3>Crie sua conta</h3><p>Nome, e-mail e senha. Você confirma o e-mail com um código.</p></div>
+    <div class="passo"><h3>Escolha o app</h3><p>Alguns têm teste grátis; outros são liberados após a contratação.</p></div>
+    <div class="passo"><h3>Receba o link</h3><p>Quando o acesso é liberado, o link do app chega no seu e-mail e aparece em Meus apps.</p></div>
+    <div class="passo"><h3>Conte com suporte</h3><p>Peça ajuda pela própria plataforma e acompanhe a resposta por e-mail.</p></div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><strong style="color:#fff">Marca &amp; Estratégia Tecnologia</strong><br>Assessoria Empresarial • Vale dos Sinos e Grande Porto Alegre / RS</div>
+  <div><a href="termos.html">Termos de Uso</a> • <a href="privacidade.html">Política de Privacidade</a><br>Contato: <a href="mailto:consultoranderson.invest@gmail.com">consultoranderson.invest@gmail.com</a></div>
+</div></footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+"use strict";
+/* Catálogo de reserva (vale enquanto a Central não responde). A versão oficial vem da aba Apps da planilha. */
+var CATALOGO = [
+  {app:"prospectarion", nome:"Prospectarion", descricao:"CRM e prospecção para corretores, consultores e pequenas empresas.", url:"https://prospectarion.github.io/", diasTeste:7},
+  {app:"pro-imobiliaria", nome:"PRO IMOBILIÁRIA", descricao:"Prospecção, agenda e atendimento para corretores e imobiliárias.", url:"https://pro-imobiliaria.github.io/", diasTeste:0},
+  {app:"social-imob-360", nome:"Social Imob 360", descricao:"Planejamento e produção de conteúdo para redes sociais.", url:"https://social-imob-360.github.io/", diasTeste:7},
+  {app:"musicalis", nome:"Musicalis", descricao:"Método musical no celular, com acompanhamento do aluno.", url:"https://musicalis.github.io/", venda:"https://musicalis.github.io/pagar/", diasTeste:0},
+  {app:"mesa-de-editais", nome:"Mesa de Editais", descricao:"Radar de editais culturais e apoio à escrita de projetos.", url:"https://mesa-de-editais-br.github.io/", diasTeste:0}
+];
+var $ = function(id){ return document.getElementById(id); };
+var C = window.CentralAcesso;
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function dataBR(iso){ return iso ? new Date(iso).toLocaleDateString("pt-BR") : ""; }
+var ROT = {ativo:["Liberado","ok"], teste:["Em teste","ok"], analise:["Em análise","em"], lista:["Lista de lançamento","em"], vencido:["Vencido","no"], bloqueado:["Suspenso","no"], sem_licenca:["Sem acesso","em"]};
+
+function cartaoCatalogo(a){
+  var tag = a.diasTeste ? '<span class="tag ok">Teste grátis de ' + a.diasTeste + ' dias</span>' : '<span class="tag">Acesso por liberação</span>';
+  return '<div class="cartao">' + tag + '<h3>' + esc(a.nome) + '</h3><p>' + esc(a.descricao) + '</p><div class="acoes">' +
+    '<button class="btn btn-escuro quero" data-app="' + esc(a.app) + '" type="button">' + (a.diasTeste ? "Testar grátis" : "Quero acesso") + '</button>' +
+    (a.venda ? '<a class="btn btn-linha" href="' + esc(a.venda) + '" target="_blank" rel="noopener">Ver planos</a>' : '') + '</div></div>';
+}
+function desenharCatalogo(lista){
+  CATALOGO = lista; $("grade-apps").innerHTML = lista.map(cartaoCatalogo).join("");
+  $("l-app").innerHTML = lista.map(function(a){ return '<option value="' + esc(a.app) + '">' + esc(a.nome) + '</option>'; }).join("");
+}
+desenharCatalogo(CATALOGO);
+if(C && C.configurado) C.api({acao:"catalogo"}).then(function(r){ if(r.ok && r.apps.length) desenharCatalogo(r.apps); }).catch(function(){});
+
+document.addEventListener("click", function(e){
+  var q = e.target.closest(".quero"), p = e.target.closest(".pedir");
+  if(q) pedir(q.getAttribute("data-app"));
+  if(p) servico(p.getAttribute("data-servico"));
+});
+function exigirConta(depois){
+  if(!C || !C.configurado){ alert("A área de clientes está sendo ativada. Escreva para consultoranderson.invest@gmail.com."); return false; }
+  if(!C.token()){ window._depois = depois; C.entrar(); return false; }
+  return true;
+}
+function pedir(app){
+  if(!exigirConta(function(){ pedir(app); })) return;
+  C.api({acao:"pedirAcesso", app:app}).then(function(r){ alert(r.mensagem || "Pedido registrado."); carregarMeus(); });
+}
+function servico(nome){
+  if(!exigirConta(function(){ servico(nome); })) return;
+  var t = prompt("Conte rapidamente o que você precisa em " + nome + ":");
+  if(!t) return;
+  C.api({acao:"chamado", app:"servicos", tipo:"orcamento: " + nome, mensagem:t}).then(function(r){ alert(r.mensagem); });
+}
+
+/* ----- Área do cliente ----- */
+function entrouNaConta(){
+  var c = C.conta() || {};
+  $("nav-conta").textContent = "Meus apps"; $("meus-apps").style.display = "block";
+  $("ola").textContent = "Olá, " + String(c.nome || "").split(" ")[0] + "! Seus apps e o status de cada um.";
+  carregarMeus();
+  if(c.criador){ $("painel").style.display = "block"; carregarPainel(); }
+  if(typeof window._depois === "function"){ var f = window._depois; window._depois = null; f(); }
+}
+function carregarMeus(){
+  C.api({acao:"meusApps"}).then(function(r){
+    if(!r.ok){ C.sair(); return; }
+    $("grade-meus").innerHTML = r.apps.length ? r.apps.map(function(a){
+      var t = ROT[a.status] || [a.status, ""];
+      return '<div class="cartao"><span class="tag ' + t[1] + '">' + esc(t[0]) + (a.vencimento && a.liberado ? " até " + dataBR(a.vencimento) : "") + '</span><h3>' + esc(a.nome) + '</h3><p>' + esc(a.mensagem || a.descricao) + '</p><div class="acoes">' +
+        (a.liberado ? '<a class="btn btn-ouro" href="' + esc(a.url) + '" target="_blank" rel="noopener">Abrir app</a>' : '<button class="btn btn-escuro quero" data-app="' + esc(a.app) + '" type="button">Pedir liberação</button>') +
+        (a.venda ? '<a class="btn btn-linha" href="' + esc(a.venda) + '" target="_blank" rel="noopener">Planos</a>' : '') + '</div></div>';
+    }).join("") : '<p>Você ainda não tem apps. Escolha um no catálogo abaixo.</p>';
+  });
+}
+$("nav-conta").onclick = function(){ if(C && C.token()) location.hash = "meus-apps"; else if(exigirConta()) {} };
+$("btn-sair").onclick = function(){ C.sair(); };
+$("btn-suporte").onclick = function(){ var t = prompt("Descreva o que você precisa:"); if(t) C.api({acao:"chamado", app:"geral", tipo:"suporte", mensagem:t}).then(function(r){ alert(r.mensagem); }); };
+document.addEventListener("central:entrou", entrouNaConta);
+document.addEventListener("central:saiu", function(){ $("meus-apps").style.display = "none"; $("painel").style.display = "none"; $("nav-conta").textContent = "Entrar"; });
+
+/* ----- Painel do Criador ----- */
+function carregarPainel(){
+  C.api({acao:"adminResumo"}).then(function(r){
+    if(!r.ok) return;
+    var k = '<div class="kpi"><b>' + r.contas + '</b>contas</div><div class="kpi"><b>' + r.confirmadas + '</b>e-mails confirmados</div><div class="kpi"><b>' + r.chamadosAbertos + '</b>chamados abertos</div>';
+    Object.keys(r.porApp).forEach(function(a){ var x = r.porApp[a]; k += '<div class="kpi"><b>' + x.liberados + '/' + x.total + '</b>' + esc(a) + ' liberados' + (x.analise ? ' • ' + x.analise + ' em análise' : '') + '</div>'; });
+    $("kpis").innerHTML = k;
+  });
+  C.api({acao:"adminContas"}).then(function(r){
+    if(!r.ok) return;
+    $("tab-contas").querySelector("tbody").innerHTML = r.contas.map(function(c){
+      return '<tr><td><b>' + esc(c.nome) + '</b><br>' + esc(c.email) + (c.whatsapp ? '<br>' + esc(c.whatsapp) : '') + '<br><small>' + esc(c.cidade || "") + '</small></td>' +
+        '<td>' + (c.confirmado === "sim" ? "e-mail confirmado" : "<b>e-mail não confirmado</b>") + '<br>' + c.acessos + ' acessos<br>último: ' + dataBR(c.ultimoAcesso) +
+        '<br><button class="btn btn-linha conta-st" data-email="' + esc(c.email) + '" data-st="' + (c.status === "bloqueado" ? "ativo" : "bloqueado") + '" type="button" style="padding:6px 10px;margin-top:6px">' + (c.status === "bloqueado" ? "Reativar conta" : "Suspender conta") + '</button></td>' +
+        '<td>' + c.licencas.map(function(l){
+          return '<div class="lic" data-email="' + esc(c.email) + '" data-app="' + esc(l.app) + '"><b style="min-width:120px">' + esc(l.app) + '</b>' +
+            '<select>' + ["ativo","teste","analise","lista","bloqueado"].map(function(s){ return '<option' + ((l.status === s || (l.status === "vencido" && s === "ativo")) ? " selected" : "") + '>' + s + '</option>'; }).join("") + '</select>' +
+            '<input type="date" value="' + (l.vencimento ? l.vencimento.slice(0, 10) : "") + '"><label><input type="checkbox"> avisar</label><button class="btn btn-escuro salvar-lic" type="button" style="padding:6px 10px">Salvar</button>' +
+            (l.status === "vencido" ? ' <span style="color:#8A1C1C">vencido</span>' : '') + '</div>';
+        }).join("") + '</td></tr>';
+    }).join("");
+  });
+  C.api({acao:"adminChamados"}).then(function(r){
+    if(!r.ok) return;
+    $("chamados").innerHTML = r.chamados.length ? r.chamados.map(function(c){
+      return '<div class="chamado" data-id="' + esc(c.id) + '"><b>' + esc(c.id) + '</b> • ' + esc(c.email) + ' • ' + esc(c.app) + ' • ' + esc(c.tipo) + ' • <i>' + esc(c.status) + '</i><br>' + esc(c.mensagem) +
+        (c.resposta ? '<br><small>Resposta: ' + esc(c.resposta) + '</small>' : '') +
+        '<textarea rows="2" placeholder="Resposta (vai por e-mail)"></textarea><button class="btn btn-escuro resp" data-st="em_andamento" type="button" style="padding:6px 10px">Responder</button> <button class="btn btn-linha resp" data-st="resolvido" type="button" style="padding:6px 10px">Responder e resolver</button></div>';
+    }).join("") : "<p>Nenhum chamado.</p>";
+  });
+}
+document.addEventListener("click", function(e){
+  var s = e.target.closest(".salvar-lic"), cs = e.target.closest(".conta-st"), rp = e.target.closest(".resp");
+  if(s){ var d = s.closest(".lic"); salvarLic(d.getAttribute("data-email"), d.getAttribute("data-app"), d.querySelector("select").value, d.querySelector("input[type=date]").value, "", d.querySelector("input[type=checkbox]").checked); }
+  if(cs){ C.api({acao:"adminConta", email:cs.getAttribute("data-email"), status:cs.getAttribute("data-st")}).then(carregarPainel); }
+  if(rp){ var ch = rp.closest(".chamado"); C.api({acao:"adminChamado", id:ch.getAttribute("data-id"), status:rp.getAttribute("data-st"), resposta:ch.querySelector("textarea").value}).then(carregarPainel); }
+});
+function salvarLic(email, app, status, venc, plano, avisar){
+  C.api({acao:"adminLicenca", email:email, app:app, status:status, vencimento:venc, plano:plano, avisar:avisar}).then(function(r){ alert(r.ok ? "Salvo: " + (r.licenca.liberado ? "liberado" : r.licenca.status) : r.mensagem); carregarPainel(); });
+}
+$("f-liberar").onsubmit = function(e){ e.preventDefault(); salvarLic($("l-email").value.trim(), $("l-app").value, $("l-status").value, $("l-venc").value, $("l-plano").value, $("l-avisar").checked); };
+
+if(C && C.token()){
+  C.api({acao:"sessao"}).then(function(r){ if(r.ok) entrouNaConta(); else C.sair(); }).catch(function(){});
+}
+});
+</script>
+<!-- CENTRAL-ACESSO -->
+<script>window.CENTRAL_CFG={"url": "", "app": "portal", "nome": "Central", "portal": "https://marca-estrategia-tecnologia.github.io/", "modo": "portal"};</script>
+<script>
+/* CENTRAL-ACESSO • kit de acesso dos apps da Marca & Estratégia Tecnologia  v1.0.0
+ *
+ * Entra em cada app (inline, pelo ferramentas/injetar.py). Faz:
+ *  - login, cadastro com repetição de senha, confirmação do e-mail por código;
+ *  - "Esqueci a senha" com código enviado ao e-mail cadastrado;
+ *  - conferência da licença do app na Central (com 7 dias de tolerância sem internet);
+ *  - lembrete semanal de cópia de segurança (baixar / restaurar) dos dados do aparelho;
+ *  - menu "Minha conta": Meus apps, Suporte, Cópia de segurança, Sair.
+ *
+ * Configuração (antes deste script):
+ *   window.CENTRAL_CFG = { url:"https://script.google.com/macros/s/.../exec", app:"prospectarion",
+ *     nome:"Prospectarion", portal:"https://marca-estrategia-tecnologia.github.io/",
+ *     backup:{ prefixos:["prospectarion"], dias:7 } };
+ * Sem url configurada o kit não bloqueia o app (só mostra o lembrete de backup).
+ */
+(function(){
+"use strict";
+var CFG = window.CENTRAL_CFG || {};
+var MODO = CFG.modo || "app";
+var APPID = MODO === "portal" ? "" : (CFG.app || "");
+var LS = "central." + (CFG.app || "portal") + ".";
+var TOLERANCIA_OFFLINE = 7 * 864e5, RECHECAR = 6 * 36e5;
+var raiz, estado = {email:"", tela:""};
+
+function ls(k, v){ try{ if(v === undefined) return JSON.parse(localStorage.getItem(LS + k) || "null"); if(v === null) localStorage.removeItem(LS + k); else localStorage.setItem(LS + k, JSON.stringify(v)); }catch(e){ return null; } }
+function api(dados){
+  if(!CFG.url) return Promise.reject(new Error("sem_url"));
+  return fetch(CFG.url, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(dados)})
+    .then(function(r){ return r.json(); });
+}
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+/* ---------- estilos (isolados em #ca-raiz) ---------- */
+var CSS = "#ca-raiz{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(10,22,40,.92);font:15px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#0A1628;overflow:auto}" +
+"#ca-raiz.ca-on{display:flex}#ca-raiz *{box-sizing:border-box}" +
+"#ca-raiz .ca-caixa{background:#fff;border-radius:16px;width:100%;max-width:400px;padding:24px 22px;box-shadow:0 20px 60px rgba(0,0,0,.4);margin:auto}" +
+"#ca-raiz .ca-marca{font-size:11px;letter-spacing:1.2px;font-weight:700;color:#C9960C;text-transform:uppercase;margin:0 0 4px}" +
+"#ca-raiz h2{margin:0 0 6px;font-size:22px;line-height:1.2;color:#0A1628}#ca-raiz p{margin:6px 0 12px;color:#334}" +
+"#ca-raiz label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px;color:#1B3A6B}" +
+"#ca-raiz input[type=email],#ca-raiz input[type=password],#ca-raiz input[type=text],#ca-raiz input[type=tel],#ca-raiz textarea{width:100%;padding:12px;border:1.5px solid #C8D0DC;border-radius:10px;font:inherit;background:#fff;color:#0A1628}" +
+"#ca-raiz input:focus,#ca-raiz textarea:focus{outline:none;border-color:#1B3A6B;box-shadow:0 0 0 3px rgba(27,58,107,.15)}" +
+"#ca-raiz .ca-codigo{letter-spacing:10px;text-align:center;font-size:24px;font-weight:700}" +
+"#ca-raiz button{font:inherit;cursor:pointer;border-radius:10px;border:0;padding:12px 14px;width:100%;margin-top:14px;font-weight:700}" +
+"#ca-raiz .ca-pri{background:#0A1628;color:#fff}#ca-raiz .ca-pri:disabled{opacity:.6;cursor:wait}" +
+"#ca-raiz .ca-sec{background:#F1F4F9;color:#1B3A6B;margin-top:8px}" +
+"#ca-raiz .ca-link{background:none;color:#1B3A6B;text-decoration:underline;padding:6px;margin-top:6px;font-weight:600}" +
+"#ca-raiz .ca-msg{border-radius:10px;padding:10px 12px;margin:12px 0 0;font-size:14px;display:none}" +
+"#ca-raiz .ca-msg.ca-erro{display:block;background:#FDECEC;color:#8A1C1C}#ca-raiz .ca-msg.ca-ok{display:block;background:#E8F5EC;color:#1E5B32}" +
+"#ca-raiz .ca-msg.ca-info{display:block;background:#FFF6E0;color:#6B4E00}" +
+"#ca-raiz .ca-check{display:flex;gap:8px;align-items:flex-start;font-weight:400;color:#334}#ca-raiz .ca-check input{margin-top:3px;width:18px;height:18px}" +
+"#ca-raiz .ca-ver{position:relative}#ca-raiz .ca-ver button{position:absolute;right:6px;top:6px;width:auto;margin:0;padding:6px 8px;background:#F1F4F9;color:#1B3A6B;font-size:12px}" +
+"#ca-raiz .ca-pe{font-size:12px;color:#667;margin-top:14px;text-align:center}#ca-raiz .ca-pe a{color:#1B3A6B}" +
+"#ca-raiz .ca-forca{height:4px;border-radius:2px;background:#E5E9F0;margin-top:6px;overflow:hidden}#ca-raiz .ca-forca i{display:block;height:100%;width:0;background:#C9960C;transition:width .2s}" +
+"#ca-botao{position:fixed;left:12px;bottom:12px;z-index:2147482999;border:0;border-radius:999px;padding:9px 13px;background:#0A1628;color:#fff;font:600 13px Inter,system-ui,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer;opacity:.9}" +
+"#ca-faixa{position:fixed;left:12px;right:12px;bottom:58px;z-index:2147482998;max-width:520px;margin:auto;background:#FFF6E0;color:#4A3600;border:1px solid #E8B84B;border-radius:12px;padding:12px 14px;font:14px/1.4 Inter,system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.2)}" +
+"#ca-faixa button{font:600 13px Inter,system-ui,sans-serif;border:0;border-radius:8px;padding:8px 10px;margin:8px 8px 0 0;cursor:pointer;background:#0A1628;color:#fff}#ca-faixa .ca-depois{background:transparent;color:#4A3600;text-decoration:underline}" +
+"@media print{#ca-raiz,#ca-botao,#ca-faixa{display:none!important}}";
+
+function montar(){
+  if(raiz) return;
+  var st = document.createElement("style"); st.textContent = CSS; document.head.appendChild(st);
+  raiz = document.createElement("div"); raiz.id = "ca-raiz"; raiz.setAttribute("role", "dialog"); raiz.setAttribute("aria-modal", "true");
+  document.body.appendChild(raiz);
+}
+
+/* ---------- telas ---------- */
+function caixa(titulo, sub, corpo, rodape){
+  return '<div class="ca-caixa"><p class="ca-marca">' + esc(CFG.nome || "Central") + ' • Marca &amp; Estratégia Tecnologia</p><h2>' + titulo + '</h2>' +
+    (sub ? '<p>' + sub + '</p>' : '') + corpo + '<div class="ca-msg" id="ca-msg" role="status" aria-live="polite"></div>' + (rodape || "") + '</div>';
+}
+function campoSenha(id, rot, auto){
+  return '<label for="' + id + '">' + rot + '</label><div class="ca-ver"><input id="' + id + '" type="password" autocomplete="' + auto + '" minlength="8" maxlength="64" required><button type="button" data-ver="' + id + '" aria-label="Mostrar senha">ver</button></div>';
+}
+function pe(){
+  var p = CFG.portal || "";
+  return '<p class="ca-pe">' + (p ? '<a href="' + esc(p) + 'termos.html" target="_blank" rel="noopener">Termos de Uso</a> • <a href="' + esc(p) + 'privacidade.html" target="_blank" rel="noopener">Privacidade</a>' : '') + '</p>';
+}
+function mostrar(html, foco){
+  montar(); raiz.innerHTML = html; raiz.classList.add("ca-on");
+  raiz.querySelectorAll("[data-ver]").forEach(function(b){ b.onclick = function(){ var i = document.getElementById(b.getAttribute("data-ver")); var v = i.type === "password"; i.type = v ? "text" : "password"; b.textContent = v ? "ocultar" : "ver"; }; });
+  var f = raiz.querySelector(foco || "input"); if(f) setTimeout(function(){ f.focus(); }, 30);
+}
+function fechar(){ if(raiz){ raiz.classList.remove("ca-on"); raiz.innerHTML = ""; } }
+function msg(tipo, texto){ var m = document.getElementById("ca-msg"); if(m){ m.className = "ca-msg ca-" + tipo; m.textContent = texto; } }
+function ocupado(btn, sim){ if(btn){ btn.disabled = sim; if(sim){ btn.dataset.t = btn.textContent; btn.textContent = "Aguarde…"; } else if(btn.dataset.t) btn.textContent = btn.dataset.t; } }
+function v(id){ var e = document.getElementById(id); return e ? e.value.trim() : ""; }
+function senhaFraca(s){ if(s.length < 8) return "A senha precisa ter pelo menos 8 caracteres."; if(!/[A-Za-zÀ-ú]/.test(s) || !/\d/.test(s)) return "Use letras e números na senha."; return ""; }
+function ligarForca(id){
+  var i = document.getElementById(id), barra = document.getElementById(id + "-f"); if(!i || !barra) return;
+  i.addEventListener("input", function(){ var s = i.value, p = 0; if(s.length >= 8) p++; if(s.length >= 12) p++; if(/\d/.test(s) && /[A-Za-z]/.test(s)) p++; if(/[^A-Za-z0-9]/.test(s)) p++; barra.style.width = (p * 25) + "%"; });
+}
+function falhaRede(btn){ ocupado(btn, false); msg("erro", "Sem conexão com a Central agora. Confira a internet e tente de novo."); }
+
+function telaEntrar(aviso){
+  estado.tela = "entrar";
+  mostrar(caixa("Entrar", "Use o e-mail e a senha da sua conta.",
+    '<form id="ca-f"><label for="ca-email">E-mail</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
+    campoSenha("ca-senha", "Senha", "current-password") + '<button class="ca-pri" id="ca-b">Entrar</button></form>' +
+    '<button class="ca-link" id="ca-esq">Esqueci a senha</button><button class="ca-sec" id="ca-novo">Criar conta</button>', pe()), estado.email ? "#ca-senha" : "#ca-email");
+  if(aviso) msg(aviso[0], aviso[1]);
+  document.getElementById("ca-esq").onclick = function(){ estado.email = v("ca-email"); telaEsqueci(); };
+  document.getElementById("ca-novo").onclick = function(){ estado.email = v("ca-email"); telaCadastro(); };
+  document.getElementById("ca-f").onsubmit = function(e){
+    e.preventDefault(); var b = document.getElementById("ca-b"); estado.email = v("ca-email").toLowerCase();
+    if(!estado.email || !v("ca-senha")) return msg("erro", "Informe e-mail e senha.");
+    ocupado(b, true);
+    api({acao:"entrar", email:estado.email, senha:document.getElementById("ca-senha").value, app:APPID}).then(function(r){
+      ocupado(b, false);
+      if(r.ok) return entrou(r);
+      if(r.erro === "nao_confirmado") return telaCodigo("confirmar", r.mensagem);
+      msg("erro", r.mensagem || "Não foi possível entrar.");
+    }).catch(function(){ falhaRede(b); });
+  };
+}
+
+function telaCadastro(){
+  estado.tela = "cadastro";
+  var p = CFG.portal || "";
+  mostrar(caixa("Criar conta", "Uma conta só para todos os apps da Marca &amp; Estratégia Tecnologia.",
+    '<form id="ca-f"><label for="ca-nome">Nome e sobrenome</label><input id="ca-nome" type="text" autocomplete="name" required maxlength="120">' +
+    '<label for="ca-email">E-mail</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
+    '<label for="ca-whats">WhatsApp com DDD <span style="font-weight:400">(opcional)</span></label><input id="ca-whats" type="tel" autocomplete="tel" maxlength="20">' +
+    campoSenha("ca-senha", "Crie uma senha (8+ caracteres, letras e números)", "new-password") + '<div class="ca-forca"><i id="ca-senha-f"></i></div>' +
+    campoSenha("ca-senha2", "Repita a senha", "new-password") +
+    '<label class="ca-check"><input type="checkbox" id="ca-aceite" required> <span>Li e aceito os ' + (p ? '<a href="' + esc(p) + 'termos.html" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="' + esc(p) + 'privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>' : 'Termos de Uso e a Política de Privacidade') + '.</span></label>' +
+    '<button class="ca-pri" id="ca-b">Criar conta</button></form><button class="ca-link" id="ca-voltar">Já tenho conta</button>'), "#ca-nome");
+  ligarForca("ca-senha");
+  document.getElementById("ca-voltar").onclick = function(){ estado.email = v("ca-email"); telaEntrar(); };
+  document.getElementById("ca-f").onsubmit = function(e){
+    e.preventDefault(); var b = document.getElementById("ca-b");
+    var s1 = document.getElementById("ca-senha").value, s2 = document.getElementById("ca-senha2").value;
+    if(v("ca-nome").split(/\s+/).length < 2) return msg("erro", "Informe nome e sobrenome.");
+    var f = senhaFraca(s1); if(f) return msg("erro", f);
+    if(s1 !== s2) return msg("erro", "As duas senhas não são iguais.");
+    if(!document.getElementById("ca-aceite").checked) return msg("erro", "Aceite os Termos e a Política de Privacidade para continuar.");
+    estado.email = v("ca-email").toLowerCase(); ocupado(b, true);
+    api({acao:"cadastrar", app:APPID, nome:v("ca-nome"), email:estado.email, whatsapp:v("ca-whats"), senha:s1,
+      consentimento:"Termos e Privacidade v1 aceitos em " + (CFG.nome || "Central"), origem:CFG.app}).then(function(r){
+      ocupado(b, false);
+      if(r.ok && r.confirmar) return telaCodigo("confirmar", r.mensagem);
+      if(r.erro === "email_existe") return telaEntrar(["info", r.mensagem]);
+      msg("erro", r.mensagem || "Não foi possível criar a conta.");
+    }).catch(function(){ falhaRede(b); });
+  };
+}
+
+function telaCodigo(tipo, aviso){
+  estado.tela = "codigo";
+  var senha = tipo === "senha";
+  mostrar(caixa(senha ? "Criar nova senha" : "Confirme seu e-mail",
+    "Enviamos um código de 6 dígitos para <strong>" + esc(estado.email) + "</strong>. Confira também a caixa de spam.",
+    '<form id="ca-f"><label for="ca-cod">Código</label><input id="ca-cod" class="ca-codigo" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="\\d{6}" required>' +
+    (senha ? campoSenha("ca-senha", "Nova senha (8+ caracteres, letras e números)", "new-password") + '<div class="ca-forca"><i id="ca-senha-f"></i></div>' + campoSenha("ca-senha2", "Repita a nova senha", "new-password") : '') +
+    '<button class="ca-pri" id="ca-b">' + (senha ? "Salvar nova senha" : "Confirmar") + '</button></form>' +
+    '<button class="ca-link" id="ca-reenv">Reenviar código</button><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-cod");
+  if(aviso) msg("info", aviso);
+  if(senha) ligarForca("ca-senha");
+  document.getElementById("ca-voltar").onclick = function(){ telaEntrar(); };
+  document.getElementById("ca-reenv").onclick = function(){
+    api({acao:"reenviarCodigo", email:estado.email, tipo:tipo}).then(function(r){ msg(r.ok ? "ok" : "erro", r.mensagem || "Código reenviado."); }).catch(function(){ msg("erro", "Sem conexão agora."); });
+  };
+  document.getElementById("ca-f").onsubmit = function(e){
+    e.preventDefault(); var b = document.getElementById("ca-b"), cod = v("ca-cod").replace(/\D/g, "");
+    if(cod.length !== 6) return msg("erro", "Digite os 6 números do código.");
+    var dados = {acao:senha ? "redefinirSenha" : "confirmar", email:estado.email, codigo:cod, app:APPID};
+    if(senha){
+      var s1 = document.getElementById("ca-senha").value, s2 = document.getElementById("ca-senha2").value;
+      var f = senhaFraca(s1); if(f) return msg("erro", f);
+      if(s1 !== s2) return msg("erro", "As duas senhas não são iguais.");
+      dados.novaSenha = s1;
+    }
+    ocupado(b, true);
+    api(dados).then(function(r){ ocupado(b, false); if(r.ok) return entrou(r); msg("erro", r.mensagem || "Código inválido."); }).catch(function(){ falhaRede(b); });
+  };
+}
+
+function telaEsqueci(){
+  estado.tela = "esqueci";
+  mostrar(caixa("Esqueci a senha", "Informe o e-mail da sua conta. Vamos enviar um código para você criar uma nova senha.",
+    '<form id="ca-f"><label for="ca-email">E-mail cadastrado</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
+    '<button class="ca-pri" id="ca-b">Enviar código</button></form><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
+  document.getElementById("ca-voltar").onclick = function(){ telaEntrar(); };
+  document.getElementById("ca-f").onsubmit = function(e){
+    e.preventDefault(); var b = document.getElementById("ca-b"); estado.email = v("ca-email").toLowerCase();
+    if(!estado.email) return msg("erro", "Informe o e-mail.");
+    ocupado(b, true);
+    api({acao:"esqueciSenha", email:estado.email}).then(function(r){ ocupado(b, false); if(r.ok) return telaCodigo("senha", r.mensagem); msg("erro", r.mensagem); }).catch(function(){ falhaRede(b); });
+  };
+}
+
+function telaSemAcesso(l){
+  estado.tela = "sem_acesso";
+  var portal = CFG.portal ? '<a href="' + esc(CFG.portal) + '#apps" style="display:block;text-align:center;margin-top:12px;color:#1B3A6B;font-weight:700">Ver planos e meus apps</a>' : '';
+  mostrar(caixa(l.status === "vencido" ? "Acesso vencido" : "Acesso ainda não liberado", esc(l.mensagem || ""),
+    '<button class="ca-pri" id="ca-ped">Pedir liberação</button>' + portal + '<button class="ca-sec" id="ca-sair">Entrar com outra conta</button>'));
+  document.getElementById("ca-ped").onclick = function(){
+    var b = this; ocupado(b, true);
+    api({acao:"pedirAcesso", token:ls("token"), app:APPID}).then(function(r){ ocupado(b, false); msg(r.ok ? "ok" : "erro", r.mensagem); if(r.licenca && r.licenca.liberado) liberar(r); }).catch(function(){ falhaRede(b); });
+  };
+  document.getElementById("ca-sair").onclick = sair;
+}
+
+/* ---------- sessão e licença ---------- */
+function entrou(r){
+  ls("token", r.token); ls("conta", r.conta);
+  if(MODO === "portal"){ fechar(); document.dispatchEvent(new CustomEvent("central:entrou", {detail:r})); return; }
+  conferir(true);
+}
+function liberar(r){
+  ls("ok", {quando:Date.now(), licenca:r.licenca || null}); fechar(); botao();
+  document.dispatchEvent(new CustomEvent("central:liberado", {detail:r}));
+}
+function conferir(forcar){
+  var t = ls("token");
+  if(!t) return telaEntrar();
+  var ultimo = ls("ok");
+  if(!forcar && ultimo && Date.now() - ultimo.quando < RECHECAR){ botao(); return; }
+  api({acao:"acesso", token:t, app:APPID}).then(function(r){
+    if(!r.ok){ ls("token", null); ls("ok", null); return telaEntrar(["info", r.mensagem || "Entre de novo."]); }
+    if(r.conta) ls("conta", r.conta);
+    if(r.liberado) return liberar(r);
+    ls("ok", null); telaSemAcesso(r.licenca || {});
+  }).catch(function(){
+    if(ultimo && Date.now() - ultimo.quando < TOLERANCIA_OFFLINE){ botao(); return; }
+    telaEntrar(["erro", "Sem internet para conferir seu acesso. Conecte-se e tente de novo."]);
+  });
+}
+function sair(){
+  var t = ls("token"); if(t) api({acao:"sair", token:t}).catch(function(){});
+  ls("token", null); ls("ok", null); ls("conta", null);
+  var b = document.getElementById("ca-botao"); if(b) b.remove();
+  if(MODO === "portal"){ document.dispatchEvent(new CustomEvent("central:saiu")); return; }
+  telaEntrar();
+}
+
+/* ---------- menu Minha conta ---------- */
+function botao(){
+  if(MODO === "portal" || document.getElementById("ca-botao")) return;
+  var b = document.createElement("button"); b.id = "ca-botao"; b.type = "button"; b.textContent = "Minha conta"; b.onclick = menu;
+  document.body.appendChild(b);
+}
+function menu(){
+  var c = ls("conta") || {};
+  var portal = CFG.portal ? '<a class="ca-sec" style="display:block;text-align:center;text-decoration:none;padding:12px;border-radius:10px;margin-top:8px" href="' + esc(CFG.portal) + '#meus-apps" target="_blank" rel="noopener">Meus apps</a>' : '';
+  mostrar(caixa("Minha conta", esc(c.nome || "") + (c.email ? "<br><small>" + esc(c.email) + "</small>" : ""),
+    portal + '<button class="ca-sec" id="ca-sup">Pedir suporte</button>' + (CFG.backup ? '<button class="ca-sec" id="ca-bk">Cópia de segurança</button>' : '') +
+    '<button class="ca-sec" id="ca-sair">Sair</button><button class="ca-link" id="ca-fechar">Fechar</button>', pe()));
+  document.getElementById("ca-fechar").onclick = fechar;
+  document.getElementById("ca-sair").onclick = sair;
+  document.getElementById("ca-sup").onclick = telaSuporte;
+  if(CFG.backup) document.getElementById("ca-bk").onclick = function(){ fechar(); faixaBackup(true); };
+}
+function telaSuporte(){
+  mostrar(caixa("Pedir suporte", "Descreva o que aconteceu. A resposta chega no seu e-mail.",
+    '<form id="ca-f"><label for="ca-txt">Mensagem</label><textarea id="ca-txt" rows="5" maxlength="2000" required></textarea><button class="ca-pri" id="ca-b">Enviar</button></form><button class="ca-link" id="ca-fechar">Fechar</button>'), "#ca-txt");
+  document.getElementById("ca-fechar").onclick = fechar;
+  document.getElementById("ca-f").onsubmit = function(e){
+    e.preventDefault(); var b = document.getElementById("ca-b"); ocupado(b, true);
+    api({acao:"chamado", token:ls("token"), app:APPID, tipo:"suporte", mensagem:v("ca-txt")}).then(function(r){ ocupado(b, false); msg(r.ok ? "ok" : "erro", r.mensagem); }).catch(function(){ falhaRede(b); });
+  };
+}
+
+/* ---------- cópia de segurança (dados do aparelho) ---------- */
+function chavesDoApp(){
+  var pref = (CFG.backup && CFG.backup.prefixos) || [], out = {};
+  for(var i = 0; i < localStorage.length; i++){
+    var k = localStorage.key(i);
+    if(pref.some(function(p){ return k.indexOf(p) === 0; })) out[k] = localStorage.getItem(k);
+  }
+  return out;
+}
+function baixarBackup(){
+  var dados = {app:APPID, nome:CFG.nome, gerado:new Date().toISOString(), origem:location.origin + location.pathname, chaves:chavesDoApp()};
+  var blob = new Blob([JSON.stringify(dados)], {type:"application/json"});
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = (CFG.app || "app") + "-copia-" + new Date().toISOString().slice(0, 10) + ".json";
+  document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  ls("backup", Date.now());
+}
+function restaurarBackup(){
+  var i = document.createElement("input"); i.type = "file"; i.accept = ".json,application/json";
+  i.onchange = function(){
+    var f = i.files[0]; if(!f) return;
+    f.text().then(function(t){
+      var d = JSON.parse(t);
+      if(!d || !d.chaves || (d.app && d.app !== CFG.app)) throw new Error("arquivo");
+      var n = Object.keys(d.chaves).length;
+      if(!confirmar("Restaurar " + n + " registros da cópia de " + String(d.gerado || "").slice(0, 10) + "? Os dados atuais deste aparelho serão substituídos.")) return;
+      var pref = (CFG.backup && CFG.backup.prefixos) || [];
+      Object.keys(d.chaves).forEach(function(k){ if(pref.some(function(p){ return k.indexOf(p) === 0; })) localStorage.setItem(k, d.chaves[k]); });
+      location.reload();
+    }).catch(function(){ faixaTexto("Este arquivo não é uma cópia válida deste app."); });
+  };
+  i.click();
+}
+function confirmar(t){ try{ return window.confirm(t); }catch(e){ return true; } }
+function faixaTexto(t){ var f = document.getElementById("ca-faixa"); if(f) f.querySelector("span").textContent = t; }
+function faixaBackup(forcar){
+  if(!CFG.backup || document.getElementById("ca-faixa")) return;
+  var dias = CFG.backup.dias || 7, ultimo = ls("backup"), adiado = ls("backup_adiado");
+  if(!forcar){
+    if(!Object.keys(chavesDoApp()).length) return;
+    if(ultimo && Date.now() - ultimo < dias * 864e5) return;
+    if(adiado && Date.now() - adiado < 864e5) return;
+  }
+  var f = document.createElement("div"); f.id = "ca-faixa"; f.setAttribute("role", "region"); f.setAttribute("aria-label", "Cópia de segurança");
+  f.innerHTML = '<strong>Cópia de segurança</strong><br><span>' + (ultimo ? "Sua última cópia foi em " + new Date(ultimo).toLocaleDateString("pt-BR") + "." : "Você ainda não fez cópia dos dados deste aparelho.") +
+    " Os dados ficam só neste aparelho: baixe uma cópia e guarde no Drive ou no e-mail.</span><br>" +
+    '<button type="button" id="ca-bk-baixar">Baixar cópia agora</button><button type="button" id="ca-bk-rest">Restaurar cópia</button><button type="button" class="ca-depois" id="ca-bk-dep">Lembrar amanhã</button>';
+  document.body.appendChild(f);
+  document.getElementById("ca-bk-baixar").onclick = function(){ baixarBackup(); f.remove(); };
+  document.getElementById("ca-bk-rest").onclick = restaurarBackup;
+  document.getElementById("ca-bk-dep").onclick = function(){ ls("backup_adiado", Date.now()); f.remove(); };
+}
+
+/* ---------- início ---------- */
+window.CentralAcesso = {
+  api: function(d){ if(ls("token") && !d.token) d.token = ls("token"); return api(d); },
+  entrar: telaEntrar, cadastrar: telaCadastro, esqueci: telaEsqueci, sair: sair, fechar: fechar,
+  conta: function(){ return ls("conta"); }, token: function(){ return ls("token"); },
+  baixarBackup: baixarBackup, restaurarBackup: restaurarBackup, configurado: !!CFG.url, versao: "1.0.0"
+};
+function iniciar(){
+  if(MODO === "portal") return;
+  setTimeout(function(){ faixaBackup(false); }, 4000);
+  if(!CFG.url) return; // Central ainda não implantada: o app segue funcionando como antes
+  conferir(false);
+}
+if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar); else iniciar();
+})();
+
+</script>
+<!-- /CENTRAL-ACESSO -->
+</body>
+</html>

@@ -35,6 +35,19 @@ Veja [`catalogo/apps.json`](catalogo/apps.json) e a auditoria em [`docs/AUDITORI
 3. Toda mudança é registrada em commit com descrição clara.
 4. Ferramentas pagas só com autorização expressa do criador (Política Zero Custo).
 
+## Estrutura
+
+| Pasta / arquivo | O que é |
+|---|---|
+| `index.html` | Portal: vitrine, serviços, Meus apps, Painel do Criador |
+| `termos.html`, `privacidade.html` | Termos de Uso e Política de Privacidade (modelo a validar) |
+| `servidor/central.gs` | Servidor de contas e licenças (Google Apps Script + planilha) |
+| `kit/central-acesso.js` | Kit que entra em cada app: login, cadastro, esqueci a senha, licença, backup |
+| `kit/adaptadores.js` | Liga a licença da Central ao plano interno de cada app |
+| `ferramentas/` | `injetar.py`, `separar_apps.py`, `aviso_mudanca.py` |
+| `testes/` | Simulador do Apps Script e testes no navegador |
+| `docs/PUBLICAR.md` | Roteiro de publicação passo a passo |
+
 ## Fases
 
 1. Vitrine + catálogo (sem login) — **próxima**

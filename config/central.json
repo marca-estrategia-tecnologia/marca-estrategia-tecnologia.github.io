@@ -1,0 +1,6 @@
+{
+  "url": "",
+  "portal": "https://marca-estrategia-tecnologia.github.io/",
+  "backup_dias": 7,
+  "observacao": "Cole em url o endereço /exec do Apps Script da Central (servidor/central.gs). Depois rode: python3 ferramentas/separar_apps.py <prospectarion antigo> <saída> para remontar os apps com o endereço."
+}
