@@ -18,7 +18,7 @@ APPS = {  # arquivo: (app id, nome, novo endereço, prefixos do localStorage ou 
     "pro-imobiliaria/index.html": ("pro-imobiliaria", "PRO IMOBILIÁRIA", "https://pro-imobiliaria.github.io/", ["proinnovar."]),
     "social-imob-pro/index.html": ("social-imob-360", "Social Imob 360", "https://social-imob-360.github.io/", None),
     "social-imob/index.html": ("social-imob-360", "Social Imob 360", "https://social-imob-360.github.io/criador/", None),
-    "musicalis/app/index.html": ("musicalis", "Musicalis", "https://musicalis.github.io/app/", None),
+    "musicalis/app/index.html": ("musicalis", "Musicalis", "https://musicalis-br.github.io/app/", None),
 }
 REDIRECIONAR = {
     "vitrine.html": "https://prospectarion.github.io/vitrine.html",
@@ -26,7 +26,7 @@ REDIRECIONAR = {
     "demo.html": "https://prospectarion.github.io/demo.html",
     "pro/index.html": "https://pro-imobiliaria.github.io/",
 }
-PASTAS_REDIRECIONAR = {"musicalis": "https://musicalis.github.io/", "imoveis": "https://imoveis-e-investimentos-rs.github.io/"}
+PASTAS_REDIRECIONAR = {"musicalis": "https://musicalis-br.github.io/", "imoveis": "https://imoveis-e-investimentos-rs.github.io/"}
 
 def faixa(app, nome, url, prefixos):
     cfg = json.dumps({"app": app, "nome": nome, "url": url, "prefixos": prefixos}, ensure_ascii=False)

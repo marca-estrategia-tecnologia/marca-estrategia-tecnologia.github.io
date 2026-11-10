@@ -14,7 +14,7 @@ Dentro dela: **New repository** → nome do repositório → **Public** → **se
 | `prospectarion` | `prospectarion.github.io` |
 | `pro-imobiliaria` | `pro-imobiliaria.github.io` |
 | `social-imob-360` | `social-imob-360.github.io` |
-| `musicalis` | `musicalis.github.io` |
+| `musicalis-br` | `musicalis-br.github.io` |
 | `imoveis-e-investimentos-rs` | `imoveis-e-investimentos-rs.github.io` |
 
 Nome ocupado? Use o mesmo com `-br` no final e avise o Claude (os endereços são trocados automaticamente).

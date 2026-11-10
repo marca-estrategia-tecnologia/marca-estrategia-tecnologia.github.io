@@ -78,7 +78,7 @@ try:
         ok(not ps.erros, "sem erros de JavaScript")
 
         print("Musicalis e site de imóveis (sem kit, só endereços)")
-        pm = pagina(); pm.goto(base + "/musicalis.github.io/index.html"); time.sleep(1)
+        pm = pagina(); pm.goto(base + "/musicalis-br.github.io/index.html"); time.sleep(1)
         links = pm.eval_on_selector_all("a[href]", "as => as.map(a => a.getAttribute('href'))")
         ok(not any("aap29" in l for l in links), "página de venda do Musicalis sem endereço antigo")
         ok(not pm.erros, "Musicalis sem erros de JavaScript")

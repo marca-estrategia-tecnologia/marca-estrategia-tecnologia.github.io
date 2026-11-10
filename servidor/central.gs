@@ -47,7 +47,7 @@ var APPS_PADRAO = [
   ["prospectarion","Prospectarion","CRM e prospecção para corretores, consultores e pequenas empresas.","https://prospectarion.github.io/","","teste",7,"sim",1],
   ["pro-imobiliaria","PRO IMOBILIÁRIA","Prospecção, agenda e atendimento para corretores e imobiliárias.","https://pro-imobiliaria.github.io/","","analise",0,"sim",2],
   ["social-imob-360","Social Imob 360","Planejamento e produção de conteúdo para redes sociais.","https://social-imob-360.github.io/","","teste",7,"sim",3],
-  ["musicalis","Musicalis","Método musical no celular, com acompanhamento do aluno.","https://musicalis.github.io/","https://musicalis.github.io/pagar/","ativo",0,"sim",4],
+  ["musicalis","Musicalis","Método musical no celular, com acompanhamento do aluno.","https://musicalis-br.github.io/","https://musicalis-br.github.io/pagar/","ativo",0,"sim",4],
   ["mesa-de-editais","Mesa de Editais","Radar de editais culturais e apoio à escrita de projetos.","https://mesa-de-editais-br.github.io/","","lista",0,"sim",5]
 ];
 

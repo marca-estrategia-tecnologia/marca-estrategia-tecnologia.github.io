@@ -13,7 +13,7 @@ import json, pathlib, re, shutil, subprocess, sys
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 ANTIGO = "https://aap29.github.io/prospectarion/"
 NOVOS = {
-    "musicalis/": "https://musicalis.github.io/",
+    "musicalis/": "https://musicalis-br.github.io/",
     "social-imob-pro/": "https://social-imob-360.github.io/",
     "social-imob/": "https://social-imob-360.github.io/criador/",
     "imoveis/": "https://imoveis-e-investimentos-rs.github.io/",
@@ -93,7 +93,7 @@ def montar(antigo, saida):
     readme(p, "Social Imob 360", "Planejamento e produção de conteúdo para redes sociais.\n\n- raiz: versão de venda (Social Imob 360 PRO).\n- `criador/`: app do criador e `criador/fonte-venda/` (gera a versão de venda).")
 
     # 4. Musicalis: mantém a licença própria (já assinada digitalmente)
-    p = saida / "musicalis.github.io"
+    p = saida / "musicalis-br.github.io"
     copiar(antigo / "musicalis", p)
     readme(p, "Musicalis", "Método musical no celular. App em `app/`; páginas de venda na raiz. Fontes e testes em `fonte/` (ver `fonte/LEIA-ME.md`).")
 
