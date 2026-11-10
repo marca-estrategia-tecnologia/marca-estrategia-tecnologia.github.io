@@ -44,6 +44,7 @@ try:
         pg.click("#nav-conta"); pg.click("#ca-novo")
         pg.fill("#ca-nome", "Joana Cliente"); pg.fill("#ca-email", "joana@teste.com")
         pg.fill("#ca-senha", "segura123"); pg.fill("#ca-senha2", "outra1234"); pg.check("#ca-aceite"); pg.click("#ca-b")
+        pg.wait_for_function("document.getElementById('ca-msg') && document.getElementById('ca-msg').textContent.length > 0")
         ok("não são iguais" in pg.inner_text("#ca-msg"), "senhas diferentes são recusadas na tela")
         pg.fill("#ca-senha2", "segura123"); pg.click("#ca-b")
         pg.wait_for_selector("#ca-cod")
