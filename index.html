@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Marca &amp; Estratégia Tecnologia — Assessoria Empresarial</title>
 <meta name="description" content="Apps comerciais, sites, páginas de vendas, conexão de redes sociais e WhatsApp, com suporte e manutenção. Vale dos Sinos e Grande Porto Alegre.">
-<meta name="theme-color" content="#0A1628">
+<meta name="theme-color" content="#0D2C7A">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="img/icone-192.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Estação M&amp;E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -142,6 +147,9 @@ footer .wrap{display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between}
   <p class="rotulo">Catálogo</p><h2 id="t-apps">Apps da Marca &amp; Estratégia</h2>
   <p>Funcionam no celular e no computador, instaláveis como aplicativo. Uma conta só dá acesso a todos.</p>
   <div class="grade" id="grade-apps"></div>
+  <div class="cartao" style="margin-top:22px;flex-direction:row;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:linear-gradient(120deg,#0A2263,#1747C4);border:0;color:#DCE6FF">
+    <div><span class="tag" style="background:#E8B84B;color:#0A1628">Equipe</span><h3 style="color:#fff;margin:8px 0 4px">Estação de Trabalho</h3><p style="color:#C9D6F5;margin:0">Área interna para a equipe assumir todos os apps, clientes, chamados e edições.</p></div>
+    <a class="btn btn-ouro" href="estacao.html">Abrir a Estação</a></div>
 </div></section>
 
 <section id="servicos" class="cinza" aria-labelledby="t-serv"><div class="wrap">
@@ -167,7 +175,7 @@ footer .wrap{display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between}
 
 <footer><div class="wrap">
   <div><strong style="color:#fff">Marca &amp; Estratégia Tecnologia</strong><br>Assessoria Empresarial • Vale dos Sinos e Grande Porto Alegre / RS</div>
-  <div><a href="termos.html">Termos de Uso</a> • <a href="privacidade.html">Política de Privacidade</a><br>Contato: <a href="mailto:andersonalvespinto@gmail.com">andersonalvespinto@gmail.com</a></div>
+  <div><a href="termos.html">Termos de Uso</a> • <a href="privacidade.html">Política de Privacidade</a> • <a href="estacao.html">Estação da equipe</a><br>Contato: <a href="mailto:andersonalvespinto@gmail.com">andersonalvespinto@gmail.com</a></div>
 </div></footer>
 
 <script>
@@ -290,6 +298,7 @@ function salvarLic(email, app, status, venc, plano, avisar){
 }
 $("f-liberar").onsubmit = function(e){ e.preventDefault(); salvarLic($("l-email").value.trim(), $("l-app").value, $("l-status").value, $("l-venc").value, $("l-plano").value, $("l-avisar").checked); };
 
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function(){});
 if(C && C.token()){
   C.api({acao:"sessao"}).then(function(r){ if(r.ok) entrouNaConta(); else C.sair(); }).catch(function(){});
 }

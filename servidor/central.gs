@@ -39,7 +39,32 @@ var ABAS = {
   Envios:    ["email","quando"],
   Falhas:    ["email","falhas","bloqueadoAte"],
   Chamados:  ["id","email","app","tipo","mensagem","status","criado","resposta"],
-  Registro:  ["quando","email","acao","app","detalhe"]
+  Registro:  ["quando","email","acao","app","detalhe"],
+  Equipe:    ["email","nome","papel","areas","status","adicionadoPor","criado"],
+  Areas:     ["id","nome","descricao","responsavel","ordem"],
+  Config:    ["app","chave","valor","atualizadoPor","atualizado"]
+};
+
+/* Papéis da equipe (o criador é definido em CRIADOR_EMAILS):
+ *  diretor   — clientes, licenças, chamados, edição dos apps
+ *  editor    — edição dos apps e configurações, chamados
+ *  atendente — chamados e consulta de clientes */
+var PAPEIS = ["diretor","editor","atendente"];
+var AREAS_PADRAO = [
+  ["diretoria","Diretoria","Decisões, metas, parcerias e prioridades da empresa.","",1],
+  ["atendimento","Atendimento e Suporte","Chamados, dúvidas de uso, recuperação de acesso e migração de clientes.","",2],
+  ["comercial","Comercial e Vendas","Prospecção, propostas, fechamento e renovação de clientes.","",3],
+  ["implantacao","Implantação e Sucesso do Cliente","Configuração inicial, treinamento e acompanhamento dos primeiros 30 dias.","",4],
+  ["produto","Produto e Desenvolvimento","Melhorias, correções, novas versões e testes dos apps.","",5],
+  ["marketing","Marketing e Conteúdo","Instagram, WhatsApp, Google Meu Negócio, vídeos e campanhas.","",6],
+  ["financeiro","Financeiro e Administrativo","Cobranças, pagamentos, notas e controle de custos.","",7]
+];
+var PERMISSOES = {
+  adminResumo:["diretor","editor","atendente"], adminContas:["diretor","editor","atendente"],
+  adminLicenca:["diretor"], adminConta:["diretor"], adminChamados:["diretor","editor","atendente"],
+  adminChamado:["diretor","editor","atendente"], equipeListar:["diretor","editor","atendente"],
+  equipeSalvar:[], equipeRemover:[], areasSalvar:[], appSalvar:["diretor","editor"],
+  configSalvar:["diretor","editor"], registroLer:["diretor"]
 };
 
 /* Apps padrão: criados na aba "Apps" ao instalar. Edite pela planilha ou pelo Painel do Criador. */
@@ -48,7 +73,8 @@ var APPS_PADRAO = [
   ["pro-imobiliaria","PRO IMOBILIÁRIA","Prospecção, agenda e atendimento para corretores e imobiliárias.","https://pro-imobiliaria.github.io/","","analise",0,"sim",2],
   ["social-imob-360","Social Imob 360","Planejamento e produção de conteúdo para redes sociais.","https://social-imob-360.github.io/","","teste",7,"sim",3],
   ["musicalis","Musicalis","Método musical no celular, com acompanhamento do aluno.","https://musicalis-br.github.io/","https://musicalis-br.github.io/pagar/","ativo",0,"sim",4],
-  ["mesa-de-editais","Mesa de Editais","Radar de editais culturais e apoio à escrita de projetos.","https://mesa-de-editais-br.github.io/","","lista",0,"sim",5]
+  ["mesa-de-editais","Mesa de Editais","Radar de editais culturais e apoio à escrita de projetos.","https://mesa-de-editais-br.github.io/","","lista",0,"sim",5],
+  ["imoveis-e-investimentos-rs","Imóveis e Investimentos RS","Site imobiliário com microsites por cidade (modelo do serviço de sites).","https://imoveis-e-investimentos-rs.github.io/","","ativo",0,"sim",6]
 ];
 
 /* ============================== ENTRADA ============================== */
@@ -84,12 +110,20 @@ var ACOES = {
   meusApps: meusApps_,
   pedirAcesso: pedirAcesso_,
   chamado: chamado_,
-  adminResumo: soCriador_(adminResumo_),
-  adminContas: soCriador_(adminContas_),
-  adminLicenca: soCriador_(adminLicenca_),
-  adminChamados: soCriador_(adminChamados_),
-  adminChamado: soCriador_(adminChamado_),
-  adminConta: soCriador_(adminConta_)
+  config: configLer_,
+  adminResumo: permite_("adminResumo", adminResumo_),
+  adminContas: permite_("adminContas", adminContas_),
+  adminLicenca: permite_("adminLicenca", adminLicenca_),
+  adminChamados: permite_("adminChamados", adminChamados_),
+  adminChamado: permite_("adminChamado", adminChamado_),
+  adminConta: permite_("adminConta", adminConta_),
+  equipeListar: permite_("equipeListar", equipeListar_),
+  equipeSalvar: permite_("equipeSalvar", equipeSalvar_),
+  equipeRemover: permite_("equipeRemover", equipeRemover_),
+  areasSalvar: permite_("areasSalvar", areasSalvar_),
+  appSalvar: permite_("appSalvar", appSalvar_),
+  configSalvar: permite_("configSalvar", configSalvar_),
+  registroLer: permite_("registroLer", registroLer_)
 };
 
 /* ============================== CONTAS ============================== */
@@ -281,8 +315,9 @@ function garantirLicenca_(email, app){
   var sh = aba_("Licencas"), rows = lerTudo_("Licencas");
   for(var i = 0; i < rows.length; i++) if(rows[i].email === email && rows[i].app === app) return rows[i];
   var a = lerApps_().filter(function(x){ return x.app === app; })[0];
-  var statusIni = ehCriador_(email) ? "ativo" : (a ? String(a.statusInicial || "analise") : "analise");
-  var plano = ehCriador_(email) ? "criador" : (statusIni === "teste" ? "teste" : "");
+  var pap = papel_(email);
+  var statusIni = pap ? "ativo" : (a ? String(a.statusInicial || "analise") : "analise");
+  var plano = pap === "criador" ? "criador" : (pap ? "equipe" : (statusIni === "teste" ? "teste" : ""));
   var venc = "";
   if(statusIni === "teste"){ var dias = Number(a && a.diasTeste) || 7; venc = new Date(Date.now() + dias * 864e5); }
   var nova = {email:email, app:app, plano:plano, status:statusIni, vencimento:venc, criado:new Date(), atualizado:new Date(), observacoes:""};
@@ -312,13 +347,136 @@ function licencaPublica_(email, app){
 
 /* ============================== PAINEL DO CRIADOR ============================== */
 
-function soCriador_(f){
+function soCriador_(f){ return permite_("equipeSalvar", f); }
+
+/* Libera a ação para o criador e para os papéis da equipe listados em PERMISSOES */
+function permite_(acao, f){
   return function(d){
     var s = sessaoValida_(d.token);
-    if(!s || !ehCriador_(s.email)) return erro_("proibido", "Acesso restrito ao criador.");
-    d._email = s.email;
+    var p = s ? papel_(s.email) : "";
+    if(!s || !(p === "criador" || (PERMISSOES[acao] || []).indexOf(p) >= 0))
+      return erro_("proibido", "Seu perfil não tem permissão para esta ação.");
+    d._email = s.email; d._papel = p;
     return f(d);
   };
+}
+
+function papel_(email){
+  email = String(email || "").toLowerCase();
+  if(ehCriador_(email)) return "criador";
+  var m = lerTudo_("Equipe").filter(function(x){ return x.email === email && String(x.status || "ativo") === "ativo"; })[0];
+  return m ? String(m.papel) : "";
+}
+function membro_(email){
+  return lerTudo_("Equipe").filter(function(x){ return x.email === String(email || "").toLowerCase(); })[0] || null;
+}
+
+/* ============================== EQUIPE E ÁREAS ============================== */
+
+function equipeListar_(){
+  var contas = {}; lerTudo_("Contas").forEach(function(c){ contas[c.email] = c; });
+  var lista = criadores_().map(function(e){
+    var c = contas[e] || {};
+    return {email:e, nome:c.nome || "", papel:"criador", areas:"todas", status:"ativo", temConta:!!c.email && String(c.confirmado) === "sim"};
+  });
+  lerTudo_("Equipe").forEach(function(m){
+    if(ehCriador_(m.email)) return;
+    var c = contas[m.email] || {};
+    lista.push({email:m.email, nome:m.nome || c.nome || "", papel:m.papel, areas:m.areas, status:m.status || "ativo",
+      adicionadoPor:m.adicionadoPor, temConta:!!c.email && String(c.confirmado) === "sim"});
+  });
+  return {ok:true, equipe:lista, areas:lerAreas_(), papeis:PAPEIS};
+}
+
+function equipeSalvar_(d){
+  var email = limpaEmail_(d.email), papel = String(d.papel || "");
+  if(!email) return erro_("dados", "Informe um e-mail válido.");
+  if(ehCriador_(email)) return erro_("dados", "Este e-mail já é criador.");
+  if(PAPEIS.indexOf(papel) < 0) return erro_("dados", "Papel inválido.");
+  var areas = String(d.areas || "").split(",").map(function(a){ return limpaApp_(a); }).filter(String).join(",");
+  var sh = aba_("Equipe"), n = acharLinha_(sh, "email", email);
+  var dados = {email:email, nome:limpa_(d.nome, 120), papel:papel, areas:areas, status:d.status === "suspenso" ? "suspenso" : "ativo",
+    adicionadoPor:d._email, criado:new Date()};
+  if(n > 0){ delete dados.criado; delete dados.adicionadoPor; gravarCampos_(sh, n, "Equipe", dados); }
+  else sh.appendRow(ABAS.Equipe.map(function(k){ return dados[k]; }));
+  if(dados.status !== "ativo") encerrarSessoes_(email);
+  registrar_(d._email, "equipe_salvar", "", email + " → " + papel + " (" + areas + ")");
+  if(n < 1 && d.avisar !== false){
+    var url = "https://marca-estrategia-tecnologia.github.io/estacao.html";
+    avisarPorEmail_(email, "Você foi convidado para a Estação de Trabalho",
+      "Você foi adicionado à equipe da Marca & Estratégia Tecnologia como " + papel + (areas ? " (áreas: " + areas + ")" : "") + ".\n\n" +
+      "1. Abra " + url + "\n2. Clique em Criar conta e use ESTE e-mail (" + email + ").\n3. Confirme o código que chegar por e-mail.\n\nSe você já tem conta, basta entrar.");
+  }
+  return equipeListar_();
+}
+
+function equipeRemover_(d){
+  var email = limpaEmail_(d.email), sh = aba_("Equipe"), n = acharLinha_(sh, "email", email);
+  if(n < 1) return erro_("dados", "Integrante não encontrado.");
+  sh.deleteRow(n); encerrarSessoes_(email);
+  registrar_(d._email, "equipe_remover", "", email);
+  return equipeListar_();
+}
+
+function lerAreas_(){
+  var a = lerTudo_("Areas");
+  if(!a.length) return AREAS_PADRAO.map(function(r){ var o = {}; ABAS.Areas.forEach(function(k, j){ o[k] = r[j]; }); return o; });
+  return a.sort(function(x, y){ return (Number(x.ordem) || 99) - (Number(y.ordem) || 99); });
+}
+
+function areasSalvar_(d){
+  var id = limpaApp_(d.id || d.nome); if(!id) return erro_("dados", "Informe o nome da área.");
+  var sh = aba_("Areas"), n = acharLinha_(sh, "id", id);
+  var o = {id:id, nome:limpa_(d.nome, 80), descricao:limpa_(d.descricao, 300), responsavel:limpaEmail_(d.responsavel) || "", ordem:Number(d.ordem) || 50};
+  if(d.remover){ if(n > 0) sh.deleteRow(n); }
+  else if(n > 0) gravarCampos_(sh, n, "Areas", o);
+  else sh.appendRow(ABAS.Areas.map(function(k){ return o[k]; }));
+  registrar_(d._email, d.remover ? "area_remover" : "area_salvar", "", id);
+  return {ok:true, areas:lerAreas_()};
+}
+
+/* ============================== EDIÇÃO DOS APPS ============================== */
+
+function appSalvar_(d){
+  var app = limpaApp_(d.app); if(!app) return erro_("dados", "Informe o identificador do app.");
+  var sh = aba_("Apps"), n = acharLinha_(sh, "app", app);
+  var st = String(d.statusInicial || "analise");
+  if(["teste","analise","lista","ativo"].indexOf(st) < 0) return erro_("dados", "Status inicial inválido.");
+  var o = {app:app, nome:limpa_(d.nome, 80), descricao:limpa_(d.descricao, 400), url:limpaUrl_(d.url), venda:limpaUrl_(d.venda),
+    statusInicial:st, diasTeste:Math.max(0, Math.min(90, Number(d.diasTeste) || 0)), publico:d.publico === "nao" ? "nao" : "sim", ordem:Number(d.ordem) || 50};
+  if(n > 0) gravarCampos_(sh, n, "Apps", o); else sh.appendRow(ABAS.Apps.map(function(k){ return o[k]; }));
+  registrar_(d._email, "app_salvar", app, o.nome);
+  return {ok:true, apps:lerApps_()};
+}
+
+function configLer_(d){
+  var app = limpaApp_(d.app), out = {};
+  lerTudo_("Config").forEach(function(c){ if(c.app === app) out[c.chave] = c.valor; });
+  return {ok:true, app:app, config:out};
+}
+
+function configSalvar_(d){
+  var app = limpaApp_(d.app), chave = String(d.chave || "").replace(/[^\w.\-]/g, "").slice(0, 60);
+  if(!app || !chave) return erro_("dados", "Informe o app e o nome do campo.");
+  var sh = aba_("Config"), rows = sh.getDataRange().getValues(), n = -1;
+  for(var i = 1; i < rows.length; i++) if(String(rows[i][0]) === app && String(rows[i][1]) === chave){ n = i + 1; break; }
+  if(d.remover){ if(n > 0) sh.deleteRow(n); }
+  else{
+    var reg = [app, chave, limpa_(d.valor, 5000), d._email, new Date()];
+    if(n > 0) sh.getRange(n, 1, 1, reg.length).setValues([reg]); else sh.appendRow(reg);
+  }
+  registrar_(d._email, "config_salvar", app, chave);
+  return configLer_({app:app});
+}
+
+function registroLer_(){
+  var r = lerTudo_("Registro").slice(-200).reverse().map(function(x){ x.quando = x.quando ? new Date(x.quando).toISOString() : ""; return x; });
+  return {ok:true, registro:r};
+}
+
+function limpaUrl_(u){
+  u = String(u || "").trim().slice(0, 300);
+  return /^https:\/\/[\w.\-]+(\/[\w\-./?=&#%~+]*)?$/.test(u) ? u : "";
 }
 
 function adminResumo_(){
@@ -524,7 +682,9 @@ function criadores_(){
 function ehCriador_(email){ return criadores_().indexOf(String(email || "").toLowerCase()) >= 0; }
 
 function contaPublica_(c){
-  return {email:c.email, nome:c.nome, cidade:c.cidade, estado:c.estado, perfil:c.perfil, whatsapp:c.whatsapp, criador:ehCriador_(c.email)};
+  var p = papel_(c.email), m = p && p !== "criador" ? membro_(c.email) : null;
+  return {email:c.email, nome:c.nome, cidade:c.cidade, estado:c.estado, perfil:c.perfil, whatsapp:c.whatsapp,
+    criador:p === "criador", papel:p, areas:p === "criador" ? "todas" : (m ? String(m.areas || "") : "")};
 }
 
 /* ============================== PLANILHA ============================== */
@@ -540,6 +700,8 @@ function instalar(){
   Object.keys(ABAS).forEach(function(n){ aba_(n); });
   var apps = aba_("Apps");
   if(apps.getLastRow() < 2) APPS_PADRAO.forEach(function(r){ apps.appendRow(r); });
+  var areas = aba_("Areas");
+  if(areas.getLastRow() < 2) AREAS_PADRAO.forEach(function(r){ areas.appendRow(r); });
   hash_("teste", "teste"); // confere a PIMENTA
   MailApp.getRemainingDailyQuota(); // pede a autorização de e-mail
   return "Central instalada. Agora faça a implantação como App da Web.";

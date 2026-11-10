@@ -1,0 +1,23 @@
+{
+  "id": "./estacao.html",
+  "name": "Estação • Marca & Estratégia Tecnologia",
+  "short_name": "Estação M&E",
+  "description": "Estação de trabalho da equipe: apps, clientes, chamados, equipe e edição dos apps.",
+  "lang": "pt-BR",
+  "start_url": "./estacao.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0A2263",
+  "theme_color": "#0D2C7A",
+  "icons": [
+    {"src": "img/icone-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "img/icone-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "img/icone-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "Chamados", "url": "./estacao.html#chamados"},
+    {"name": "Clientes e licenças", "url": "./estacao.html#clientes"},
+    {"name": "Apps", "url": "./estacao.html#apps"}
+  ]
+}
