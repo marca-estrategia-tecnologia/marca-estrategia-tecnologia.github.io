@@ -7,29 +7,55 @@
 <meta name="description" content="Apps comerciais, sites, páginas de vendas, conexão de redes sociais e WhatsApp, com suporte e manutenção. Vale dos Sinos e Grande Porto Alegre.">
 <meta name="theme-color" content="#0A1628">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--noite:#0A1628;--royal:#1B3A6B;--ouro:#C9960C;--ouro2:#E8B84B;--papel:#F5F7FB;--texto:#1A2433;--borda:#DCE3EE}
+:root{--azul:#0D2C7A;--azul2:#1747C4;--noite:#0A1628;--royal:#1B3A6B;--ouro:#C9960C;--ouro2:#E8B84B;--papel:#F5F7FB;--texto:#1A2433;--borda:#DCE3EE}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--texto);background:#fff}
 a{color:var(--royal)}img{max-width:100%}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
-h1,h2,h3{font-family:"Playfair Display",Georgia,serif;line-height:1.15;color:var(--noite);margin:0 0 12px}
-h1{font-size:clamp(34px,5vw,56px);color:#fff;font-weight:900}h2{font-size:clamp(28px,3.4vw,40px)}h3{font-size:21px}
+h1,h2,h3{font-family:"Plus Jakarta Sans",Inter,system-ui,sans-serif;line-height:1.15;color:var(--noite);margin:0 0 12px}
+h1{font-size:clamp(34px,4.6vw,58px);color:#fff;font-weight:800;letter-spacing:-.02em}h2{font-size:clamp(28px,3.4vw,42px);font-weight:800;letter-spacing:-.015em}h3{font-weight:700}h3{font-size:21px}
 .dourado{background:linear-gradient(90deg,var(--ouro),var(--ouro2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .rotulo{font:700 12px/1 Inter,sans-serif;letter-spacing:1.6px;text-transform:uppercase;color:var(--ouro);margin:0 0 12px}
 .btn{display:inline-block;font:700 15px Inter,sans-serif;border-radius:10px;padding:13px 20px;text-decoration:none;border:0;cursor:pointer}
 .btn-ouro{background:linear-gradient(90deg,var(--ouro),var(--ouro2));color:var(--noite)}.btn-claro{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.35)}
 .btn-escuro{background:var(--noite);color:#fff}.btn-linha{background:#fff;color:var(--royal);border:1.5px solid var(--borda)}
-header{position:sticky;top:0;z-index:50;background:rgba(10,22,40,.97);backdrop-filter:blur(6px)}
+header{position:sticky;top:0;z-index:50;background:rgba(11,33,96,.96);backdrop-filter:blur(6px)}
 header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px}
-.logo{font:900 17px "Playfair Display",serif;color:#fff;text-decoration:none;line-height:1.1}.logo small{display:block;font:600 10px Inter,sans-serif;letter-spacing:1.4px;color:var(--ouro2);text-transform:uppercase}
+.logo{font:900 17px "Plus Jakarta Sans",sans-serif;color:#fff;text-decoration:none;line-height:1.1}.logo small{display:block;font:600 10px Inter,sans-serif;letter-spacing:1.4px;color:var(--ouro2);text-transform:uppercase}
 nav{display:flex;gap:18px;align-items:center}nav a{color:#D6DEEA;text-decoration:none;font-weight:600;font-size:14px}nav a:hover{color:#fff}
 #nav-conta{padding:9px 14px;font-size:14px}
 @media(max-width:760px){nav a.n-opc{display:none}}
-.hero{background:radial-gradient(1200px 500px at 80% -10%,#1B3A6B 0,transparent 60%),var(--noite);color:#D6DEEA;padding:84px 0 92px}
-.hero p.lead{font-size:19px;max-width:640px;margin:16px 0 28px}.hero .acoes{display:flex;gap:12px;flex-wrap:wrap}
-.selos{display:flex;gap:22px;flex-wrap:wrap;margin-top:34px;font-size:14px;color:#AFC0D6}.selos b{color:#fff}
+.hero{position:relative;overflow:hidden;color:#DCE6FF;padding:64px 0 0;background:radial-gradient(900px 520px at 78% 30%,#2B5BE0 0,transparent 62%),radial-gradient(700px 400px at 10% 110%,#1747C4 0,transparent 60%),linear-gradient(160deg,#0A2263 0%,#0D2C7A 45%,#123A9C 100%)}
+.hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr 1.25fr;gap:24px;align-items:end;max-width:1240px}
+.hero .txt{padding-bottom:72px}.hero p.lead{font-size:18px;max-width:560px;margin:16px 0 26px;color:#C9D6F5}.hero .acoes{display:flex;gap:12px;flex-wrap:wrap}
+.selos{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}.selo{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:12px 16px;color:#C9D6F5;font-size:13px}.selo b{display:block;font:800 26px "Plus Jakarta Sans",sans-serif;color:#fff;line-height:1.1}
+.palco{position:relative;height:640px}
+.palco .pessoa{position:absolute;left:-2%;bottom:0;height:600px;width:auto;max-width:none;z-index:3;filter:drop-shadow(0 20px 40px rgba(0,0,0,.35))}
+.telas{position:absolute;right:-2%;top:40px;width:76%;height:560px}
+.janela{position:absolute;width:60%;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 24px 60px rgba(4,14,48,.55);border:1px solid rgba(255,255,255,.25)}
+.janela .barra{height:22px;background:#EEF2F8;display:flex;align-items:center;gap:5px;padding:0 9px}.janela .barra i{width:8px;height:8px;border-radius:50%;background:#D0D7E2}.janela .barra i:first-child{background:#FF6159}.janela .barra i:nth-child(2){background:#FFBD2E}.janela .barra i:nth-child(3){background:#28C941}
+.janela .barra span{margin-left:8px;font:600 10px Inter,sans-serif;color:#5A6880;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.janela img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top}
+.etq{position:absolute;z-index:4;display:flex;align-items:center;gap:8px;background:#fff;color:#0A1628;border-radius:999px;padding:7px 13px 7px 8px;font:700 12px Inter,sans-serif;box-shadow:0 10px 26px rgba(0,0,0,.28);white-space:nowrap}
+.etq i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font:800 11px "Plus Jakarta Sans",sans-serif;font-style:normal}
+.seta{position:absolute;z-index:4;left:27%;top:30%;width:120px;height:80px}
+@media(max-width:960px){.hero .wrap{grid-template-columns:1fr}.hero .txt{padding-bottom:10px}.palco{height:540px}.palco .pessoa{height:480px}.telas{width:78%;top:0}.seta{display:none}}
+@media(max-width:560px){.palco{height:470px}.telas{height:330px;width:96%;right:-4%}.janela{width:66%}.palco .pessoa{height:360px;left:-6%}.etq{font-size:10.5px;padding:5px 10px 5px 6px}.etq i{width:18px;height:18px;font-size:9px}}
+.celular-sec{position:relative;overflow:hidden;color:#DCE6FF;padding:80px 0 0;background:radial-gradient(800px 480px at 20% 40%,#2B5BE0 0,transparent 60%),linear-gradient(200deg,#0A2263 0%,#0D2C7A 55%,#123A9C 100%)}
+.celular-sec h2{color:#fff}.celular-sec .wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:stretch;max-width:1240px}
+.vitrine-cel{position:relative;height:620px;align-self:center}
+.fone{position:absolute;width:31%;max-width:210px;border-radius:30px;padding:8px;background:#0B1324;box-shadow:0 26px 60px rgba(4,14,48,.6);border:1px solid rgba(255,255,255,.18)}
+.fone::before{content:"";position:absolute;top:13px;left:50%;transform:translateX(-50%);width:34%;height:14px;border-radius:10px;background:#0B1324;z-index:2}
+.fone img{display:block;width:100%;height:auto;aspect-ratio:9/19.5;object-fit:cover;object-position:top;border-radius:23px;background:#fff}
+.fone .etq{left:50%;transform:translateX(-50%);bottom:-18px}
+.lado{text-align:left;padding-top:20px;display:flex;flex-direction:column}
+.lado .pessoa2{width:auto;height:380px;align-self:flex-end;margin-top:auto;filter:drop-shadow(0 20px 40px rgba(0,0,0,.35))}
+.lado .bloco{padding:0 0 18px}
+@media(max-width:960px){.celular-sec .wrap{grid-template-columns:1fr}.vitrine-cel{height:500px;order:2}.lado{order:1}.lado .pessoa2{height:300px;align-self:center}}
+@media(max-width:560px){.vitrine-cel{height:300px;margin-top:10px}.lado .pessoa2{display:none}.celular-sec{padding-bottom:34px}.fone{border-radius:22px;padding:5px}.fone img{border-radius:18px}}
 section{padding:80px 0}.cinza{background:var(--papel)}
 .grade{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
 .cartao{background:#fff;border:1px solid var(--borda);border-radius:16px;padding:24px;display:flex;flex-direction:column}
@@ -38,7 +64,7 @@ section{padding:80px 0}.cinza{background:var(--papel)}
 .cartao .acoes{display:flex;gap:8px;flex-wrap:wrap}.cartao .btn{padding:10px 14px;font-size:14px}
 .passos{counter-reset:p;display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
 .passo{padding:22px;border-left:3px solid var(--ouro);background:#fff;border-radius:0 12px 12px 0}
-.passo::before{counter-increment:p;content:"0" counter(p);font:900 30px "Playfair Display",serif;color:var(--ouro);display:block}
+.passo::before{counter-increment:p;content:"0" counter(p);font:900 30px "Plus Jakarta Sans",sans-serif;color:var(--ouro);display:block}
 .servico ul{margin:0 0 16px;padding-left:18px;color:#46546A}
 #meus-apps,#painel{display:none}
 .tab{width:100%;border-collapse:collapse;font-size:14px;background:#fff}.tab th,.tab td{border-bottom:1px solid var(--borda);padding:10px 8px;text-align:left;vertical-align:top}
@@ -46,7 +72,7 @@ section{padding:80px 0}.cinza{background:var(--papel)}
 .tab select,.tab input{font:inherit;padding:6px;border:1px solid var(--borda);border-radius:8px;max-width:150px}
 .rolagem{overflow:auto;border:1px solid var(--borda);border-radius:12px}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:0 0 24px}
-.kpi{background:#fff;border:1px solid var(--borda);border-radius:12px;padding:16px}.kpi b{display:block;font:900 30px "Playfair Display",serif;color:var(--noite)}
+.kpi{background:#fff;border:1px solid var(--borda);border-radius:12px;padding:16px}.kpi b{display:block;font:900 30px "Plus Jakarta Sans",sans-serif;color:var(--noite)}
 .aviso{padding:12px 14px;border-radius:10px;background:#FFF6E0;color:#6B4E00;margin:0 0 18px}
 .lic{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:3px 0}
 .chamado{background:#fff;border:1px solid var(--borda);border-radius:12px;padding:14px;margin-bottom:12px}.chamado textarea{width:100%;font:inherit;border:1px solid var(--borda);border-radius:8px;padding:8px;margin:8px 0}
@@ -64,11 +90,32 @@ footer .wrap{display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between}
 
 <main id="topo">
 <section class="hero"><div class="wrap">
-  <p class="rotulo">Estratégia para vender • Tecnologia para crescer</p>
-  <h1>Ferramentas comerciais <span class="dourado">prontas para usar</span>, com quem entende de vendas.</h1>
-  <p class="lead">Apps de prospecção, atendimento e conteúdo, sites e páginas de vendas, conexão com redes sociais e WhatsApp. Implantação, suporte e manutenção em um só lugar.</p>
-  <div class="acoes"><a class="btn btn-ouro" href="#apps">Conhecer os apps</a><a class="btn btn-claro" href="#servicos">Contratar um serviço</a></div>
-  <div class="selos"><span><b>Uma conta</b> para todos os apps</span><span><b>Suporte</b> pela própria plataforma</span><span><b>Vale dos Sinos</b> e Grande Porto Alegre</span></div>
+  <div class="txt">
+    <p class="rotulo">Estratégia para vender • Tecnologia para crescer</p>
+    <h1>Os apps que fazem a sua empresa <span class="dourado">vender mais</span>.</h1>
+    <p class="lead">Prospecção, atendimento, conteúdo e presença digital em um só lugar. Implantação, suporte e manutenção feitos por quem vende todos os dias.</p>
+    <div class="acoes"><a class="btn btn-ouro" href="#apps">Conhecer os apps</a><a class="btn btn-claro" href="#servicos">Contratar um serviço</a></div>
+    <div class="selos"><div class="selo"><b>6</b>apps prontos</div><div class="selo"><b>1</b>conta para todos</div><div class="selo"><b>RS</b>Vale dos Sinos e Grande POA</div></div>
+  </div>
+  <div class="palco" aria-label="Apps da Marca &amp; Estratégia no computador">
+    <div class="telas"><div class="janela" style="left:0%;top:0px;z-index:1"><div class="barra"><i></i><i></i><i></i><span>prospectarion.github.io</span></div><img src="img/prospectarion-pc.webp" alt="Tela do Prospectarion" loading="eager" width="880" height="550"></div>
+<div class="janela" style="left:40%;top:34px;z-index:2"><div class="barra"><i></i><i></i><i></i><span>musicalis-br.github.io</span></div><img src="img/musicalis-pc.webp" alt="Tela do Musicalis" loading="eager" width="880" height="550"></div>
+<div class="janela" style="left:2%;top:262px;z-index:3"><div class="barra"><i></i><i></i><i></i><span>imoveis-e-investimentos-rs.github.io</span></div><img src="img/imoveis-pc.webp" alt="Tela do site Imóveis e Investimentos RS" loading="eager" width="880" height="550"></div>
+<div class="janela" style="left:40%;top:296px;z-index:4"><div class="barra"><i></i><i></i><i></i><span>mesa-de-editais-br.github.io</span></div><img src="img/mesa-pc.webp" alt="Tela do Mesa de Editais" loading="eager" width="880" height="550"></div>
+<span class="etq" style="left:3%;top:212px"><i style="background:#E8541E">P</i>Prospectarion</span><span class="etq" style="left:62%;top:246px"><i style="background:#E9B10B">M</i>Musicalis</span><span class="etq" style="left:5%;top:474px"><i style="background:#14234A">IR</i>Imóveis e Investimentos RS</span><span class="etq" style="left:64%;top:508px"><i style="background:#F26522">ME</i>Mesa de Editais</span></div>
+    <svg class="seta" viewBox="0 0 120 80" aria-hidden="true"><path d="M6 70 C 40 70, 60 20, 104 14" fill="none" stroke="#E8B84B" stroke-width="3" stroke-dasharray="7 6" stroke-linecap="round"/><path d="M92 6 L106 14 L94 25" fill="none" stroke="#E8B84B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <img class="pessoa" src="img/anderson.webp" alt="Anderson Alves, fundador da Marca &amp; Estratégia Tecnologia" width="720" height="955">
+  </div>
+</div></section>
+
+<section class="celular-sec" aria-labelledby="t-cel"><div class="wrap">
+  <div class="vitrine-cel"><div class="fone" style="left:0%;z-index:1;transform:rotate(-8deg);bottom:30px"><img src="img/prospectarion-cel.webp" alt="Prospectarion no celular" loading="lazy" width="360" height="780"><span class="etq"><i style="background:#E8541E">P</i>Prospectarion</span></div><div class="fone" style="left:17%;z-index:2;transform:rotate(-3deg);bottom:10px"><img src="img/proimob-cel.webp" alt="PRO IMOBILIÁRIA no celular" loading="lazy" width="360" height="780"><span class="etq"><i style="background:#1F4FD1">PI</i>PRO IMOBILIÁRIA</span></div><div class="fone" style="left:35%;z-index:4;transform:rotate(0deg);bottom:0px"><img src="img/social-cel.webp" alt="Social Imob 360 no celular" loading="lazy" width="360" height="780"><span class="etq"><i style="background:#F07B22">S</i>Social Imob 360</span></div><div class="fone" style="left:53%;z-index:3;transform:rotate(3deg);bottom:10px"><img src="img/musicalis-cel.webp" alt="Musicalis no celular" loading="lazy" width="360" height="780"><span class="etq"><i style="background:#E9B10B">M</i>Musicalis</span></div><div class="fone" style="left:69%;z-index:2;transform:rotate(8deg);bottom:30px"><img src="img/mesa-cel.webp" alt="Mesa de Editais no celular" loading="lazy" width="360" height="780"><span class="etq"><i style="background:#F26522">ME</i>Mesa de Editais</span></div></div>
+  <div class="lado">
+    <div class="bloco"><p class="rotulo">No bolso da sua equipe</p><h2 id="t-cel">Os mesmos apps, direto no celular.</h2>
+    <p style="color:#C9D6F5;max-width:460px">Instaláveis como aplicativo, funcionam até sem internet e mantêm a mesma conta em todos os aparelhos. Você abre, trabalha e vende de onde estiver.</p>
+    <div class="acoes" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:18px"><a class="btn btn-ouro" href="#apps">Escolher meu app</a><button class="btn btn-claro" id="btn-entrar2" type="button">Entrar na minha conta</button></div></div>
+    <img class="pessoa2" src="img/anderson.webp" alt="" loading="lazy" width="720" height="955">
+  </div>
 </div></section>
 
 <section id="meus-apps" class="cinza" aria-labelledby="t-meus"><div class="wrap">
@@ -195,6 +242,7 @@ function carregarMeus(){
   });
 }
 $("nav-conta").onclick = function(){ if(C && C.token()) location.hash = "meus-apps"; else if(exigirConta()) {} };
+var b2=$("btn-entrar2"); if(b2) b2.onclick=function(){ $("nav-conta").click(); };
 $("btn-sair").onclick = function(){ C.sair(); };
 $("btn-suporte").onclick = function(){ var t = prompt("Descreva o que você precisa:"); if(t) C.api({acao:"chamado", app:"geral", tipo:"suporte", mensagem:t}).then(function(r){ alert(r.mensagem); }); };
 document.addEventListener("central:entrou", entrouNaConta);
