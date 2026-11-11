@@ -80,6 +80,7 @@ var APPS_PADRAO = [
 /* ============================== ENTRADA ============================== */
 
 function doPost(e){
+  if(!e) return instalar(); // executado pelo botão Executar do editor: faz a instalação
   var lock = LockService.getScriptLock();
   try{
     lock.waitLock(15000);
@@ -693,10 +694,10 @@ function instalar(){
   var props = PropertiesService.getScriptProperties();
   if(String(props.getProperty("PIMENTA") || "").length < 20) // chave secreta gerada aqui: ninguém precisa digitar
     props.setProperty("PIMENTA", Utilities.getUuid() + Utilities.getUuid() + Utilities.getUuid());
-  if(!props.getProperty("CRIADOR_EMAILS")){
-    var eu = String(Session.getEffectiveUser().getEmail() || "").toLowerCase();
-    if(eu) props.setProperty("CRIADOR_EMAILS", eu);
-  }
+  // Criadores: o dono do script + o segundo e-mail oficial do Anderson (soma, nunca apaga quem já está)
+  var lista = criadores_(), eu = String(Session.getEffectiveUser().getEmail() || "").toLowerCase();
+  [eu, "andersonalvespinto@gmail.com"].forEach(function(e){ if(e && lista.indexOf(e) < 0) lista.push(e); });
+  props.setProperty("CRIADOR_EMAILS", lista.join(","));
   Object.keys(ABAS).forEach(function(n){ aba_(n); });
   var apps = aba_("Apps");
   if(apps.getLastRow() < 2) APPS_PADRAO.forEach(function(r){ apps.appendRow(r); });
@@ -704,7 +705,8 @@ function instalar(){
   if(areas.getLastRow() < 2) AREAS_PADRAO.forEach(function(r){ areas.appendRow(r); });
   hash_("teste", "teste"); // confere a PIMENTA
   MailApp.getRemainingDailyQuota(); // pede a autorização de e-mail
-  return "Central instalada. Agora faça a implantação como App da Web.";
+  Logger.log("Criadores: " + lista.join(", ") + " • Abas: " + Object.keys(ABAS).length);
+  return "Central instalada.";
 }
 
 function limparExpirados(){ // opcional: acionador diário

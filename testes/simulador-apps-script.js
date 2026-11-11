@@ -35,6 +35,7 @@ function criarSimulador(props){
     }; } },
     PropertiesService:{ getScriptProperties(){ return { getProperty(k){ return props[k] ?? null; }, setProperty(k, v){ props[k] = v; } }; } },
     Session:{ getEffectiveUser(){ return { getEmail(){ return "criador@teste.com"; } }; } },
+    Logger:{ log(){} },
     Utilities:{
       DigestAlgorithm:{SHA_256:"sha256"}, Charset:{UTF_8:"utf8"},
       getUuid(){ return crypto.randomUUID(); },
