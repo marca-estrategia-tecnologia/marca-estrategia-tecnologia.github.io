@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Estação de Trabalho — Marca &amp; Estratégia Tecnologia</title>
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#0D2C7A">
+<meta name="theme-color" content="#0097B2">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="img/icone-192.png">
+<link rel="icon" href="img/favicon-48.png" sizes="48x48"><link rel="icon" href="img/icone-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--azul:#0D2C7A;--azul2:#1747C4;--noite:#0A1628;--ouro:#C9960C;--ouro2:#E8B84B;--papel:#F3F6FC;--borda:#DCE3EE;--texto:#1A2433;--mudo:#5A6880}
+:root{--azul:#0D2C7A;--azul2:#1747C4;--noite:#0A1628;--ouro:#0097B2;--ouro2:#5CE1E6;--marca:#0097B2;--marca-clara:#5CE1E6;--marca-azul:#004AAD;--papel:#F3F6FC;--borda:#DCE3EE;--texto:#1A2433;--mudo:#5A6880}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{margin:0;font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--texto);background:var(--papel);min-height:100vh}
@@ -33,7 +33,7 @@ label{display:block;font-size:12.5px;font-weight:600;color:#1B3A6B;margin:8px 0 
 /* casca */
 .casca{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
 aside{background:linear-gradient(180deg,#0A2263,#0D2C7A 60%,#123A9C);color:#C9D6F5;padding:18px 14px calc(18px + env(safe-area-inset-bottom));position:sticky;top:0;height:100vh;overflow:auto}
-.marca{font:800 17px "Plus Jakarta Sans",sans-serif;color:#fff;line-height:1.15;margin:4px 6px 18px}.marca small{display:block;font:700 10px Inter,sans-serif;letter-spacing:1.3px;color:var(--ouro2);text-transform:uppercase;margin-top:3px}
+.marca{font:800 17px "Plus Jakarta Sans",sans-serif;color:#fff;line-height:1.15;margin:4px 6px 18px;display:flex;align-items:center;gap:10px}.marca img{width:44px;height:44px;border-radius:12px;flex:0 0 44px}.marca small{display:block;font:700 10px Inter,sans-serif;letter-spacing:1.3px;color:var(--ouro2);text-transform:uppercase;margin-top:3px}
 nav a{display:flex;align-items:center;gap:10px;color:#C9D6F5;text-decoration:none;padding:10px 12px;border-radius:10px;font-weight:600;margin:2px 0}
 nav a:hover{background:rgba(255,255,255,.08);color:#fff}nav a.ativo{background:#fff;color:var(--azul)}
 nav a .ico{width:22px;text-align:center}
@@ -69,6 +69,11 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left
   .menu-cel{display:inline-flex}
   main{padding:16px 14px calc(30px + env(safe-area-inset-bottom))}
 }
+.inst-topo{display:flex;align-items:center;gap:14px;margin-bottom:6px}.inst-icone{width:72px;height:72px;border-radius:18px;box-shadow:0 6px 18px rgba(0,151,178,.35)}
+.btn-app{display:inline-flex;align-items:center;gap:12px;border:0;border-radius:18px;padding:10px 20px 10px 10px;margin-top:12px;cursor:pointer;background:linear-gradient(135deg,#0097B2,#5CE1E6);color:#0A1628;font:800 16px "Plus Jakarta Sans",Inter,sans-serif;text-align:left;box-shadow:0 8px 22px rgba(0,151,178,.35);transition:transform .15s,box-shadow .15s}
+.btn-app:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(0,151,178,.45)}.btn-app:focus-visible{outline:3px solid #004AAD;outline-offset:3px}
+.btn-app img{width:40px;height:40px;border-radius:11px;box-shadow:0 0 0 2px rgba(255,255,255,.7)}.btn-app small{display:block;font:600 11px Inter,sans-serif;letter-spacing:.6px;color:#00404C;text-transform:uppercase}
+.btn-app[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -84,7 +89,7 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left
 
 <div class="casca" id="casca" hidden>
   <aside id="lateral">
-    <div class="marca">Marca &amp; Estratégia<small>Estação de Trabalho</small></div>
+    <div class="marca"><img src="img/logo-me.png" alt="" width="44" height="44"><span>Marca &amp; Estratégia<small>Estação de Trabalho</small></span></div>
     <nav id="menu" aria-label="Estação">
       <a href="#inicio" data-v="inicio"><span class="ico">🏠</span>Início</a>
       <a href="#apps" data-v="apps"><span class="ico">🧩</span>Apps</a>
@@ -190,7 +195,8 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left
 
     <section class="vista" id="v-instalar">
       <h1>Instalar o atalho</h1><p class="muted">A Estação abre como um aplicativo, com ícone próprio, no computador, tablet e celular.</p>
-      <div class="cartao"><button class="btn ouro" id="btn-instalar" type="button" hidden>📲 Instalar agora</button><p id="inst-status" class="muted"></p></div>
+      <div class="cartao"><div class="inst-topo"><img class="inst-icone" src="img/icone-192.png" alt="Ícone da Estação: logo Marca &amp; Estratégia" width="72" height="72"><div><b>Estação • Marca &amp; Estratégia</b><br><span class="muted">Este é o ícone que aparece na área de trabalho e na tela do celular.</span></div></div>
+        <button class="btn-app" id="btn-instalar" type="button" hidden><img src="img/icone-192.png" alt="" width="40" height="40"><span>Instalar a Estação<small>Marca &amp; Estratégia Tecnologia</small></span></button><p id="inst-status" class="muted"></p></div>
       <div class="grade">
         <div class="cartao"><h3>💻 Computador (Chrome ou Edge)</h3><ol class="muted"><li>Abra esta página.</li><li>Clique no ícone de instalar na barra de endereço (monitor com seta) ou no menu ⋮ → <b>Instalar Estação M&amp;E</b>.</li><li>O atalho aparece na área de trabalho e no menu Iniciar.</li></ol></div>
         <div class="cartao"><h3>📱 Android</h3><ol class="muted"><li>Abra no Chrome.</li><li>Menu ⋮ → <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</li></ol></div>
@@ -511,6 +517,7 @@ var APPID = MODO === "portal" ? "" : (CFG.app || "");
 var LS = "central." + (CFG.app || "portal") + ".";
 var TOLERANCIA_OFFLINE = 7 * 864e5, RECHECAR = 6 * 36e5;
 var raiz, estado = {email:"", tela:""};
+var LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAAwFBMVEUAl7L8/v4AAAAAia4AeK9Wt8pzxdTM6e+94+qq2+QppbwAl7Jj5+oBaq8Al7IAqqqFzNk5q8QAk6kAl68AlrEVoLhjvc7b8PQAlrKc1uBW2eKS0d0Af38Af78A//9d5OZBrcI7xtJLyNtK0tsAVaoAf/8mtsgjfcAxmMoGW7AdssUdrMEoicQln7gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAqtMw+AAAAQHRSTlP+/wD//////////9X//7MD//8WNWn///9T////AwQB//////8DAv//////////AAAAAAAAAAAAAAAAAAAAAAAA9rUFOQAAA2VJREFUeNrNWQl2ozAMFQjMTiBsgaTN1qbtLPe/3niB2E7SvoZqZvpfCCDLH0sytqKAO+GBH1WdJ3AXkryuxs4KMJ43j+6yzmEW8nrpPm5swoXrrhKYjWQlKTThwl3m8CXky5FREm7cKoEvIqnczUT44K6AACsZGhD2VkCCSlgNLg8vEIEHmxM+P+VUhPnTswsLGgdOblyAu0zoCJMlN7kGQtTc5ISSMFlABaSooKYlrCGnJcwhoSUkpvvfwDmdmthvC3ERsz4MgrBvm6lpxyIpYY3xgKa5SRM7TiDhSDQYR84ZTKq0gZYUqhOLpCyI2mtG3yBwHPDNO2fNFax2J+Y9QknmF1JwTYlrQ993It/vjXsMncLXY+R8qrXjHXtj0BdWG1YK92gbI+bEyF0WTPxNoPVK0zEmOsNGGU9mPKEUEmQTS6CHCmBemwgsF4kwaEGkZox0baAdGkhpqD39HiHo7qORhqTFc0Mvpb3VSyP8gLA1JMajpd+wsJ/6KUKmJRGW9sCRmZG8n7BFduGJ6b6fR1iinuMxIp9Nk140z2RzfkUSgRXzewkDaIzZVEgwBX8mofFK7dAEzCIMjSBfTZRvQhjTElo+ZCSEoMU9AaF6lTu1WQQUhPxNicTy9lusCaW5Qs8kbDGG03E4nmBnvm08+DNXG+63YyowiNtphcGd2F9mEXawT7cHfxjSo/CmWqfjQgx95noIQ3p4eTmkQ9rIhStar8ObAfokYdGk2+Htl19u0x/m9l3CB3tKc7lJMTQJ05fyNfNtwhtz3Lnc9ZidO4wSYfLrq5/xERoa13xoDt+Xu7CRfSgHqSQBTjwow3ZI99qo60ykNHd1nrFc7PNOtDtLIh5mgeNZYx2/l4d0IgHrVKYgN8eumwRcwpRKx+Dn/rA/8VG0jK/Wu9v5nJ3mxZeiJr71cs1NQv9qVozW2PC9caLHAeB5fJv1+AfVtWw5n8SReUqBK7+hVtT6FqGHmDUZirM4PNGQeZlQECeUTcC/M/HlKalUVH0tS1A9WLSNhN5I6ClC0Sy6K4WJ0FOK0qrsOl7j6MEyWbWOJqPUk6bi5AjxrEuTvxImMqZvOxP/9e/RhP4HOHmJgLyIQV5mIS8EkZeq6Itp1OU++oIkecmUvqhLX3amL4zTl+7p/1yg+/vjD8/mLV2yipnrAAAAAElFTkSuQmCC";
 
 function ls(k, v){ try{ if(v === undefined) return JSON.parse(localStorage.getItem(LS + k) || "null"); if(v === null) localStorage.removeItem(LS + k); else localStorage.setItem(LS + k, JSON.stringify(v)); }catch(e){ return null; } }
 function api(dados){
@@ -524,7 +531,8 @@ function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(
 var CSS = "#ca-raiz{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(10,22,40,.92);font:15px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#0A1628;overflow:auto}" +
 "#ca-raiz.ca-on{display:flex}#ca-raiz *{box-sizing:border-box}" +
 "#ca-raiz .ca-caixa{background:#fff;border-radius:16px;width:100%;max-width:400px;padding:24px 22px;box-shadow:0 20px 60px rgba(0,0,0,.4);margin:auto}" +
-"#ca-raiz .ca-marca{font-size:11px;letter-spacing:1.2px;font-weight:700;color:#C9960C;text-transform:uppercase;margin:0 0 4px}" +
+"#ca-raiz .ca-topo{display:flex;align-items:center;gap:10px;margin:0 0 10px}#ca-raiz .ca-topo img{width:40px;height:40px;border-radius:11px;flex:0 0 40px}#ca-raiz .ca-topo .ca-marca{margin:0}" +
+"#ca-raiz .ca-marca{font-size:11px;letter-spacing:1.2px;font-weight:700;color:#004AAD;text-transform:uppercase;margin:0 0 4px}" +
 "#ca-raiz h2{margin:0 0 6px;font-size:22px;line-height:1.2;color:#0A1628}#ca-raiz p{margin:6px 0 12px;color:#334}" +
 "#ca-raiz label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px;color:#1B3A6B}" +
 "#ca-raiz input[type=email],#ca-raiz input[type=password],#ca-raiz input[type=text],#ca-raiz input[type=tel],#ca-raiz textarea{width:100%;padding:12px;border:1.5px solid #C8D0DC;border-radius:10px;font:inherit;background:#fff;color:#0A1628}" +
@@ -536,14 +544,14 @@ var CSS = "#ca-raiz{position:fixed;inset:0;z-index:2147483000;display:none;align
 "#ca-raiz .ca-link{background:none;color:#1B3A6B;text-decoration:underline;padding:6px;margin-top:6px;font-weight:600}" +
 "#ca-raiz .ca-msg{border-radius:10px;padding:10px 12px;margin:12px 0 0;font-size:14px;display:none}" +
 "#ca-raiz .ca-msg.ca-erro{display:block;background:#FDECEC;color:#8A1C1C}#ca-raiz .ca-msg.ca-ok{display:block;background:#E8F5EC;color:#1E5B32}" +
-"#ca-raiz .ca-msg.ca-info{display:block;background:#FFF6E0;color:#6B4E00}" +
+"#ca-raiz .ca-msg.ca-info{display:block;background:#E8FAFB;color:#00404C}" +
 "#ca-raiz .ca-check{display:flex;gap:8px;align-items:flex-start;font-weight:400;color:#334}#ca-raiz .ca-check input{margin-top:3px;width:18px;height:18px}" +
 "#ca-raiz .ca-ver{position:relative}#ca-raiz .ca-ver button{position:absolute;right:6px;top:6px;width:auto;margin:0;padding:6px 8px;background:#F1F4F9;color:#1B3A6B;font-size:12px}" +
 "#ca-raiz .ca-pe{font-size:12px;color:#667;margin-top:14px;text-align:center}#ca-raiz .ca-pe a{color:#1B3A6B}" +
-"#ca-raiz .ca-forca{height:4px;border-radius:2px;background:#E5E9F0;margin-top:6px;overflow:hidden}#ca-raiz .ca-forca i{display:block;height:100%;width:0;background:#C9960C;transition:width .2s}" +
-"#ca-botao{position:fixed;left:12px;bottom:12px;z-index:2147482999;border:0;border-radius:999px;padding:9px 13px;background:#0A1628;color:#fff;font:600 13px Inter,system-ui,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer;opacity:.9}" +
-"#ca-faixa{position:fixed;left:12px;right:12px;bottom:58px;z-index:2147482998;max-width:520px;margin:auto;background:#FFF6E0;color:#4A3600;border:1px solid #E8B84B;border-radius:12px;padding:12px 14px;font:14px/1.4 Inter,system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.2)}" +
-"#ca-faixa button{font:600 13px Inter,system-ui,sans-serif;border:0;border-radius:8px;padding:8px 10px;margin:8px 8px 0 0;cursor:pointer;background:#0A1628;color:#fff}#ca-faixa .ca-depois{background:transparent;color:#4A3600;text-decoration:underline}" +
+"#ca-raiz .ca-forca{height:4px;border-radius:2px;background:#E5E9F0;margin-top:6px;overflow:hidden}#ca-raiz .ca-forca i{display:block;height:100%;width:0;background:#0097B2;transition:width .2s}" +
+"#ca-botao{position:fixed;left:12px;bottom:12px;z-index:2147482999;border:0;border-radius:999px;padding:9px 13px;background:#0097B2;color:#fff;font:600 13px Inter,system-ui,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer;opacity:.9}" +
+"#ca-faixa{position:fixed;left:12px;right:12px;bottom:58px;z-index:2147482998;max-width:520px;margin:auto;background:#E8FAFB;color:#00404C;border:1px solid #5CE1E6;border-radius:12px;padding:12px 14px;font:14px/1.4 Inter,system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.2)}" +
+"#ca-faixa button{font:600 13px Inter,system-ui,sans-serif;border:0;border-radius:8px;padding:8px 10px;margin:8px 8px 0 0;cursor:pointer;background:#0A1628;color:#fff}#ca-faixa .ca-depois{background:transparent;color:#00404C;text-decoration:underline}" +
 "@media print{#ca-raiz,#ca-botao,#ca-faixa{display:none!important}}";
 
 function montar(){
@@ -555,7 +563,7 @@ function montar(){
 
 /* ---------- telas ---------- */
 function caixa(titulo, sub, corpo, rodape){
-  return '<div class="ca-caixa"><p class="ca-marca">' + esc(CFG.nome || "Central") + ' • Marca &amp; Estratégia Tecnologia</p><h2>' + titulo + '</h2>' +
+  return '<div class="ca-caixa"><div class="ca-topo"><img src="' + LOGO + '" alt="Marca &amp; Estratégia" width="40" height="40"><p class="ca-marca">' + esc(CFG.nome || "Central") + ' • Marca &amp; Estratégia Tecnologia</p></div><h2>' + titulo + '</h2>' +
     (sub ? '<p>' + sub + '</p>' : '') + corpo + '<div class="ca-msg" id="ca-msg" role="status" aria-live="polite"></div>' + (rodape || "") + '</div>';
 }
 function campoSenha(id, rot, auto){

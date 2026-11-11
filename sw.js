@@ -1,6 +1,6 @@
 /* Service worker da Central e da Estação: abre sem internet as páginas já visitadas.
    Dados (contas, licenças, chamados) sempre vêm do servidor. */
-var CACHE = "central-1";
+var CACHE = "central-2";
 var ARQUIVOS = ["./", "index.html", "estacao.html", "manifest.webmanifest", "img/icone-192.png", "img/icone-512.png", "img/anderson.webp"];
 self.addEventListener("install", function(e){ e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(ARQUIVOS); })); self.skipWaiting(); });
 self.addEventListener("activate", function(e){
