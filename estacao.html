@@ -91,6 +91,7 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left
       <a href="#clientes" data-v="clientes" data-p="diretor,editor,atendente"><span class="ico">👥</span>Clientes e licenças</a>
       <a href="#chamados" data-v="chamados" data-p="diretor,editor,atendente"><span class="ico">💬</span>Chamados</a>
       <a href="#editar" data-v="editar" data-p="diretor,editor"><span class="ico">✏️</span>Editar apps</a>
+      <a href="#criadores" data-v="criadores" data-p=""><span class="ico">👑</span>Criadores (1 a 4)</a>
       <a href="#equipe" data-v="equipe" data-p="diretor,editor,atendente"><span class="ico">🧑‍💼</span>Equipe e áreas</a>
       <a href="#registro" data-v="registro" data-p="diretor"><span class="ico">📜</span>Registro</a>
       <a href="#instalar" data-v="instalar"><span class="ico">📲</span>Instalar atalho</a>
@@ -107,13 +108,13 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left
       <div class="kpis" id="kpis"></div>
       <div class="grade">
         <div class="cartao"><h3>Atalhos</h3><p class="muted">O que mais se usa no dia a dia.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="#apps">Abrir apps</a><a class="btn linha" href="#chamados">Chamados</a><a class="btn linha" href="#clientes">Liberar cliente</a></div></div>
-        <div class="cartao"><h3>Migração dos clientes</h3><p class="muted">Clientes dos endereços antigos: peça para clicarem em "Levar meus dados" no app antigo e restaurarem em Minha conta → Cópia de segurança no app novo. Libere o app de cada um em Clientes e licenças.</p></div>
+        <div class="cartao"><h3>Migração dos clientes</h3><p class="muted">Os dados de quem usava os endereços antigos continuam no aparelho da pessoa. No app novo, no mesmo aparelho: <b>Minha conta → Trazer meus dados do endereço antigo</b>. Libere o app de cada cliente em Clientes e licenças.</p></div>
         <div class="cartao"><h3>Ajuda</h3><p class="muted">Dúvida de uso? Abra um chamado interno descrevendo o problema. Tudo o que você altera aqui fica no Registro.</p></div>
       </div>
     </section>
 
     <section class="vista" id="v-apps">
-      <h1>Apps</h1><p class="muted">Abra qualquer app no computador, tablet ou celular. Na primeira vez em cada app, entre com a mesma conta da Estação: sua licença de equipe já está liberada.</p>
+      <h1>Apps</h1><p class="muted">Abra qualquer app no computador, tablet ou celular. Pelo botão <b>Abrir app</b> você já entra com a mesma conta da Estação, sem digitar a senha de novo.</p>
       <div class="grade" id="grade-apps"></div>
     </section>
 
@@ -149,6 +150,24 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left
       <div class="cartao"><h3>Configurações do app</h3><p class="muted">Campos livres no formato nome → valor (ex.: <code>aviso.topo</code>, <code>preco.mensal</code>, <code>link.whatsapp</code>). Ficam públicos para o app ler: nunca coloque senhas aqui.</p>
         <div class="rolagem" style="margin-bottom:10px"><table><thead><tr><th>Campo</th><th>Valor</th><th></th></tr></thead><tbody id="tb-config"></tbody></table></div>
         <form id="f-config" class="linha"><div><label for="c-chave">Campo</label><input id="c-chave" required pattern="[\w.\-]+"></div><div style="flex:2 1 260px"><label for="c-valor">Valor</label><input id="c-valor"></div><div style="flex:0 0 auto"><button class="btn" type="submit">Salvar campo</button></div></form></div>
+    </section>
+
+    <section class="vista" id="v-criadores">
+      <h1>Criadores</h1>
+      <p class="muted">O <b>e-mail 1</b> é o principal (CEO): só ele muda esta lista. Os e-mails <b>2, 3 e 4</b> são co-criadores. Todos os quatro têm acesso livre e ilimitado a todos os apps e à Estação. Se o e-mail principal for perdido, um co-criador pede a sucessão: o principal é avisado por e-mail e, se não entrar em <span id="cr-dias">7</span> dias, o co-criador assume como e-mail 1.</p>
+      <div class="cartao"><h3>Ordem atual</h3><div class="rolagem"><table><thead><tr><th>Nº</th><th>E-mail</th><th>Função</th><th>Conta</th><th>Último acesso</th></tr></thead><tbody id="tb-criadores"></tbody></table></div></div>
+      <div class="cartao" id="box-cr-editar" hidden style="margin-top:14px"><h3>Definir os co-criadores (2, 3 e 4)</h3><p class="muted">Use e-mails seus, de confiança. Cada um recebe um aviso e cria a conta com o mesmo e-mail. Deixe em branco para não usar.</p>
+        <form id="f-cri" class="linha">
+          <div><label for="cr-2">E-mail 2</label><input id="cr-2" type="email"></div>
+          <div><label for="cr-3">E-mail 3</label><input id="cr-3" type="email"></div>
+          <div><label for="cr-4">E-mail 4</label><input id="cr-4" type="email"></div>
+          <div><label for="cr-senha">Sua senha (confirmação)</label><input id="cr-senha" type="password" autocomplete="current-password" required></div>
+          <div style="flex:0 0 auto"><button class="btn" type="submit">Salvar ordem</button></div></form>
+        <hr style="border:0;border-top:1px solid #E5E9F0;margin:16px 0">
+        <h3>Passar o posto de e-mail principal</h3><p class="muted">Use só se quiser que outro e-mail seu vire o nº 1. Você passa a ser co-criador.</p>
+        <form id="f-transf" class="linha"><div><label for="tr-email">Novo e-mail principal</label><select id="tr-email"></select></div><div><label for="tr-senha">Sua senha</label><input id="tr-senha" type="password" autocomplete="current-password" required></div><div style="flex:0 0 auto"><button class="btn linha" type="submit">Passar o posto</button></div></form>
+      </div>
+      <div class="cartao" id="box-cr-suc" hidden style="margin-top:14px"><h3>Sucessão do e-mail principal</h3><p class="muted" id="suc-txt"></p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="suc-pedir" type="button">Pedir sucessão</button><button class="btn" id="suc-concluir" type="button" hidden>Concluir sucessão</button><button class="btn linha" id="suc-cancelar" type="button" hidden>Cancelar pedido</button></div></div>
     </section>
 
     <section class="vista" id="v-equipe">
@@ -208,7 +227,8 @@ function entrar(){
     EU = r.conta;
     if(!EU.papel){ bloquear("O e-mail " + EU.email + " não faz parte da equipe. Peça acesso a um criador."); return; }
     $("bloqueio").hidden = true; $("casca").hidden = false;
-    $("eu-nome").textContent = EU.nome || ""; $("eu-email").textContent = EU.email; $("eu-papel").textContent = EU.papel;
+    $("eu-nome").textContent = EU.nome || ""; $("eu-email").textContent = EU.email;
+    $("eu-papel").textContent = EU.papel === "criador" ? (EU.principal ? "criador principal • e-mail 1" : "co-criador • e-mail " + (EU.ordemCriador || "")) : EU.papel;
     document.querySelectorAll("#menu a[data-p]").forEach(function(a){ a.hidden = !pode(a.getAttribute("data-p")); });
     $("box-add").hidden = EU.papel !== "criador"; $("box-area").hidden = EU.papel !== "criador";
     $("form-lib-box").hidden = !pode("diretor");
@@ -231,7 +251,7 @@ function rota(){
   document.querySelectorAll(".vista").forEach(function(s){ s.classList.toggle("on", s.id === "v-" + v); });
   document.querySelectorAll("#menu a").forEach(function(x){ x.classList.toggle("ativo", x === a); });
   $("lateral").classList.remove("aberto");
-  ({inicio:carregarInicio, clientes:carregarClientes, chamados:carregarChamados, editar:carregarEditar, equipe:carregarEquipe, registro:carregarRegistro, instalar:prepararInstalar}[v] || function(){})();
+  ({inicio:carregarInicio, clientes:carregarClientes, chamados:carregarChamados, editar:carregarEditar, equipe:carregarEquipe, criadores:carregarCriadores, registro:carregarRegistro, instalar:prepararInstalar}[v] || function(){})();
   window.scrollTo(0, 0);
 }
 window.addEventListener("hashchange", rota);
@@ -257,13 +277,14 @@ function carregarApps(){
     $("grade-apps").innerHTML = APPS.map(function(a){
       var c = CORES[a.app] || ["#1747C4", (a.nome || "?").slice(0, 2).toUpperCase()];
       return '<div class="cartao app"><div class="cab"><span class="logo" style="background:' + c[0] + '">' + esc(c[1]) + '</span><div><h3 style="margin:0">' + esc(a.nome) + '</h3><span class="muted">' + esc(String(a.url || "").replace("https://", "")) + '</span></div></div>' +
-        '<p>' + esc(a.descricao) + '</p><div class="acoes"><a class="btn" href="' + esc(a.url) + '" target="_blank" rel="noopener">Abrir app</a>' +
+        '<p>' + esc(a.descricao) + '</p><div class="acoes"><button class="btn abrir-app" data-url="' + esc(a.url) + '" data-app="' + esc(a.app) + '" type="button">Abrir app</button>' +
         (a.venda ? '<a class="btn linha" href="' + esc(a.venda) + '" target="_blank" rel="noopener">Página de venda</a>' : '') +
         '<button class="btn linha copiar" data-url="' + esc(a.url) + '" type="button">Copiar link</button></div></div>';
     }).join("");
   });
 }
 document.addEventListener("click", function(e){
+  var ab = e.target.closest(".abrir-app"); if(ab){ C.abrirApp ? C.abrirApp(ab.dataset.url, ab.dataset.app) : window.open(ab.dataset.url, "_blank"); return; }
   var b = e.target.closest(".copiar"); if(!b) return;
   navigator.clipboard.writeText(b.getAttribute("data-url")).then(function(){ toast("Link copiado. Cole no WhatsApp ou e-mail do cliente."); }, function(){ toast(b.getAttribute("data-url")); });
 });
@@ -397,6 +418,46 @@ document.addEventListener("click", function(e){
 });
 function confirmar(t){ try{ return window.confirm(t); }catch(x){ return true; } }
 
+/* ---------- criadores (1 principal + 3 co-criadores) ---------- */
+function carregarCriadores(){
+  api({acao:"criadoresListar"}).then(function(r){
+    if(!r.ok) return toast(r.mensagem);
+    $("cr-dias").textContent = r.prazoDias;
+    var euPrincipal = r.eu === r.principal;
+    $("tb-criadores").innerHTML = r.criadores.map(function(c){
+      return '<tr><td><b>' + c.ordem + '</b></td><td>' + esc(c.email) + (c.email === r.eu ? ' <span class="tag">você</span>' : '') + '</td><td>' + (c.ordem === 1 ? '<span class="tag ok">principal (CEO)</span>' : '<span class="tag">co-criador</span>') + '</td>' +
+        '<td>' + (c.confirmado ? '<span class="tag ok">conta ativa</span>' : '<span class="tag em">' + (c.contaCriada ? 'falta confirmar' : 'sem conta ainda') + '</span>') + '</td><td>' + (c.ultimoAcesso ? new Date(c.ultimoAcesso).toLocaleString("pt-BR") : "—") + '</td></tr>';
+    }).join("");
+    $("box-cr-editar").hidden = !euPrincipal;
+    if(euPrincipal){
+      var co = r.criadores.slice(1).map(function(c){ return c.email; });
+      ["cr-2", "cr-3", "cr-4"].forEach(function(id, i){ $(id).value = co[i] || ""; });
+      $("tr-email").innerHTML = co.map(function(e){ return '<option>' + esc(e) + '</option>'; }).join("") || '<option value="">Cadastre um co-criador primeiro</option>';
+    }
+    var suc = r.sucessao, box = $("box-cr-suc");
+    box.hidden = euPrincipal && !suc;
+    $("suc-pedir").hidden = euPrincipal || !!suc;
+    $("suc-concluir").hidden = !(suc && suc.email === r.eu && Date.now() >= new Date(suc.liberaEm).getTime());
+    $("suc-cancelar").hidden = !(suc && (euPrincipal || suc.email === r.eu));
+    $("suc-txt").textContent = suc ? (suc.email + " pediu a sucessão em " + new Date(suc.pedido).toLocaleString("pt-BR") + ". Pode ser concluída a partir de " + new Date(suc.liberaEm).toLocaleString("pt-BR") + (euPrincipal ? ". Como você entrou, o pedido já foi cancelado ao entrar; se ainda aparecer, clique em Cancelar pedido." : ".")) :
+      "Use só se o e-mail principal (" + r.principal + ") foi perdido ou está sem acesso. Ele será avisado por e-mail e, se não entrar em " + r.prazoDias + " dias, você poderá concluir e virar o e-mail 1.";
+  });
+}
+$("f-cri").onsubmit = function(e){
+  e.preventDefault();
+  var lista = ["cr-2", "cr-3", "cr-4"].map(function(id){ return $(id).value.trim(); }).filter(String);
+  api({acao:"criadoresSalvar", senha:$("cr-senha").value, coCriadores:lista}).then(function(r){ $("cr-senha").value = ""; toast(r.mensagem || (r.ok ? "Salvo" : "Erro")); if(r.ok) carregarCriadores(); });
+};
+$("f-transf").onsubmit = function(e){
+  e.preventDefault(); var alvo = $("tr-email").value; if(!alvo) return;
+  if(!confirmar("Passar o posto de e-mail principal para " + alvo + "? Você passa a ser co-criador.")) return;
+  api({acao:"transferirPrincipal", senha:$("tr-senha").value, email:alvo}).then(function(r){ $("tr-senha").value = ""; toast(r.mensagem); if(r.ok){ entrar(); location.hash = "#criadores"; } });
+};
+$("suc-pedir").onclick = function(){ if(confirmar("Pedir para assumir como e-mail principal? O principal atual será avisado por e-mail.")) api({acao:"pedirSucessao"}).then(function(r){ toast(r.mensagem); carregarCriadores(); }); };
+$("suc-concluir").onclick = function(){ api({acao:"concluirSucessao"}).then(function(r){ toast(r.mensagem); if(r.ok){ entrar(); location.hash = "#criadores"; } }); };
+$("suc-cancelar").onclick = function(){ api({acao:"cancelarSucessao"}).then(function(r){ toast(r.mensagem); carregarCriadores(); }); };
+
+
 /* ---------- registro ---------- */
 function carregarRegistro(){
   api({acao:"registroLer"}).then(function(r){
@@ -424,7 +485,7 @@ else if(C.token()) entrar(); else bloquear();
 <!-- CENTRAL-ACESSO -->
 <script>window.CENTRAL_CFG={"url": "https://script.google.com/macros/s/AKfycbzHUemEpAn0XZNf-eO2rAw9virHv4F6PERNbbUypi8jT0PaGbSa3znCw7QtbFaGvwc/exec", "app": "portal", "nome": "Estação de Trabalho", "portal": "https://marca-estrategia-tecnologia.github.io/", "modo": "portal"};</script>
 <script>
-/* CENTRAL-ACESSO • kit de acesso dos apps da Marca & Estratégia Tecnologia  v1.0.0
+/* CENTRAL-ACESSO • kit de acesso dos apps da Marca & Estratégia Tecnologia  v1.1.0
  *
  * Entra em cada app (inline, pelo ferramentas/injetar.py). Faz:
  *  - login, cadastro com repetição de senha, confirmação do e-mail por código;
@@ -432,6 +493,9 @@ else if(C.token()) entrar(); else bloquear();
  *  - conferência da licença do app na Central (com 7 dias de tolerância sem internet);
  *  - lembrete semanal de cópia de segurança (baixar / restaurar) dos dados do aparelho;
  *  - menu "Minha conta": Meus apps, Suporte, Cópia de segurança, Sair.
+ *  - entrar uma vez só: abre os outros apps com um passe de uso único (#ca-passe=...);
+ *  - "Trazer meus dados do endereço antigo": copia os dados que ficaram no endereço antigo
+ *    (aap29.github.io) para este app, pelo mesmo aparelho, sem arquivo no meio.
  *
  * Configuração (antes deste script):
  *   window.CENTRAL_CFG = { url:"https://script.google.com/macros/s/.../exec", app:"prospectarion",
@@ -667,14 +731,105 @@ function botao(){
 }
 function menu(){
   var c = ls("conta") || {};
-  var portal = CFG.portal ? '<a class="ca-sec" style="display:block;text-align:center;text-decoration:none;padding:12px;border-radius:10px;margin-top:8px" href="' + esc(CFG.portal) + '#meus-apps" target="_blank" rel="noopener">Meus apps</a>' : '';
+  var portal = '<div id="ca-apps" style="margin-top:6px"><small style="color:#667">Carregando seus apps…</small></div>';
   mostrar(caixa("Minha conta", esc(c.nome || "") + (c.email ? "<br><small>" + esc(c.email) + "</small>" : ""),
-    portal + '<button class="ca-sec" id="ca-sup">Pedir suporte</button>' + (CFG.backup ? '<button class="ca-sec" id="ca-bk">Cópia de segurança</button>' : '') +
+    portal + '<button class="ca-sec" id="ca-sup">Pedir suporte</button>' + (CFG.backup ? '<button class="ca-sec" id="ca-bk">Cópia de segurança</button>' : '') + (CFG.ponte ? '<button class="ca-sec" id="ca-ponte">Trazer meus dados do endereço antigo</button>' : '') +
     '<button class="ca-sec" id="ca-sair">Sair</button><button class="ca-link" id="ca-fechar">Fechar</button>', pe()));
   document.getElementById("ca-fechar").onclick = fechar;
   document.getElementById("ca-sair").onclick = sair;
   document.getElementById("ca-sup").onclick = telaSuporte;
   if(CFG.backup) document.getElementById("ca-bk").onclick = function(){ fechar(); faixaBackup(true); };
+  if(CFG.ponte) document.getElementById("ca-ponte").onclick = trazerDados;
+  listarApps(document.getElementById("ca-apps"));
+}
+function listarApps(caixaApps){
+  if(!caixaApps) return;
+  api({acao:"meusApps", token:ls("token")}).then(function(r){
+    var outros = (r.apps || []).filter(function(a){ return a.url && a.app !== APPID; });
+    if(!r.ok || !outros.length){ caixaApps.innerHTML = CFG.portal ? '<a class="ca-sec" style="display:block;text-align:center;text-decoration:none;padding:12px;border-radius:10px" href="' + esc(CFG.portal) + '" target="_blank" rel="noopener">Ver todos os apps</a>' : ""; return; }
+    caixaApps.innerHTML = '<small style="color:#667;font-weight:600">Abrir outro app (sem digitar a senha de novo)</small>' + outros.map(function(a){
+      return '<button class="ca-sec" data-app="' + esc(a.app) + '" data-url="' + esc(a.url) + '"' + (a.liberado ? '' : ' style="opacity:.7"') + '>' + esc(a.nome) + (a.liberado ? '' : ' • ' + esc(a.status)) + '</button>';
+    }).join("");
+    [].forEach.call(caixaApps.querySelectorAll("button[data-app]"), function(b){ b.onclick = function(){ abrirApp(b.dataset.url, b.dataset.app); }; });
+  }).catch(function(){ caixaApps.innerHTML = ""; });
+}
+
+/* ---------- entrar uma vez só: passe de uso único para abrir outro app ---------- */
+function abrirApp(url, app){
+  var janela = window.open("about:blank", "_blank");
+  var ir = function(destino){ if(janela){ try{ janela.opener = null; }catch(e){} janela.location.href = destino; } else location.href = destino; };
+  var t = ls("token");
+  if(!t || !CFG.url) return ir(url);
+  api({acao:"passe", token:t, app:app}).then(function(r){
+    ir(r.ok && r.passe ? url.split("#")[0] + "#ca-passe=" + encodeURIComponent(r.passe) : url);
+  }).catch(function(){ ir(url); });
+}
+function lerPasse(){
+  var m = String(location.hash || "").match(/ca-passe=([A-Za-z0-9%]+)/);
+  if(!m) return "";
+  try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){ location.hash = ""; }
+  return decodeURIComponent(m[1]);
+}
+
+/* ---------- trazer os dados do endereço antigo (mesmo aparelho) ----------
+ * Abre a página-ponte do endereço antigo numa janela; ela lê os dados daquele endereço
+ * e manda só para este app (origem conferida dos dois lados). */
+function trazerDados(){
+  if(!CFG.ponte) return;
+  if(!confirmar("Trazer os dados que ficaram no endereço antigo deste app, neste aparelho?\n\nOs dados atuais deste app neste aparelho serão substituídos pelos do endereço antigo.")) return;
+  var origemPonte = new URL(CFG.ponte.url).origin;
+  var w = window.open(CFG.ponte.url + "?app=" + encodeURIComponent(CFG.ponte.app) + "&para=" + encodeURIComponent(location.origin), "ca-ponte", "width=420,height=520");
+  if(!w){ alert("O navegador bloqueou a janela. Permita pop-ups para este site e tente de novo."); return; }
+  var tempo = setTimeout(function(){ window.removeEventListener("message", ouvir); }, 120000);
+  function ouvir(e){
+    if(e.origin !== origemPonte || !e.data || e.data.tipo !== "ponte-dados" || e.data.app !== CFG.ponte.app) return;
+    window.removeEventListener("message", ouvir); clearTimeout(tempo);
+    gravarDadosPonte(e.data).then(function(n){
+      try{ w.postMessage({tipo:"ponte-ok", n:n}, origemPonte); }catch(x){}
+      alert(n ? "Pronto! " + n + " itens trazidos do endereço antigo. O app vai recarregar." : "Não encontrei dados deste app no endereço antigo neste aparelho. Se você usava em outro celular ou computador, faça isto lá.");
+      if(n) location.reload();
+    }).catch(function(err){ alert("Não consegui gravar os dados: " + (err && err.message || err)); });
+  }
+  window.addEventListener("message", ouvir);
+}
+function gravarDadosPonte(d){
+  var n = 0, pref = (CFG.ponte.prefixos || []);
+  var trazidos = {};
+  Object.keys(d.ls || {}).forEach(function(k){ if(pref.some(function(p){ return k.indexOf(p) === 0; })){ localStorage.setItem(k, d.ls[k]); trazidos[k] = d.ls[k]; n++; } });
+  // o app pode salvar o estado atual ao recarregar (pagehide): regrava o que veio por último
+  var regravar = function(){ Object.keys(trazidos).forEach(function(k){ try{ localStorage.setItem(k, trazidos[k]); }catch(e){} }); };
+  window.addEventListener("pagehide", regravar); window.addEventListener("beforeunload", regravar);
+  var bancos = (d.idb || []).filter(function(b){ return (CFG.ponte.idb || []).indexOf(b.nome) >= 0; });
+  return bancos.reduce(function(prom, b){ return prom.then(function(){ return gravarBanco(b).then(function(q){ n += q; }); }); }, Promise.resolve()).then(function(){ return n; });
+}
+function gravarBanco(b){
+  return new Promise(function(ok, falha){
+    var existe = indexedDB.databases ? indexedDB.databases().then(function(l){ return l.some(function(x){ return x.name === b.nome; }); }) : Promise.resolve(true);
+    existe.then(function(sim){
+      var req = sim ? indexedDB.open(b.nome) : indexedDB.open(b.nome, b.versao || 1);
+      req.onupgradeneeded = function(){
+        var db = req.result;
+        b.lojas.forEach(function(l){
+          if(db.objectStoreNames.contains(l.nome)) return;
+          var os = db.createObjectStore(l.nome, {keyPath:l.keyPath || undefined, autoIncrement:!!l.autoIncrement});
+          (l.indices || []).forEach(function(ix){ try{ os.createIndex(ix.nome, ix.keyPath, {unique:!!ix.unique, multiEntry:!!ix.multiEntry}); }catch(e){} });
+        });
+      };
+      req.onerror = function(){ falha(req.error); };
+      req.onsuccess = function(){
+        var db = req.result, nomes = b.lojas.map(function(l){ return l.nome; }).filter(function(x){ return db.objectStoreNames.contains(x); });
+        if(!nomes.length){ db.close(); return ok(0); }
+        var tx = db.transaction(nomes, "readwrite"), q = 0;
+        b.lojas.forEach(function(l){
+          if(nomes.indexOf(l.nome) < 0) return;
+          var os = tx.objectStore(l.nome); os.clear();
+          l.registros.forEach(function(r){ if(os.keyPath) os.put(r.v); else os.put(r.v, r.k); q++; });
+        });
+        tx.oncomplete = function(){ db.close(); ok(q); };
+        tx.onerror = function(){ db.close(); falha(tx.error); };
+      };
+    }).catch(falha);
+  });
 }
 function telaSuporte(){
   mostrar(caixa("Pedir suporte", "Descreva o que aconteceu. A resposta chega no seu e-mail.",
@@ -744,9 +899,17 @@ window.CentralAcesso = {
   api: function(d){ if(ls("token") && !d.token) d.token = ls("token"); return api(d); },
   entrar: telaEntrar, cadastrar: telaCadastro, esqueci: telaEsqueci, sair: sair, fechar: fechar,
   conta: function(){ return ls("conta"); }, token: function(){ return ls("token"); },
-  baixarBackup: baixarBackup, restaurarBackup: restaurarBackup, configurado: !!CFG.url, versao: "1.0.0"
+  baixarBackup: baixarBackup, restaurarBackup: restaurarBackup, configurado: !!CFG.url, versao: "1.1.0", abrirApp: abrirApp, trazerDados: trazerDados
 };
 function iniciar(){
+  var passe = CFG.url ? lerPasse() : "";
+  if(passe){
+    api({acao:"usarPasse", passe:passe, app:APPID}).then(function(r){
+      if(r.ok && r.token){ ls("ok", null); entrou(r); if(MODO !== "portal") setTimeout(function(){ faixaBackup(false); }, 4000); }
+      else if(MODO !== "portal") conferir(false);
+    }).catch(function(){ if(MODO !== "portal") conferir(false); });
+    return;
+  }
   if(MODO === "portal") return;
   setTimeout(function(){ faixaBackup(false); }, 4000);
   if(!CFG.url) return; // Central ainda não implantada: o app segue funcionando como antes

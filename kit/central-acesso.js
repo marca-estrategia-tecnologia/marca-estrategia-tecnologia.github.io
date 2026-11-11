@@ -1,4 +1,4 @@
-/* CENTRAL-ACESSO • kit de acesso dos apps da Marca & Estratégia Tecnologia  v1.0.0
+/* CENTRAL-ACESSO • kit de acesso dos apps da Marca & Estratégia Tecnologia  v1.1.0
  *
  * Entra em cada app (inline, pelo ferramentas/injetar.py). Faz:
  *  - login, cadastro com repetição de senha, confirmação do e-mail por código;
@@ -6,6 +6,9 @@
  *  - conferência da licença do app na Central (com 7 dias de tolerância sem internet);
  *  - lembrete semanal de cópia de segurança (baixar / restaurar) dos dados do aparelho;
  *  - menu "Minha conta": Meus apps, Suporte, Cópia de segurança, Sair.
+ *  - entrar uma vez só: abre os outros apps com um passe de uso único (#ca-passe=...);
+ *  - "Trazer meus dados do endereço antigo": copia os dados que ficaram no endereço antigo
+ *    (aap29.github.io) para este app, pelo mesmo aparelho, sem arquivo no meio.
  *
  * Configuração (antes deste script):
  *   window.CENTRAL_CFG = { url:"https://script.google.com/macros/s/.../exec", app:"prospectarion",
@@ -241,14 +244,105 @@ function botao(){
 }
 function menu(){
   var c = ls("conta") || {};
-  var portal = CFG.portal ? '<a class="ca-sec" style="display:block;text-align:center;text-decoration:none;padding:12px;border-radius:10px;margin-top:8px" href="' + esc(CFG.portal) + '#meus-apps" target="_blank" rel="noopener">Meus apps</a>' : '';
+  var portal = '<div id="ca-apps" style="margin-top:6px"><small style="color:#667">Carregando seus apps…</small></div>';
   mostrar(caixa("Minha conta", esc(c.nome || "") + (c.email ? "<br><small>" + esc(c.email) + "</small>" : ""),
-    portal + '<button class="ca-sec" id="ca-sup">Pedir suporte</button>' + (CFG.backup ? '<button class="ca-sec" id="ca-bk">Cópia de segurança</button>' : '') +
+    portal + '<button class="ca-sec" id="ca-sup">Pedir suporte</button>' + (CFG.backup ? '<button class="ca-sec" id="ca-bk">Cópia de segurança</button>' : '') + (CFG.ponte ? '<button class="ca-sec" id="ca-ponte">Trazer meus dados do endereço antigo</button>' : '') +
     '<button class="ca-sec" id="ca-sair">Sair</button><button class="ca-link" id="ca-fechar">Fechar</button>', pe()));
   document.getElementById("ca-fechar").onclick = fechar;
   document.getElementById("ca-sair").onclick = sair;
   document.getElementById("ca-sup").onclick = telaSuporte;
   if(CFG.backup) document.getElementById("ca-bk").onclick = function(){ fechar(); faixaBackup(true); };
+  if(CFG.ponte) document.getElementById("ca-ponte").onclick = trazerDados;
+  listarApps(document.getElementById("ca-apps"));
+}
+function listarApps(caixaApps){
+  if(!caixaApps) return;
+  api({acao:"meusApps", token:ls("token")}).then(function(r){
+    var outros = (r.apps || []).filter(function(a){ return a.url && a.app !== APPID; });
+    if(!r.ok || !outros.length){ caixaApps.innerHTML = CFG.portal ? '<a class="ca-sec" style="display:block;text-align:center;text-decoration:none;padding:12px;border-radius:10px" href="' + esc(CFG.portal) + '" target="_blank" rel="noopener">Ver todos os apps</a>' : ""; return; }
+    caixaApps.innerHTML = '<small style="color:#667;font-weight:600">Abrir outro app (sem digitar a senha de novo)</small>' + outros.map(function(a){
+      return '<button class="ca-sec" data-app="' + esc(a.app) + '" data-url="' + esc(a.url) + '"' + (a.liberado ? '' : ' style="opacity:.7"') + '>' + esc(a.nome) + (a.liberado ? '' : ' • ' + esc(a.status)) + '</button>';
+    }).join("");
+    [].forEach.call(caixaApps.querySelectorAll("button[data-app]"), function(b){ b.onclick = function(){ abrirApp(b.dataset.url, b.dataset.app); }; });
+  }).catch(function(){ caixaApps.innerHTML = ""; });
+}
+
+/* ---------- entrar uma vez só: passe de uso único para abrir outro app ---------- */
+function abrirApp(url, app){
+  var janela = window.open("about:blank", "_blank");
+  var ir = function(destino){ if(janela){ try{ janela.opener = null; }catch(e){} janela.location.href = destino; } else location.href = destino; };
+  var t = ls("token");
+  if(!t || !CFG.url) return ir(url);
+  api({acao:"passe", token:t, app:app}).then(function(r){
+    ir(r.ok && r.passe ? url.split("#")[0] + "#ca-passe=" + encodeURIComponent(r.passe) : url);
+  }).catch(function(){ ir(url); });
+}
+function lerPasse(){
+  var m = String(location.hash || "").match(/ca-passe=([A-Za-z0-9%]+)/);
+  if(!m) return "";
+  try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){ location.hash = ""; }
+  return decodeURIComponent(m[1]);
+}
+
+/* ---------- trazer os dados do endereço antigo (mesmo aparelho) ----------
+ * Abre a página-ponte do endereço antigo numa janela; ela lê os dados daquele endereço
+ * e manda só para este app (origem conferida dos dois lados). */
+function trazerDados(){
+  if(!CFG.ponte) return;
+  if(!confirmar("Trazer os dados que ficaram no endereço antigo deste app, neste aparelho?\n\nOs dados atuais deste app neste aparelho serão substituídos pelos do endereço antigo.")) return;
+  var origemPonte = new URL(CFG.ponte.url).origin;
+  var w = window.open(CFG.ponte.url + "?app=" + encodeURIComponent(CFG.ponte.app) + "&para=" + encodeURIComponent(location.origin), "ca-ponte", "width=420,height=520");
+  if(!w){ alert("O navegador bloqueou a janela. Permita pop-ups para este site e tente de novo."); return; }
+  var tempo = setTimeout(function(){ window.removeEventListener("message", ouvir); }, 120000);
+  function ouvir(e){
+    if(e.origin !== origemPonte || !e.data || e.data.tipo !== "ponte-dados" || e.data.app !== CFG.ponte.app) return;
+    window.removeEventListener("message", ouvir); clearTimeout(tempo);
+    gravarDadosPonte(e.data).then(function(n){
+      try{ w.postMessage({tipo:"ponte-ok", n:n}, origemPonte); }catch(x){}
+      alert(n ? "Pronto! " + n + " itens trazidos do endereço antigo. O app vai recarregar." : "Não encontrei dados deste app no endereço antigo neste aparelho. Se você usava em outro celular ou computador, faça isto lá.");
+      if(n) location.reload();
+    }).catch(function(err){ alert("Não consegui gravar os dados: " + (err && err.message || err)); });
+  }
+  window.addEventListener("message", ouvir);
+}
+function gravarDadosPonte(d){
+  var n = 0, pref = (CFG.ponte.prefixos || []);
+  var trazidos = {};
+  Object.keys(d.ls || {}).forEach(function(k){ if(pref.some(function(p){ return k.indexOf(p) === 0; })){ localStorage.setItem(k, d.ls[k]); trazidos[k] = d.ls[k]; n++; } });
+  // o app pode salvar o estado atual ao recarregar (pagehide): regrava o que veio por último
+  var regravar = function(){ Object.keys(trazidos).forEach(function(k){ try{ localStorage.setItem(k, trazidos[k]); }catch(e){} }); };
+  window.addEventListener("pagehide", regravar); window.addEventListener("beforeunload", regravar);
+  var bancos = (d.idb || []).filter(function(b){ return (CFG.ponte.idb || []).indexOf(b.nome) >= 0; });
+  return bancos.reduce(function(prom, b){ return prom.then(function(){ return gravarBanco(b).then(function(q){ n += q; }); }); }, Promise.resolve()).then(function(){ return n; });
+}
+function gravarBanco(b){
+  return new Promise(function(ok, falha){
+    var existe = indexedDB.databases ? indexedDB.databases().then(function(l){ return l.some(function(x){ return x.name === b.nome; }); }) : Promise.resolve(true);
+    existe.then(function(sim){
+      var req = sim ? indexedDB.open(b.nome) : indexedDB.open(b.nome, b.versao || 1);
+      req.onupgradeneeded = function(){
+        var db = req.result;
+        b.lojas.forEach(function(l){
+          if(db.objectStoreNames.contains(l.nome)) return;
+          var os = db.createObjectStore(l.nome, {keyPath:l.keyPath || undefined, autoIncrement:!!l.autoIncrement});
+          (l.indices || []).forEach(function(ix){ try{ os.createIndex(ix.nome, ix.keyPath, {unique:!!ix.unique, multiEntry:!!ix.multiEntry}); }catch(e){} });
+        });
+      };
+      req.onerror = function(){ falha(req.error); };
+      req.onsuccess = function(){
+        var db = req.result, nomes = b.lojas.map(function(l){ return l.nome; }).filter(function(x){ return db.objectStoreNames.contains(x); });
+        if(!nomes.length){ db.close(); return ok(0); }
+        var tx = db.transaction(nomes, "readwrite"), q = 0;
+        b.lojas.forEach(function(l){
+          if(nomes.indexOf(l.nome) < 0) return;
+          var os = tx.objectStore(l.nome); os.clear();
+          l.registros.forEach(function(r){ if(os.keyPath) os.put(r.v); else os.put(r.v, r.k); q++; });
+        });
+        tx.oncomplete = function(){ db.close(); ok(q); };
+        tx.onerror = function(){ db.close(); falha(tx.error); };
+      };
+    }).catch(falha);
+  });
 }
 function telaSuporte(){
   mostrar(caixa("Pedir suporte", "Descreva o que aconteceu. A resposta chega no seu e-mail.",
@@ -318,9 +412,17 @@ window.CentralAcesso = {
   api: function(d){ if(ls("token") && !d.token) d.token = ls("token"); return api(d); },
   entrar: telaEntrar, cadastrar: telaCadastro, esqueci: telaEsqueci, sair: sair, fechar: fechar,
   conta: function(){ return ls("conta"); }, token: function(){ return ls("token"); },
-  baixarBackup: baixarBackup, restaurarBackup: restaurarBackup, configurado: !!CFG.url, versao: "1.0.0"
+  baixarBackup: baixarBackup, restaurarBackup: restaurarBackup, configurado: !!CFG.url, versao: "1.1.0", abrirApp: abrirApp, trazerDados: trazerDados
 };
 function iniciar(){
+  var passe = CFG.url ? lerPasse() : "";
+  if(passe){
+    api({acao:"usarPasse", passe:passe, app:APPID}).then(function(r){
+      if(r.ok && r.token){ ls("ok", null); entrou(r); if(MODO !== "portal") setTimeout(function(){ faixaBackup(false); }, 4000); }
+      else if(MODO !== "portal") conferir(false);
+    }).catch(function(){ if(MODO !== "portal") conferir(false); });
+    return;
+  }
   if(MODO === "portal") return;
   setTimeout(function(){ faixaBackup(false); }, 4000);
   if(!CFG.url) return; // Central ainda não implantada: o app segue funcionando como antes

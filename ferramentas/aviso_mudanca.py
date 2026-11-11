@@ -38,11 +38,14 @@ def faixa(app, nome, url, prefixos):
 <button type="button" id="mudanca-fechar" style="font:600 13px system-ui;border:0;background:none;color:#AFC0D6;text-decoration:underline;cursor:pointer">Continuar aqui por enquanto</button></div></div></div>
 <script>(function(){var C=""" + cfg + """;var t=document.getElementById("mudanca-txt"),b=document.getElementById("mudanca-dados");
 document.getElementById("mudanca-ir").href=C.url;document.getElementById("mudanca-fechar").onclick=function(){document.getElementById("mudanca").remove();};
-if(C.prefixos){t.textContent="Seus dados ficam neste aparelho: baixe a cópia, abra o novo endereço, crie sua conta e use Minha conta → Cópia de segurança → Restaurar cópia.";
+if(C.prefixos){t.textContent="Seus dados ficam neste aparelho. Abra o novo endereço, entre na sua conta e toque em Minha conta → Trazer meus dados do endereço antigo (ou baixe a cópia aqui e use Restaurar cópia).";
 b.onclick=function(){var o={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(C.prefixos.some(function(p){return k.indexOf(p)===0;}))o[k]=localStorage.getItem(k);}
 var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify({app:C.app,nome:C.nome,gerado:new Date().toISOString(),origem:location.href,chaves:o})],{type:"application/json"}));
 a.download=C.app+"-copia-mudanca.json";document.body.appendChild(a);a.click();b.textContent="Cópia baixada ✓";};}
-else{t.textContent="Antes de ir, faça o backup pelo próprio app (menu de backup) e importe no novo endereço.";b.style.display="none";}})();</script>
+else if(C.app==="musicalis"){t.textContent="Toque em Levar meu progresso: a versão nova abre já com sua conta, práticas e selos.";b.textContent="1. Levar meu progresso";
+b.onclick=function(){try{var p=(typeof pacoteMigracao==="function")&&pacoteMigracao();if(!p){alert("Entre na sua conta aqui primeiro e toque de novo.");return;}var t2=b64uEnc(JSON.stringify(p));
+if(t2.length>=400000){copiarBackup();alert("Progresso copiado. Na versão nova, cole em Perfil → Backup.");location.href=C.url;return;}location.href=C.url+"#migrar="+t2;}catch(e){alert("Use Perfil → Backup → Copiar meu backup e cole na versão nova.");}};}
+else{t.textContent="Seus dados ficam neste aparelho. No endereço novo, entre na sua conta e use Minha conta → Trazer meus dados do endereço antigo.";b.style.display="none";}})();</script>
 """ + FIM
 
 def redirecionar(url):

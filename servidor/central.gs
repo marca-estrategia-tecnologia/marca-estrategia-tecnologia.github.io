@@ -25,7 +25,10 @@
  * - Textos limpos antes de gravar (nada começa com = + - @: evita fórmulas na planilha).
  */
 
-var VERSAO = "1.0.0";
+var VERSAO = "1.1.0";
+var MAX_CRIADORES = 4;      // 1 principal (CEO) + até 3 co-criadores
+var SUCESSAO_DIAS = 7;      // prazo para o principal responder a um pedido de sucessão
+var PASSE_MIN = 2;          // validade do passe de entrada entre apps
 var MIN_HASH_RODADAS = 5000;
 var SESSAO_DIAS = 30;
 var CODIGO_MIN = 15;
@@ -124,7 +127,15 @@ var ACOES = {
   areasSalvar: permite_("areasSalvar", areasSalvar_),
   appSalvar: permite_("appSalvar", appSalvar_),
   configSalvar: permite_("configSalvar", configSalvar_),
-  registroLer: permite_("registroLer", registroLer_)
+  registroLer: permite_("registroLer", registroLer_),
+  passe: passe_,
+  usarPasse: usarPasse_,
+  criadoresListar: criadoresListar_,
+  criadoresSalvar: criadoresSalvar_,
+  transferirPrincipal: transferirPrincipal_,
+  pedirSucessao: pedirSucessao_,
+  cancelarSucessao: cancelarSucessao_,
+  concluirSucessao: concluirSucessao_
 };
 
 /* ============================== CONTAS ============================== */
@@ -283,6 +294,7 @@ function meusApps_(d){
   var apps = lerApps_(), mapa = {};
   apps.forEach(function(a){ mapa[a.app] = a; });
   var lics = lerTudo_("Licencas").filter(function(l){ return l.email === s.email; });
+  if(papel_(s.email) === "criador") lics = apps.map(function(a){ return {app:a.app}; });
   return {ok:true, apps:lics.map(function(l){
     var a = mapa[l.app] || {nome:l.app, url:"", descricao:""};
     var p = licencaPublica_(s.email, l.app);
@@ -327,6 +339,8 @@ function garantirLicenca_(email, app){
 }
 
 function licencaPublica_(email, app){
+  var pap = papel_(email);
+  if(pap === "criador") return {app:app, plano:"criador", status:"ativo", vencimento:"", liberado:true, mensagem:"Acesso de criador: livre e ilimitado."};
   var l = lerTudo_("Licencas").filter(function(x){ return x.email === email && x.app === app; })[0];
   if(!l) return {app:app, status:"sem_licenca", liberado:false, mensagem:"Você ainda não tem acesso a este app."};
   var venc = l.vencimento ? new Date(l.vencimento) : null;
@@ -370,6 +384,136 @@ function papel_(email){
 }
 function membro_(email){
   return lerTudo_("Equipe").filter(function(x){ return x.email === String(email || "").toLowerCase(); })[0] || null;
+}
+
+
+/* ============================== CRIADORES (1 principal + 3 co-criadores) ==============================
+ * CRIADOR_EMAILS guarda a ordem: 1 = e-mail principal (CEO), 2, 3 e 4 = co-criadores.
+ * Todos têm acesso livre e ilimitado a todos os apps e ao Painel. Só o principal muda a lista.
+ * Sucessão: se o principal perder o e-mail, um co-criador pede a sucessão; o principal é avisado
+ * por e-mail e, se não entrar em SUCESSAO_DIAS dias, o pedido pode ser concluído e o co-criador
+ * vira o principal (o antigo principal fica como co-criador). Se o principal entrar, o pedido cai. */
+
+function sessaoCriador_(d){
+  var s = sessaoValida_(d.token);
+  if(!s || !ehCriador_(s.email)) return null;
+  return s;
+}
+function senhaConfere_(email, senha){
+  var sh = aba_("Contas"), n = acharLinha_(sh, "email", email); if(n < 1) return false;
+  var c = lerLinha_(sh, n, "Contas"); return hash_(String(senha || ""), c.sal) === c.hash;
+}
+function sucessao_(){ try{ return JSON.parse(PropertiesService.getScriptProperties().getProperty("SUCESSAO") || "null"); }catch(e){ return null; } }
+function gravarSucessao_(v){ var p = PropertiesService.getScriptProperties(); if(v) p.setProperty("SUCESSAO", JSON.stringify(v)); else p.deleteProperty("SUCESSAO"); }
+
+function criadoresListar_(d){
+  var s = sessaoCriador_(d); if(!s) return erro_("proibido", "Só os criadores veem esta lista.");
+  var contas = {}; lerTudo_("Contas").forEach(function(c){ contas[c.email] = c; });
+  var suc = sucessao_();
+  return {ok:true, max:MAX_CRIADORES, eu:s.email, principal:principal_(), prazoDias:SUCESSAO_DIAS,
+    sucessao:suc ? {email:suc.email, pedido:suc.pedido, liberaEm:new Date(new Date(suc.pedido).getTime() + SUCESSAO_DIAS * 864e5).toISOString()} : null,
+    criadores:criadores_().map(function(e, i){
+      var c = contas[e] || {};
+      return {ordem:i + 1, email:e, nome:c.nome || "", contaCriada:!!c.email, confirmado:String(c.confirmado) === "sim", ultimoAcesso:c.ultimoAcesso || ""};
+    })};
+}
+
+function criadoresSalvar_(d){
+  var s = sessaoCriador_(d); if(!s) return erro_("proibido", "Só os criadores podem fazer isto.");
+  if(s.email !== principal_()) return erro_("proibido", "Só o e-mail principal (1) pode mudar os co-criadores.");
+  if(!senhaConfere_(s.email, d.senha)) return erro_("senha", "Senha incorreta. Por segurança, confirme a sua senha.");
+  var outros = (d.coCriadores || []).map(function(e){ return limpaEmail_(e); }).filter(function(e){ return e && e !== s.email; });
+  if(outros.length > MAX_CRIADORES - 1) return erro_("dados", "São no máximo " + (MAX_CRIADORES - 1) + " co-criadores.");
+  var invalido = (d.coCriadores || []).filter(function(e){ return String(e || "").trim() && !limpaEmail_(e); });
+  if(invalido.length) return erro_("dados", "E-mail inválido: " + invalido[0]);
+  var antes = criadores_(), lista = gravarCriadores_([s.email].concat(outros));
+  registrar_(s.email, "criadores", "", lista.join(","));
+  lista.slice(1).forEach(function(e){
+    if(antes.indexOf(e) < 0) avisarPorEmail_(e, "Você agora é co-criador da Marca & Estratégia Tecnologia",
+      "O e-mail principal " + s.email + " adicionou você como co-criador (" + (lista.indexOf(e) + 1) + "º e-mail).\n\nVocê tem acesso livre a todos os apps e à Estação de Trabalho: " +
+      "https://marca-estrategia-tecnologia.github.io/estacao.html\nSe ainda não tem conta, use Criar conta com este mesmo e-mail.");
+  });
+  antes.forEach(function(e){ if(lista.indexOf(e) < 0) encerrarSessoes_(e); });
+  return {ok:true, criadores:lista, mensagem:"Lista de criadores salva."};
+}
+
+function transferirPrincipal_(d){
+  var s = sessaoCriador_(d); if(!s) return erro_("proibido", "Só os criadores podem fazer isto.");
+  if(s.email !== principal_()) return erro_("proibido", "Só o e-mail principal pode passar o posto.");
+  if(!senhaConfere_(s.email, d.senha)) return erro_("senha", "Senha incorreta.");
+  var alvo = limpaEmail_(d.email), lista = criadores_();
+  if(lista.indexOf(alvo) < 1) return erro_("dados", "Escolha um dos co-criadores da lista.");
+  lista.splice(lista.indexOf(alvo), 1); lista = gravarCriadores_([alvo].concat(lista));
+  gravarSucessao_(null);
+  registrar_(s.email, "transferiu_principal", "", alvo);
+  avisarPorEmail_(lista.join(","), "[Central] Novo e-mail principal", s.email + " passou o posto de e-mail principal para " + alvo + ".\nNova ordem: " + lista.join(", "));
+  return {ok:true, criadores:lista, mensagem:alvo + " agora é o e-mail principal."};
+}
+
+function pedirSucessao_(d){
+  var s = sessaoCriador_(d); if(!s) return erro_("proibido", "Só os co-criadores podem pedir a sucessão.");
+  var p = principal_(); if(s.email === p) return erro_("dados", "Você já é o e-mail principal.");
+  var atual = sucessao_(); if(atual && atual.email !== s.email) return erro_("dados", "Já existe um pedido de sucessão feito por " + atual.email + ".");
+  var v = atual || {email:s.email, pedido:new Date().toISOString()}; gravarSucessao_(v);
+  var libera = new Date(new Date(v.pedido).getTime() + SUCESSAO_DIAS * 864e5);
+  registrar_(s.email, "pediu_sucessao", "", p);
+  avisarPorEmail_(criadores_().join(","), "[Central] Pedido de sucessão do e-mail principal",
+    s.email + " pediu para assumir como e-mail principal no lugar de " + p + ".\n\nSe você é " + p + " e ainda usa este e-mail, basta ENTRAR na Estação: o pedido é cancelado na hora.\n" +
+    "Sem resposta, o pedido pode ser concluído a partir de " + Utilities.formatDate(libera, "America/Sao_Paulo", "dd/MM/yyyy HH:mm") + ".");
+  return {ok:true, liberaEm:libera.toISOString(), mensagem:"Pedido registrado. O e-mail principal foi avisado. Se ele não entrar em " + SUCESSAO_DIAS + " dias, você poderá concluir a sucessão."};
+}
+
+function cancelarSucessaoSePendente_(email){
+  var v = sucessao_(); if(!v) return;
+  gravarSucessao_(null);
+  registrar_(email, "sucessao_cancelada", "", v.email);
+  avisarPorEmail_(criadores_().join(","), "[Central] Pedido de sucessão cancelado", "O e-mail principal " + email + " entrou na Estação, então o pedido de " + v.email + " foi cancelado.");
+}
+function cancelarSucessao_(d){
+  var s = sessaoCriador_(d); if(!s) return erro_("proibido", "Só os criadores podem fazer isto.");
+  var v = sucessao_(); if(!v) return {ok:true, mensagem:"Não há pedido de sucessão."};
+  if(s.email !== principal_() && s.email !== v.email) return erro_("proibido", "Só o principal ou quem pediu pode cancelar.");
+  if(s.email === principal_()) cancelarSucessaoSePendente_(s.email); else { gravarSucessao_(null); registrar_(s.email, "sucessao_desistiu", "", ""); }
+  return {ok:true, mensagem:"Pedido de sucessão cancelado."};
+}
+function concluirSucessao_(d){
+  var s = sessaoCriador_(d); if(!s) return erro_("proibido", "Só os co-criadores podem fazer isto.");
+  var v = sucessao_(); if(!v || v.email !== s.email) return erro_("dados", "Você não tem um pedido de sucessão aberto.");
+  var libera = new Date(v.pedido).getTime() + SUCESSAO_DIAS * 864e5;
+  if(Date.now() < libera) return erro_("prazo", "Ainda não: o prazo termina em " + Utilities.formatDate(new Date(libera), "America/Sao_Paulo", "dd/MM/yyyy HH:mm") + ".");
+  var antigo = principal_(), lista = criadores_().filter(function(e){ return e !== s.email && e !== antigo; });
+  lista = gravarCriadores_([s.email].concat(lista).concat([antigo]));
+  gravarSucessao_(null);
+  registrar_(s.email, "sucessao_concluida", "", antigo);
+  avisarPorEmail_(lista.join(","), "[Central] Sucessão concluída", s.email + " agora é o e-mail principal. " + antigo + " passou a co-criador.\nNova ordem: " + lista.join(", "));
+  return {ok:true, criadores:lista, mensagem:"Pronto: você agora é o e-mail principal."};
+}
+
+/* ============================== PASSE ENTRE APPS (entrar uma vez só) ==============================
+ * Quem já entrou no portal, na Estação ou em um app pede um passe de uso único (vale PASSE_MIN minutos)
+ * e abre o outro app com #ca-passe=... no endereço; o app troca o passe por uma sessão própria. */
+function passe_(d){
+  var s = sessaoValida_(d.token); if(!s) return erro_("sessao", "Sessão expirada. Entre de novo.");
+  var p = (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, "");
+  aba_("Codigos").appendRow([s.email, "passe", hashToken_(p), new Date(Date.now() + PASSE_MIN * 6e4), 0]);
+  return {ok:true, passe:p};
+}
+function usarPasse_(d){
+  var p = String(d.passe || ""); if(p.length < 40) return erro_("passe", "Passe inválido. Entre com e-mail e senha.");
+  var sh = aba_("Codigos"), rows = sh.getDataRange().getValues(), h = hashToken_(p);
+  for(var i = rows.length - 1; i >= 1; i--){
+    if(String(rows[i][1]) === "passe" && String(rows[i][2]) === h){
+      var email = String(rows[i][0]), expira = new Date(rows[i][3]).getTime();
+      sh.deleteRow(i + 1);
+      if(expira < Date.now()) return erro_("passe", "O passe expirou. Entre com e-mail e senha.");
+      var ca = aba_("Contas"), n = acharLinha_(ca, "email", email);
+      if(n < 1) return erro_("passe", "Conta não encontrada.");
+      var c = lerLinha_(ca, n, "Contas");
+      if(String(c.status) === "bloqueado") return erro_("conta_bloqueada", "Esta conta está suspensa. Fale com o suporte.");
+      return abrirSessao_(email, limpaApp_(d.app), ca, n);
+    }
+  }
+  return erro_("passe", "Passe inválido ou já usado. Entre com e-mail e senha.");
 }
 
 /* ============================== EQUIPE E ÁREAS ============================== */
@@ -618,6 +762,7 @@ function abrirSessao_(email, app, sh, n){
   var c = lerLinha_(sh, n, "Contas");
   gravarCampos_(sh, n, "Contas", {ultimoAcesso:new Date(), acessos:(Number(c.acessos) || 0) + 1});
   if(app) garantirLicenca_(email, app);
+  if(principal_() === email) cancelarSucessaoSePendente_(email);
   registrar_(email, "entrou", app, "");
   return {ok:true, token:token, conta:contaPublica_(c), licenca:app ? licencaPublica_(email, app) : null};
 }
@@ -680,12 +825,19 @@ function criadores_(){
   return String(PropertiesService.getScriptProperties().getProperty("CRIADOR_EMAILS") || "")
     .toLowerCase().split(",").map(function(s){ return s.trim(); }).filter(String);
 }
+function principal_(){ return criadores_()[0] || ""; }
+function gravarCriadores_(lista){
+  var vistos = {}, limpa = lista.map(function(e){ return limpaEmail_(e); }).filter(function(e){ if(!e || vistos[e]) return false; vistos[e] = 1; return true; });
+  PropertiesService.getScriptProperties().setProperty("CRIADOR_EMAILS", limpa.slice(0, MAX_CRIADORES).join(","));
+  return limpa.slice(0, MAX_CRIADORES);
+}
 function ehCriador_(email){ return criadores_().indexOf(String(email || "").toLowerCase()) >= 0; }
 
 function contaPublica_(c){
   var p = papel_(c.email), m = p && p !== "criador" ? membro_(c.email) : null;
   return {email:c.email, nome:c.nome, cidade:c.cidade, estado:c.estado, perfil:c.perfil, whatsapp:c.whatsapp,
-    criador:p === "criador", papel:p, areas:p === "criador" ? "todas" : (m ? String(m.areas || "") : "")};
+    criador:p === "criador", papel:p, areas:p === "criador" ? "todas" : (m ? String(m.areas || "") : ""),
+    principal:p === "criador" && principal_() === c.email, ordemCriador:p === "criador" ? criadores_().indexOf(c.email) + 1 : 0};
 }
 
 /* ============================== PLANILHA ============================== */
@@ -695,9 +847,9 @@ function instalar(){
   if(String(props.getProperty("PIMENTA") || "").length < 20) // chave secreta gerada aqui: ninguém precisa digitar
     props.setProperty("PIMENTA", Utilities.getUuid() + Utilities.getUuid() + Utilities.getUuid());
   // Criadores: o dono do script + o segundo e-mail oficial do Anderson (soma, nunca apaga quem já está)
+  // Só na primeira vez: depois a ordem (1 principal + co-criadores) é cuidada pela Estação.
   var lista = criadores_(), eu = String(Session.getEffectiveUser().getEmail() || "").toLowerCase();
-  [eu, "andersonalvespinto@gmail.com"].forEach(function(e){ if(e && lista.indexOf(e) < 0) lista.push(e); });
-  props.setProperty("CRIADOR_EMAILS", lista.join(","));
+  if(!lista.length) lista = gravarCriadores_([eu, "andersonalvespinto@gmail.com"]);
   Object.keys(ABAS).forEach(function(n){ aba_(n); });
   var apps = aba_("Apps");
   if(apps.getLastRow() < 2) APPS_PADRAO.forEach(function(r){ apps.appendRow(r); });

@@ -118,4 +118,48 @@ r = c({acao:"areasSalvar", token:tokenCriador, nome:"Treinamento", descricao:"Ca
 ok(r.ok && r.areas.some(a => a.id === "treinamento"), "criador cria nova área");
 r = c({acao:"equipeRemover", token:tokenCriador, email:"edu@teste.com"});
 ok(!c({acao:"appSalvar", token:tkEdu, app:"x", nome:"X", statusInicial:"teste"}).ok, "integrante removido perde o acesso na hora");
+
+console.log("Criadores: principal + co-criadores");
+const novaConta = (nome, email, senha) => { c({acao:"cadastrar", app:"", nome, email, senha, consentimento:"v1"}); return c({acao:"confirmar", email, codigo:ultimoCodigo(email)}).token; };
+const tkCo = novaConta("Anderson Dois", "co2@teste.com", "segunda123");
+ok(!c({acao:"acesso", token:tkCo, app:"pro-imobiliaria"}).liberado, "antes de virar co-criador, segue as regras de cliente");
+ok(!c({acao:"criadoresSalvar", token:tkCo, senha:"segunda123", coCriadores:["co2@teste.com"]}).ok, "quem não é criador não mexe na lista");
+r = c({acao:"criadoresSalvar", token:tokenCriador, senha:"errada000", coCriadores:["co2@teste.com"]});
+ok(!r.ok && r.erro === "senha", "mudar criadores exige a senha do principal");
+r = c({acao:"criadoresSalvar", token:tokenCriador, senha:"criador123", coCriadores:["co2@teste.com", "co3@teste.com", "co4@teste.com", "co5@teste.com"]});
+ok(!r.ok, "no máximo 3 co-criadores");
+r = c({acao:"criadoresSalvar", token:tokenCriador, senha:"criador123", coCriadores:["CO2@teste.com", "co3@teste.com", "co4@teste.com"]});
+ok(r.ok && r.criadores.join() === "criador@teste.com,co2@teste.com,co3@teste.com,co4@teste.com", "principal salva a ordem 1, 2, 3 e 4");
+ok(sim.emails.some(e => e.to === "co3@teste.com" && /co-criador/.test(e.subject)), "co-criador novo recebe aviso por e-mail");
+r = c({acao:"acesso", token:tkCo, app:"pro-imobiliaria"});
+ok(r.liberado && r.licenca.plano === "criador", "co-criador tem acesso livre a qualquer app");
+r = c({acao:"meusApps", token:tkCo});
+ok(r.apps.length === 6 && r.apps.every(a => a.liberado), "criador vê todos os apps em Meus apps, todos liberados");
+let rc = c({acao:"criadoresListar", token:tokenCriador});
+ok(rc.ok && rc.criadores[0].email === "criador@teste.com" && rc.criadores.length === 4, "lista mostra a ordem dos criadores");
+ok(c({acao:"sessao", token:tokenCriador}).conta.principal && !c({acao:"sessao", token:tkCo}).conta.principal, "conta indica quem é o principal");
+ok(!c({acao:"criadoresSalvar", token:tkCo, senha:"segunda123", coCriadores:[]}).ok, "co-criador não muda a lista");
+
+console.log("Sucessão do principal");
+r = c({acao:"pedirSucessao", token:tkCo});
+ok(r.ok && sim.emails.some(e => /sucessão/i.test(e.subject) && e.to.includes("criador@teste.com")), "co-criador pede sucessão e o principal é avisado");
+ok(!c({acao:"concluirSucessao", token:tkCo}).ok, "não conclui antes do prazo");
+c({acao:"entrar", email:"criador@teste.com", senha:"criador123"});
+ok(c({acao:"criadoresListar", token:tokenCriador}).sucessao === null, "principal entrar cancela o pedido");
+c({acao:"pedirSucessao", token:tkCo});
+const props = sim.ctx.PropertiesService.getScriptProperties();
+const suc = JSON.parse(props.getProperty("SUCESSAO")); suc.pedido = new Date(Date.now() - 8 * 864e5).toISOString(); props.setProperty("SUCESSAO", JSON.stringify(suc));
+r = c({acao:"concluirSucessao", token:tkCo});
+ok(r.ok && r.criadores[0] === "co2@teste.com" && r.criadores[r.criadores.length - 1] === "criador@teste.com", "após o prazo, o co-criador vira principal e o antigo fica como co-criador");
+r = c({acao:"transferirPrincipal", token:tkCo, senha:"segunda123", email:"criador@teste.com"});
+ok(r.ok && r.criadores[0] === "criador@teste.com", "principal pode devolver o posto");
+
+console.log("Passe: entrar uma vez e abrir os outros apps");
+r = c({acao:"passe", token:tokenCriador});
+ok(r.ok && r.passe.length >= 40, "gera passe de uso único");
+const ps = r.passe;
+r = c({acao:"usarPasse", passe:ps, app:"social-imob-360"});
+ok(r.ok && r.token && r.token !== tokenCriador && r.licenca.liberado, "outro app troca o passe por sessão própria, já liberado");
+ok(!c({acao:"usarPasse", passe:ps, app:"social-imob-360"}).ok, "passe não funciona duas vezes");
+ok(!c({acao:"passe", token:"x".repeat(64)}).ok, "sem sessão válida não há passe");
 console.log("\n" + n + " verificações OK");

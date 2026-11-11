@@ -33,7 +33,7 @@ function criarSimulador(props){
       getSheetByName(n){ return abas[n] || null; },
       insertSheet(n){ return (abas[n] = new Sheet(n)); }
     }; } },
-    PropertiesService:{ getScriptProperties(){ return { getProperty(k){ return props[k] ?? null; }, setProperty(k, v){ props[k] = v; } }; } },
+    PropertiesService:{ getScriptProperties(){ return { getProperty(k){ return props[k] ?? null; }, setProperty(k, v){ props[k] = v; }, deleteProperty(k){ delete props[k]; } }; } },
     Session:{ getEffectiveUser(){ return { getEmail(){ return "criador@teste.com"; } }; } },
     Logger:{ log(){} },
     Utilities:{

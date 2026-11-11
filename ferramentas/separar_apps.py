@@ -39,8 +39,19 @@ def adaptador(nome):
     m = re.search(r"/\* @" + re.escape(nome) + r" \*/(.*?)/\* @fim \*/", t, re.S)
     return m.group(1).strip() if m else ""
 
-def kit(html, app, nome, prefixos, adapt=None):
-    subprocess.run([sys.executable, str(RAIZ / "ferramentas" / "injetar.py"), str(html), app, nome] + prefixos, check=True)
+PONTE_URL = "https://aap29.github.io/prospectarion/ponte-dados.html"
+PONTES = {  # o que trazer do endereço antigo (aap29.github.io) para cada app novo
+    "prospectarion": {"app": "prospectarion", "prefixos": ["prospectarion"], "idb": []},
+    "pro-imobiliaria": {"app": "pro-imobiliaria", "prefixos": ["proinnovar."], "idb": []},
+    "social-imob-360": {"app": "social-imob-360", "prefixos": ["sipro_"], "idb": ["SOCIAL_IMOB_PRO_CLIENTE", "SOCIAL_IMOB_PRO_VIDEOS"]},
+    "social-imob-360-criador": {"app": "social-imob-360-criador", "prefixos": ["si_"], "idb": ["SOCIAL_IMOB_360_PRO", "SOCIAL_IMOB_VIDEOS"]},
+}
+
+def kit(html, app, nome, prefixos, adapt=None, ponte=None):
+    extra = []
+    if ponte:
+        extra = ["--ponte=" + json.dumps(dict(PONTES[ponte], url=PONTE_URL))]
+    subprocess.run([sys.executable, str(RAIZ / "ferramentas" / "injetar.py"), str(html), app, nome] + prefixos + extra, check=True)
     if adapt:
         t = html.read_text(encoding="utf-8")
         bloco = "<!-- CENTRAL-ADAPTADOR -->\n<script>\n" + adaptador(adapt) + "\n</script>\n<!-- /CENTRAL-ADAPTADOR -->"
@@ -106,10 +117,10 @@ def montar(antigo, saida):
             trocar_enderecos(d)
 
     # Kit da Central nos apps de uso com login
-    kit(saida / "prospectarion.github.io" / "index.html", "prospectarion", "Prospectarion", ["prospectarion"], "prospectarion")
-    kit(saida / "pro-imobiliaria.github.io" / "index.html", "pro-imobiliaria", "PRO IMOBILIÁRIA", ["proinnovar."])
-    kit(saida / "social-imob-360.github.io" / "index.html", "social-imob-360", "Social Imob 360", [], "social-imob-360")
-    kit(saida / "social-imob-360.github.io" / "criador" / "index.html", "social-imob-360", "Social Imob 360 • Criador", [], "social-imob-360")
+    kit(saida / "prospectarion.github.io" / "index.html", "prospectarion", "Prospectarion", ["prospectarion"], "prospectarion", "prospectarion")
+    kit(saida / "pro-imobiliaria.github.io" / "index.html", "pro-imobiliaria", "PRO IMOBILIÁRIA", ["proinnovar."], None, "pro-imobiliaria")
+    kit(saida / "social-imob-360.github.io" / "index.html", "social-imob-360", "Social Imob 360", [], "social-imob-360", "social-imob-360")
+    kit(saida / "social-imob-360.github.io" / "criador" / "index.html", "social-imob-360", "Social Imob 360 • Criador", [], "social-imob-360", "social-imob-360-criador")
     print("Repositórios montados em", saida)
 
 if __name__ == "__main__":
