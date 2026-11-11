@@ -846,10 +846,9 @@ function instalar(){
   var props = PropertiesService.getScriptProperties();
   if(String(props.getProperty("PIMENTA") || "").length < 20) // chave secreta gerada aqui: ninguém precisa digitar
     props.setProperty("PIMENTA", Utilities.getUuid() + Utilities.getUuid() + Utilities.getUuid());
-  // Criadores: o dono do script + o segundo e-mail oficial do Anderson (soma, nunca apaga quem já está)
-  // Só na primeira vez: depois a ordem (1 principal + co-criadores) é cuidada pela Estação.
+    // Só na primeira vez: depois a ordem (1 principal + co-criadores) é cuidada pela Estação.
   var lista = criadores_(), eu = String(Session.getEffectiveUser().getEmail() || "").toLowerCase();
-  if(!lista.length) lista = gravarCriadores_([eu, "andersonalvespinto@gmail.com"]);
+  if(!lista.length) lista = gravarCriadores_([eu]); // só o principal; co-criadores são cadastrados por ele na Estação
   Object.keys(ABAS).forEach(function(n){ aba_(n); });
   var apps = aba_("Apps");
   if(apps.getLastRow() < 2) APPS_PADRAO.forEach(function(r){ apps.appendRow(r); });
