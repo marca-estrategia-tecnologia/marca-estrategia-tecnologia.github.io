@@ -28,7 +28,7 @@ h1{font-size:clamp(34px,4.6vw,58px);color:#fff;font-weight:800;letter-spacing:-.
 .btn-escuro{background:var(--noite);color:#fff}.btn-linha{background:#fff;color:var(--royal);border:1.5px solid var(--borda)}
 header{position:sticky;top:0;z-index:50;background:rgba(11,33,96,.96);backdrop-filter:blur(6px)}
 header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px}
-.logo{font:900 17px "Plus Jakarta Sans",sans-serif;color:#fff;text-decoration:none;line-height:1.1;display:flex;align-items:center;gap:10px}.logo img{width:44px;height:44px;border-radius:12px;flex:0 0 44px;box-shadow:0 2px 10px rgba(0,0,0,.25)}.logo span{display:block}.logo small{display:block;font:600 10px Inter,sans-serif;letter-spacing:1.4px;color:var(--ouro2);text-transform:uppercase}
+.logo{font:900 17px "Plus Jakarta Sans",sans-serif;color:#fff;text-decoration:none;line-height:1.1;display:flex;align-items:center;gap:10px}.logo img{width:44px;height:44px;border-radius:12px;flex:0 0 44px;box-shadow:0 2px 10px rgba(0,0,0,.25)}.logo span{display:block}.logo small{display:block;width:max-content;font:700 10px/1 Inter,sans-serif;letter-spacing:1.4px;color:#fff;background:var(--marca-azul);padding:4px 8px;border-radius:6px;margin-top:5px;text-transform:uppercase}
 nav{display:flex;gap:18px;align-items:center}nav a{color:#D6DEEA;text-decoration:none;font-weight:600;font-size:14px}nav a:hover{color:#fff}
 #nav-conta{padding:9px 14px;font-size:14px}
 @media(max-width:760px){nav a.n-opc{display:none}}
@@ -58,7 +58,7 @@ nav{display:flex;gap:18px;align-items:center}nav a{color:#D6DEEA;text-decoration
 .fone .etq{left:50%;transform:translateX(-50%);bottom:-18px}
 .lado{text-align:left;padding-top:20px;display:flex;flex-direction:column}
 .lado .pessoa2{width:auto;height:380px;align-self:flex-end;margin-top:auto;filter:drop-shadow(0 20px 40px rgba(0,0,0,.35))}
-.lado .bloco{padding:0 0 18px}
+.lado .bloco{padding:0 0 18px;max-width:560px}@media(max-width:480px){.logo{font-size:15px;gap:8px}.logo img{width:38px;height:38px;flex-basis:38px;border-radius:10px}.logo small{font-size:8.5px;letter-spacing:.5px;padding:3px 6px}}.celular-sec h2{font-size:clamp(36px,4.6vw,58px);line-height:1.05;letter-spacing:-.02em;margin:0 0 16px}.celular-sec .bloco .sub{font-size:16px;line-height:1.6;color:#C9D6F5;max-width:100%;margin:0}
 @media(max-width:960px){.celular-sec .wrap{grid-template-columns:1fr}.vitrine-cel{height:500px;order:2}.lado{order:1}.lado .pessoa2{height:300px;align-self:center}}
 @media(max-width:560px){.vitrine-cel{height:300px;margin-top:10px}.lado .pessoa2{display:none}.celular-sec{padding-bottom:34px}.fone{border-radius:22px;padding:5px}.fone img{border-radius:18px}}
 section{padding:80px 0}.cinza{background:var(--papel)}
@@ -117,7 +117,7 @@ footer .wrap{display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between}
   <div class="vitrine-cel"><div class="fone" style="left:0%;z-index:1;transform:rotate(-8deg);bottom:30px"><img src="img/prospectarion-cel.webp" alt="Prospectarion no celular" loading="lazy" width="360" height="780"><span class="etq"><i style="background:#E8541E">P</i>Prospectarion</span></div><div class="fone" style="left:17%;z-index:2;transform:rotate(-3deg);bottom:10px"><img src="img/proimob-cel.webp" alt="PRO IMOBILIÁRIA no celular" loading="lazy" width="360" height="780"><span class="etq"><i style="background:#1F4FD1">PI</i>PRO IMOBILIÁRIA</span></div><div class="fone" style="left:35%;z-index:4;transform:rotate(0deg);bottom:0px"><img src="img/social-cel.webp" alt="Social Imob 360 no celular" loading="lazy" width="360" height="780"><span class="etq"><i style="background:#F07B22">S</i>Social Imob 360</span></div><div class="fone" style="left:53%;z-index:3;transform:rotate(3deg);bottom:10px"><img src="img/musicalis-cel.webp" alt="Musicalis no celular" loading="lazy" width="360" height="780"><span class="etq"><i style="background:#E9B10B">M</i>Musicalis</span></div><div class="fone" style="left:69%;z-index:2;transform:rotate(8deg);bottom:30px"><img src="img/mesa-cel.webp" alt="Mesa de Editais no celular" loading="lazy" width="360" height="780"><span class="etq"><i style="background:#F26522">ME</i>Mesa de Editais</span></div></div>
   <div class="lado">
     <div class="bloco"><p class="rotulo">No bolso da sua equipe</p><h2 id="t-cel">Os mesmos apps, direto no celular.</h2>
-    <p style="color:#C9D6F5;max-width:460px">Instaláveis como aplicativo, funcionam até sem internet e mantêm a mesma conta em todos os aparelhos. Você abre, trabalha e vende de onde estiver.</p>
+    <p class="sub">Instaláveis como aplicativo, funcionam até sem internet e mantêm a mesma conta em todos os aparelhos. Você abre, trabalha e vende de onde estiver.</p>
     <div class="acoes" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:18px"><a class="btn btn-ouro" href="#apps">Escolher meu app</a><button class="btn btn-claro" id="btn-entrar2" type="button">Entrar na minha conta</button></div></div>
     <img class="pessoa2" src="img/anderson.webp" alt="" loading="lazy" width="720" height="955">
   </div>
