@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0E37A0">
+<meta name="robots" content="noindex, nofollow">
+<title>Baixar · MARKETING PRODUÇÃO INNOVAR (MPI)</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="img/icone-64.png">
+<link rel="apple-touch-icon" href="img/icone-180.png">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#fff;
+       background:radial-gradient(1100px 600px at -10% -20%,#1F5BE0 0,transparent 60%),linear-gradient(160deg,#0E37A0,#0A1E57);
+       display:grid;place-items:center;padding:28px}
+  main{width:100%;max-width:560px;text-align:center}
+  .logo{width:280px;max-width:80%;height:auto}
+  .icone{width:112px;height:112px;border-radius:24px;box-shadow:0 12px 40px rgba(0,0,0,.35);margin:34px auto 18px;display:block}
+  h1{font-size:26px;letter-spacing:.02em;margin:0 0 6px}
+  .sigla{display:inline-block;letter-spacing:.2em;font-weight:700;font-size:13px;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:5px 12px;margin-bottom:12px}
+  p{color:#C9D6F2;line-height:1.5;margin:0 0 24px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:58px;border-radius:14px;border:0;font:inherit;font-weight:700;font-size:17px;cursor:pointer;text-decoration:none;margin-bottom:12px}
+  .pri{background:#fff;color:#0E37A0}
+  .sec{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3)}
+  .dica{background:rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;text-align:left;font-size:14px;color:#E2EAFB;margin:10px 0 18px;display:none}
+  .dica.ver{display:block}
+  .dica ol{margin:6px 0 0;padding-left:20px}
+  .ok{background:rgba(22,163,74,.25);border:1px solid rgba(134,239,172,.5)}
+  footer{margin-top:28px;font-size:12px;color:#8FA3CF}
+</style>
+</head>
+<body>
+<main>
+  <img class="logo" src="img/logo-innovar-branca.png" alt="Innovar Imobiliária">
+  <img class="icone" src="img/icone-512.png" alt="">
+  <span class="sigla">MPI</span>
+  <h1>MARKETING PRODUÇÃO INNOVAR</h1>
+  <p>Instale o MPI na área de trabalho do computador ou na tela inicial do celular. Ele abre como um aplicativo, com o ícone da Innovar.</p>
+
+  <button class="btn pri" id="instalar">⤓ Baixar na área de trabalho</button>
+  <div class="dica" id="dica-ok">O MPI já está instalado neste aparelho. Procure o ícone <b>MPI</b> na área de trabalho ou no menu Iniciar.</div>
+  <div class="dica" id="dica-pc">Seu navegador não oferece a instalação automática. Faça assim:
+    <ol><li>Abra este endereço no <b>Google Chrome</b> ou no <b>Microsoft Edge</b>;</li><li>Clique no ícone de instalar (⊕) no fim da barra de endereço, ou no menu ⋮ → <b>Instalar MPI</b>.</li></ol>
+    Ou use o botão "Baixar atalho" abaixo.</div>
+  <div class="dica" id="dica-ios">No iPhone: toque em <b>Compartilhar</b> (□↑) no Safari e depois em <b>Adicionar à Tela de Início</b>.</div>
+
+  <a class="btn sec" id="atalho" href="mpi-atalho.url" download="MARKETING PRODUÇÃO INNOVAR (MPI).url">Baixar atalho para Windows (.url)</a>
+  <a class="btn sec" href="./">Abrir o MPI no navegador</a>
+
+  <footer>Acesso restrito a usuários convidados · Tecnologia Marca &amp; Estratégia</footer>
+</main>
+<script>
+  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(function(){});
+  var evento = null;
+  var ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var instalado = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  function mostrar(id){ ['dica-ok','dica-pc','dica-ios'].forEach(function(x){ document.getElementById(x).classList.toggle('ver', x === id); }); }
+  if (instalado) mostrar('dica-ok');
+  if (ios) document.getElementById('atalho').style.display = 'none';
+  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); evento = e; });
+  window.addEventListener('appinstalled', function(){ mostrar('dica-ok'); document.getElementById('dica-ok').classList.add('ok'); });
+  document.getElementById('instalar').onclick = function(){
+    if (evento) { evento.prompt(); evento.userChoice.then(function(r){ if (r.outcome === 'accepted') mostrar('dica-ok'); evento = null; }); return; }
+    if (instalado) return mostrar('dica-ok');
+    mostrar(ios ? 'dica-ios' : 'dica-pc');
+  };
+</script>
+</body>
+</html>
