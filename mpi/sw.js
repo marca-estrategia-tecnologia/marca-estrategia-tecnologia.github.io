@@ -1,7 +1,7 @@
 /* MPI — service worker: permite instalar na área de trabalho e abrir a tela mesmo com internet instável.
    Os dados (banco) sempre vêm do servidor, nunca do cache. */
-const CACHE = 'mpi-v3';
-const BASE = ['./', 'index.html', 'baixar.html', 'manifest.webmanifest', 'img/icone-192.png', 'img/icone-512.png', 'img/logo-innovar-branca.png'];
+const CACHE = 'mpi-v4';
+const BASE = ['./', 'index.html', 'baixar.html', 'guia.html', 'manifest.webmanifest', 'img/icone-192.png', 'img/icone-512.png', 'img/logo-innovar-branca.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(BASE))); self.skipWaiting(); });
 self.addEventListener('activate', (e) => {
   e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k.startsWith('mpi-') && k !== CACHE).map((k) => caches.delete(k)))));

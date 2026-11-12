@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guia do MPI · Marketing Produção Innovar</title>
+<meta name="description" content="Como entrar e usar o MPI — Marketing Produção Innovar: guia da Direção, do Marketing e dos Corretores.">
+<meta name="theme-color" content="#0A1E57">
+<link rel="icon" href="img/icone-192.png">
+<style>
+:root{--azul:#1446C8;--marinho:#0A1E57;--texto:#0F172A;--suave:#5B6678;--borda:#E2E8F0;--fundo:#F6F7FB;
+  --cor:#1446C8;--cor-esc:#0A1E57;--cor-clara:#EEF3FF}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--texto);background:var(--fundo);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--cor)}
+.topo{background:radial-gradient(900px 500px at 0% -20%,#2A63E8 0,transparent 60%),linear-gradient(160deg,#0E37A0,#0A1E57);color:#fff;padding:36px 22px 92px}
+.topo .dentro{max-width:1040px;margin:0 auto}
+.topo img{width:190px;display:block}
+.etq{display:inline-block;margin-top:28px;font-size:12px;font-weight:700;letter-spacing:.16em;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:5px 12px}
+.topo h1{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:14px 0 10px;letter-spacing:-.02em}
+.topo p{color:#D2DDF2;max-width:640px;margin:0;font-size:17px}
+main{max-width:1040px;margin:-64px auto 0;padding:0 16px 60px}
+.escolha{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:14px}
+.porta{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--texto);background:#fff;border-radius:16px;padding:20px;border:1px solid var(--borda);box-shadow:0 8px 28px rgba(15,23,42,.08);border-top:6px solid var(--c);transition:transform .15s}
+.porta:hover{transform:translateY(-2px)}
+.porta b{font-size:19px}
+.porta span{color:var(--suave);font-size:14px}
+.porta em{font-style:normal;margin-top:6px;font-weight:700;color:var(--c);font-size:14px}
+.abas{position:sticky;top:0;z-index:5;display:flex;gap:6px;background:var(--fundo);padding:16px 0 10px;margin-top:22px;overflow-x:auto}
+.abas button{border:1px solid var(--borda);background:#fff;border-radius:999px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer;white-space:nowrap;color:var(--texto)}
+.abas button.ativa{background:var(--c);border-color:var(--c);color:#fff}
+.setor{display:none;scroll-margin-top:86px}
+.setor.ativo{display:block}
+.capa{border-radius:18px;color:#fff;padding:26px;margin:8px 0 18px;background:linear-gradient(140deg,var(--cor),var(--cor-esc))}
+.capa h2{margin:0 0 6px;font-size:28px;letter-spacing:-.01em}
+.capa p{margin:0;opacity:.92;max-width:720px}
+.link-caixa{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:10px 12px}
+.link-caixa code{font-size:14px;overflow-wrap:anywhere;flex:1 1 240px;color:#fff;font-family:ui-monospace,Consolas,monospace}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
+.btn-claro{background:#fff;color:var(--cor-esc)}
+.btn-borda{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.6)}
+.bloco{background:#fff;border:1px solid var(--borda);border-radius:16px;padding:22px;margin-bottom:16px}
+.bloco h3{margin:0 0 4px;font-size:19px;display:flex;align-items:center;gap:10px}
+.bloco h3 .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--cor-clara);color:var(--cor);display:grid;place-items:center;font-size:14px}
+.bloco > p.sub{margin:0 0 14px;color:var(--suave)}
+ol.passos{counter-reset:p;list-style:none;margin:0;padding:0;display:grid;gap:10px}
+ol.passos li{counter-increment:p;position:relative;padding:12px 14px 12px 52px;background:#FAFBFD;border:1px solid var(--borda);border-radius:12px}
+ol.passos li::before{content:counter(p);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--cor);color:#fff;font-weight:700;font-size:13px;display:grid;place-items:center}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:12px}
+.item{border:1px solid var(--borda);border-radius:12px;padding:14px 16px;background:#FAFBFD}
+.item b{display:block;margin-bottom:4px}
+.item p{margin:0;color:#334155;font-size:15px}
+.tag{display:inline-block;background:var(--cor-clara);color:var(--cor);font-weight:700;font-size:12px;border-radius:999px;padding:2px 9px;margin:2px 2px 0 0}
+.botao-nome{display:inline-block;background:#fff;border:1px solid var(--borda);border-radius:7px;padding:0 7px;font-weight:600;font-size:14px;white-space:nowrap}
+.alerta{border-left:4px solid var(--cor);background:var(--cor-clara);border-radius:10px;padding:12px 14px;margin:12px 0 0;font-size:15px}
+.pode,.naopode{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.pode li::before{content:"✓";color:#16A34A;font-weight:800;margin-right:8px}
+.naopode li::before{content:"✕";color:#DC2626;font-weight:800;margin-right:8px}
+.etapas{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.etapas span{font-size:13px;border-radius:999px;padding:4px 10px;background:#F1F5F9;border:1px solid var(--borda)}
+details{border:1px solid var(--borda);border-radius:12px;background:#fff;margin-bottom:10px}
+summary{cursor:pointer;padding:14px 16px;font-weight:600}
+details p{margin:0;padding:0 16px 14px;color:#334155}
+footer{text-align:center;color:var(--suave);font-size:13px;padding:24px 16px 40px}
+@media (max-width:600px){.topo{padding:26px 18px 84px}.capa{padding:20px}.bloco{padding:18px}}
+@media print{.abas,.escolha,.btn{display:none!important}.setor{display:block!important;page-break-before:always}.topo{padding-bottom:30px}main{margin-top:10px}}
+</style>
+</head>
+<body>
+<header class="topo"><div class="dentro">
+  <img src="img/logo-innovar-branca.png" alt="Innovar Imobiliária">
+  <span class="etq">MPI · GUIA DE ACESSO</span>
+  <h1>Como entrar e usar o MPI</h1>
+  <p>O <b>Marketing Produção Innovar</b> organiza agenda, visitas, produção e entrega dos materiais de cada imóvel. Escolha abaixo a sua área: cada setor tem o seu próprio link de entrada e a sua cor.</p>
+</div></header>
+
+<main>
+  <div class="escolha">
+    <a class="porta" href="#direcao" data-ir="direcao" style="--c:#1446C8"><b>Direção</b><span>Visão geral: agenda, equipes, aprovações e resultados.</span><em>Ver o guia da Direção →</em></a>
+    <a class="porta" href="#marketing" data-ir="marketing" style="--c:#7C3AED"><b>Equipe de Marketing</b><span>Agenda, visitas, quadro de produção e arquivo dos materiais.</span><em>Ver o guia do Marketing →</em></a>
+    <a class="porta" href="#corretor" data-ir="corretor" style="--c:#059669"><b>Corretores</b><span>Pedir acesso, agendar produções e receber os materiais.</span><em>Ver o guia do Corretor →</em></a>
+  </div>
+
+  <nav class="abas" aria-label="Setores">
+    <button data-aba="comum" style="--c:#0F172A">Antes de começar</button>
+    <button data-aba="direcao" style="--c:#1446C8">Direção</button>
+    <button data-aba="marketing" style="--c:#7C3AED">Marketing</button>
+    <button data-aba="corretor" style="--c:#059669">Corretores</button>
+    <button data-aba="duvidas" style="--c:#0F172A">Dúvidas</button>
+  </nav>
+
+  <!-- ===================== COMUM ===================== -->
+  <section class="setor" id="comum" style="--cor:#334155;--cor-esc:#0F172A;--cor-clara:#F1F5F9">
+    <div class="capa"><h2>Antes de começar</h2>
+      <p>Regras que valem para todos. O MPI funciona no computador e no celular, direto no navegador, e pode ser instalado como aplicativo.</p></div>
+    <div class="bloco"><h3><span class="n">1</span>Cada pessoa vê somente o que é da sua área</h3>
+      <p class="sub">As permissões ficam no banco de dados, não só na tela. Mesmo trocando de link, ninguém enxerga o que não é seu.</p>
+      <div class="grade">
+        <div class="item"><b>O link é a porta</b><p>Cada setor tem o seu link, com a sua cor. Quem decide o que você vê é o seu cadastro.</p></div>
+        <div class="item"><b>Cores dos ambientes</b><p><span class="tag" style="background:#E8EEFF;color:#1446C8">Direção · azul</span> <span class="tag" style="background:#F1EAFF;color:#7C3AED">Marketing · roxo</span> <span class="tag" style="background:#E3F7EF;color:#059669">Corretor · verde</span></p></div>
+        <div class="item"><b>Tudo fica registrado</b><p>Mudanças importantes ficam no histórico do sistema, com data, hora e quem fez.</p></div>
+      </div>
+    </div>
+    <div class="bloco"><h3><span class="n">2</span>Primeiro acesso (criar a sua senha)</h3>
+      <p class="sub">Só funciona com o e-mail que foi cadastrado (ou aprovado, no caso dos corretores).</p>
+      <ol class="passos">
+        <li>Abra o <b>link do seu setor</b> (veja na aba da sua área).</li>
+        <li>Toque em <span class="botao-nome">Primeiro acesso</span>.</li>
+        <li>Digite o seu e-mail cadastrado e crie uma senha com <b>pelo menos 8 caracteres</b>.</li>
+        <li>Abra o e-mail de confirmação que chega na sua caixa de entrada (olhe também o spam) e clique no link.</li>
+        <li>Volte ao link do seu setor e toque em <span class="botao-nome">Entrar</span> com e-mail e senha.</li>
+      </ol>
+      <div class="alerta">Esqueceu a senha? Na tela de entrada, toque em <span class="botao-nome">Esqueci a senha</span> e siga o link que chega por e-mail.</div>
+    </div>
+    <div class="bloco"><h3><span class="n">3</span>Instalar na área de trabalho ou no celular</h3>
+      <div class="grade">
+        <div class="item"><b>Computador (Chrome ou Edge)</b><p>Na tela de entrada, toque em <span class="botao-nome">⤓ Instalar na área de trabalho</span>. O MPI ganha ícone próprio e abre como aplicativo.</p></div>
+        <div class="item"><b>Android</b><p>Abra o link no Chrome → menu ⋮ → <b>Instalar app</b> (ou "Adicionar à tela inicial").</p></div>
+        <div class="item"><b>iPhone</b><p>Abra o link no Safari → botão Compartilhar → <b>Adicionar à Tela de Início</b>.</p></div>
+      </div>
+      <div class="alerta">Página de instalação: <a href="baixar.html">abrir a página de download do MPI</a>.</div>
+    </div>
+  </section>
+
+  <!-- ===================== DIREÇÃO ===================== -->
+  <section class="setor" id="direcao" style="--cor:#1446C8;--cor-esc:#0A1E57;--cor-clara:#EEF3FF">
+    <div class="capa"><h2>Direção Innovar</h2>
+      <p>Visão geral de todo o sistema: agenda, equipe de Marketing, corretores, aprovações e resultados. Até <b>3 acessos</b> da Direção.</p>
+      <div class="link-caixa"><code data-link="direcao/"></code><a class="btn btn-claro" data-abrir="direcao/">Entrar</a><button class="btn btn-borda" data-copiar="direcao/">Copiar link</button></div></div>
+
+    <div class="bloco"><h3><span class="n">1</span>Como entrar</h3>
+      <ol class="passos">
+        <li>O seu e-mail é cadastrado como Direção (limite de 3 pessoas).</li>
+        <li>Abra o link da Direção acima → <span class="botao-nome">Primeiro acesso</span> → crie a senha → confirme pelo e-mail.</li>
+        <li>Depois disso, entre sempre por este mesmo link. O ambiente da Direção é <b>azul-marinho</b>.</li>
+      </ol></div>
+
+    <div class="bloco"><h3><span class="n">2</span>O que você encontra no menu</h3>
+      <div class="grade">
+        <div class="item"><b>Radar do Dia</b><p>O resumo do dia: solicitações a decidir, visitas de hoje, prazos que vencem e itens atrasados.</p></div>
+        <div class="item"><b>Agenda</b><p>Todos os agendamentos do Marketing, por dia e semana, sem horários duplicados.</p></div>
+        <div class="item"><b>Quadro de Produção</b><p>Cada imóvel em produção como um cartão, passando pelas etapas até a entrega.</p></div>
+        <div class="item"><b>Imóveis</b><p>Cadastro completo de todos os imóveis, com o código usado pela Innovar.</p></div>
+        <div class="item"><b>Corretores</b><p>Cada corretor com seus imóveis, solicitações, visitas, produções e entregas.</p></div>
+        <div class="item"><b>Equipes e acessos</b><p>Cadastrar a equipe de Marketing, aprovar pedidos de corretores e copiar os links de entrada.</p></div>
+        <div class="item"><b>Painel da Direção</b><p>Indicadores por período: recebidos, entregues, atrasados, tempo médio, produção por pessoa e por corretor.</p></div>
+        <div class="item"><b>Auditoria</b><p>Histórico das alterações feitas no sistema: quem fez, o quê e quando.</p></div>
+      </div></div>
+
+    <div class="bloco"><h3><span class="n">3</span>Cadastrar a equipe de Marketing</h3>
+      <ol class="passos">
+        <li>Abra <span class="botao-nome">Equipes e acessos</span> → bloco <b>Equipe de Marketing</b> (mostra as vagas, ex.: 2/3).</li>
+        <li>Preencha nome, e-mail e função (<b>Coordenação de Marketing</b> ou <b>Equipe de Marketing</b>) → <span class="botao-nome">Cadastrar</span>.</li>
+        <li>Envie à pessoa o <b>link do Marketing</b> e peça que faça o Primeiro acesso.</li>
+      </ol>
+      <div class="alerta">O Marketing tem no máximo <b>3 pessoas</b>. Para trocar alguém, cancele o cadastro pendente ou peça a desativação de quem saiu.</div></div>
+
+    <div class="bloco"><h3><span class="n">4</span>Aprovar corretores</h3>
+      <p class="sub">O corretor pede acesso pelo link dos corretores. Ele só entra depois de aprovado pela <b>Direção</b> e pelo <b>Marketing</b>.</p>
+      <ol class="passos">
+        <li>Em <span class="botao-nome">Equipes e acessos</span> → <b>Pedidos de acesso de corretores</b>, confira nome, e-mail, WhatsApp e código.</li>
+        <li>Toque em <span class="botao-nome">Aprovar</span> (lado da Direção) ou <span class="botao-nome">Recusar</span> (com o motivo).</li>
+        <li>Quando o Marketing também aprovar, o acesso é liberado e aparece em <b>Últimas decisões</b> com o botão <span class="botao-nome">Avisar no WhatsApp</span>.</li>
+      </ol></div>
+
+    <div class="bloco"><h3><span class="n">5</span>Limites do acesso da Direção</h3>
+      <ul class="pode"><li>Acompanha e também pode agir: decidir solicitações e mover cartões quando precisar.</li></ul>
+      <ul class="naopode" style="margin-top:6px"><li>Não vê o arquivo interno de materiais do Marketing (Drive do Marketing).</li><li>Não altera as configurações técnicas do sistema (agenda, etapas, prazos).</li><li>Novos acessos da Direção são liberados pelo suporte do sistema.</li></ul></div>
+  </section>
+
+  <!-- ===================== MARKETING ===================== -->
+  <section class="setor" id="marketing" style="--cor:#7C3AED;--cor-esc:#2E1065;--cor-clara:#F3EEFF">
+    <div class="capa"><h2>Equipe de Marketing</h2>
+      <p>Visão do setor: agenda, visitas, quadro de produção, corretores atendidos e o arquivo dos materiais. Até <b>3 acessos</b> (coordenação + equipe).</p>
+      <div class="link-caixa"><code data-link="marketing/"></code><a class="btn btn-claro" data-abrir="marketing/">Entrar</a><button class="btn btn-borda" data-copiar="marketing/">Copiar link</button></div></div>
+
+    <div class="bloco"><h3><span class="n">1</span>Como entrar</h3>
+      <ol class="passos">
+        <li>A Direção cadastra o seu e-mail na equipe de Marketing.</li>
+        <li>Abra o link do Marketing acima → <span class="botao-nome">Primeiro acesso</span> → crie a senha → confirme pelo e-mail.</li>
+        <li>Entre sempre por este link. O ambiente do Marketing é <b>roxo</b>.</li>
+      </ol></div>
+
+    <div class="bloco"><h3><span class="n">2</span>Comece o dia pelo Radar</h3>
+      <p class="sub">O <b>Radar do Dia</b> mostra o que precisa de você agora: solicitações a decidir, visitas de hoje, prazos que vencem até amanhã, atrasados e materiais aguardando aprovação.</p></div>
+
+    <div class="bloco"><h3><span class="n">3</span>Decidir as solicitações de agendamento <span class="tag">Coordenação</span></h3>
+      <p class="sub">Quando o corretor pede uma produção, o horário fica <b>pré-reservado por 24 horas</b> até a decisão da <b>Coordenação de Marketing</b> (ou da Direção). Abra a solicitação na <b>Agenda</b> e escolha:</p>
+      <div class="grade">
+        <div class="item"><b><span class="botao-nome">Confirmar</span></b><p>Horário garantido. O cartão vai para "Agendado" e o corretor avisa o proprietário.</p></div>
+        <div class="item"><b><span class="botao-nome">Sugerir outro horário</span></b><p>Envia uma nova opção ao corretor, que responde se o proprietário aceitou.</p></div>
+        <div class="item"><b><span class="botao-nome">Pedir informações</span></b><p>Pede ao corretor o que falta (chaves, contato, detalhes do imóvel).</p></div>
+        <div class="item"><b><span class="botao-nome">Recusar</span></b><p>Encerra a solicitação, com o motivo.</p></div>
+      </div>
+      <div class="alerta">A agenda não aceita dois compromissos no mesmo horário. Hoje ela está configurada para <b>segunda a sexta, 08:30–18:00</b>, com intervalo das <b>12:00 às 13:30</b>. Cada produção ocupa <b>3 horas</b>.</div></div>
+
+    <div class="bloco"><h3><span class="n">4</span>Registrar a visita (passo a passo)</h3>
+      <p class="sub">No cartão do imóvel, registre cada momento. O horário é gravado automaticamente:</p>
+      <ol class="passos">
+        <li><span class="botao-nome">Saí da imobiliária</span>: o cartão vai para "Visita em andamento".</li>
+        <li><span class="botao-nome">Cheguei ao imóvel</span></li>
+        <li><span class="botao-nome">Iniciei a produção</span></li>
+        <li><span class="botao-nome">Encerrei a produção</span></li>
+        <li><span class="botao-nome">Voltei à imobiliária</span>: o cartão vai para "Material recebido".</li>
+      </ol>
+      <div class="alerta">Aconteceu algo (proprietário ausente, chave errada, chuva)? Registre uma <b>ocorrência</b>. Ela fica no histórico do cartão.</div></div>
+
+    <div class="bloco"><h3><span class="n">5</span>Quadro de Produção</h3>
+      <p class="sub">Arraste o cartão de uma etapa para a outra. Cada etapa tem prazo em <b>dias úteis</b> (feriados não contam). O cartão avisa quando <b>vence hoje ou no próximo dia útil</b> e quando está <b>atrasado</b>.</p>
+      <div class="alerta" style="margin:0 0 12px">A <b>Coordenação</b> distribui o responsável de cada cartão. A <b>Equipe</b> opera os cartões em que é a responsável.</div>
+      <div class="etapas"><span>Novas solicitações</span><span>Agendamento pendente</span><span>Agendado</span><span>Visita em andamento</span><span>Material recebido</span><span>Organização dos arquivos</span><span>Edição de fotografias</span><span>Edição de vídeos</span><span>Revisão interna</span><span>Aguardando aprovação</span><span>Material aprovado</span><span>Pronto para publicação</span><span>Entregue ao corretor</span><span>Concluído</span><span style="background:#FEE2E2;border-color:#FECACA">Bloqueados / com pendências</span></div>
+      <div class="grade" style="margin-top:14px">
+        <div class="item"><b>Checklist</b><p>Cada cartão traz o checklist padrão da produção. Marque os itens conforme avança.</p></div>
+        <div class="item"><b>Comentários</b><p>Comentário, pergunta, pedido de correção ou observação, tudo registrado no cartão.</p></div>
+        <div class="item"><b>Entrega ao corretor</b><p>No cartão, cole o <b>link dos materiais para o corretor (entrega)</b>. É esse link que ele vê em "Meus materiais".</p></div>
+        <div class="item"><b>Bloqueados</b><p>Algo impede o andamento? Mova para "Bloqueados", com o motivo.</p></div>
+      </div></div>
+
+    <div class="bloco"><h3><span class="n">6</span>Drive do Marketing (arquivo interno)</h3>
+      <p class="sub">Uso exclusivo do Marketing: corretores e Direção <b>não veem</b> estes links. É o arquivo de produção da empresa.</p>
+      <ol class="passos">
+        <li>Em <span class="botao-nome">Drive do Marketing</span>, salve o link da <b>pasta principal da nuvem</b> e as orientações de organização.</li>
+        <li>Para cada corretor, salve o link da <b>pasta do corretor</b>.</li>
+        <li>Dentro de cada corretor, salve o link da <b>pasta de cada imóvel</b>. O botão <span class="botao-nome">Nome</span> copia o nome padronizado da pasta.</li>
+        <li>Use <b>"Só o que falta organizar"</b> para completar o que está sem pasta.</li>
+      </ol>
+      <div class="alerta">Na nuvem (Google Drive), compartilhe a pasta principal <b>somente com os e-mails da equipe de Marketing</b>.</div></div>
+
+    <div class="bloco"><h3><span class="n">7</span>Corretores e pedidos de acesso</h3>
+      <div class="grade">
+        <div class="item"><b>Corretores</b><p>Lista de todos os corretores com imóveis, solicitações, próximas visitas, produções e entregas.</p></div>
+        <div class="item"><b>Pedidos de acesso</b><p>Aprove pelo lado do Marketing os corretores que pediram acesso. A liberação exige também a aprovação da Direção.</p></div>
+        <div class="item"><b>Painel</b><p>A Coordenação também acessa o Painel com os indicadores de produção do período.</p></div>
+      </div></div>
+  </section>
+
+  <!-- ===================== CORRETOR ===================== -->
+  <section class="setor" id="corretor" style="--cor:#059669;--cor-esc:#064E3B;--cor-clara:#E7F8F1">
+    <div class="capa"><h2>Estação do Corretor</h2>
+      <p>A sua estação de trabalho: seus imóveis, os agendamentos de produção com o Marketing e os seus materiais prontos. Você vê <b>somente o que é seu</b>.</p>
+      <div class="link-caixa"><code data-link="corretor/"></code><a class="btn btn-claro" data-abrir="corretor/">Entrar</a><button class="btn btn-borda" data-copiar="corretor/">Copiar link</button></div></div>
+
+    <div class="bloco"><h3><span class="n">1</span>Pedir o seu acesso</h3>
+      <ol class="passos">
+        <li>Abra o link dos corretores acima e toque em <span class="botao-nome">Solicitar acesso de corretor</span>.</li>
+        <li>Preencha nome completo, e-mail, WhatsApp e o seu código de corretor na Innovar (se tiver) → <span class="botao-nome">Enviar pedido</span>.</li>
+        <li>Aguarde: a <b>Direção</b> e o <b>Marketing</b> analisam o seu pedido. Você pode receber o aviso de liberação pelo WhatsApp.</li>
+        <li>Liberado? Volte ao link → <span class="botao-nome">Primeiro acesso</span> → crie a senha com o <b>mesmo e-mail</b> → confirme pelo e-mail.</li>
+        <li>Entre sempre por este link. O seu ambiente é <b>verde</b>.</li>
+      </ol></div>
+
+    <div class="bloco"><h3><span class="n">2</span>Minha estação</h3>
+      <p class="sub">A tela inicial mostra o que <b>precisa de você</b>, as próximas visitas, as produções em andamento e os <b>seus materiais</b> prontos.</p></div>
+
+    <div class="bloco"><h3><span class="n">3</span>Cadastrar os seus imóveis</h3>
+      <div class="grade">
+        <div class="item"><b>Um a um</b><p><span class="botao-nome">Meus imóveis</span> → <span class="botao-nome">+ Novo imóvel</span>. Use o <b>mesmo código</b> do imóvel na Innovar/Jetimob. O CEP preenche o endereço.</p></div>
+        <div class="item"><b>Por planilha</b><p><span class="botao-nome">Importar planilha</span> aceita CSV ou Excel (inclusive exportado do Jetimob). O código é a referência: importar de novo <b>atualiza</b>, nunca duplica.</p></div>
+      </div>
+      <div class="alerta">Os dados do proprietário ficam protegidos: só você, a Direção, a Coordenação de Marketing e quem estiver produzindo o imóvel os veem.</div></div>
+
+    <div class="bloco"><h3><span class="n">4</span>Solicitar uma produção (fotos e vídeo)</h3>
+      <ol class="passos">
+        <li>Toque em <span class="botao-nome">Solicitar agendamento</span> e escolha o imóvel e o tipo (foto, vídeo ou ambos).</li>
+        <li>Escolha um horário livre na agenda e escreva as observações (chaves, contato, detalhes).</li>
+        <li>O horário fica <b>pré-reservado</b> até o Marketing responder.</li>
+      </ol>
+      <div class="alerta"><b>Regras da agenda:</b> peça com pelo menos <b>24 horas de antecedência</b>, de <b>segunda a sexta, 08:30–18:00</b> (intervalo das 12:00 às 13:30). Cada produção dura <b>3 horas</b>. Feriados e horários já reservados aparecem como ocupados e não podem ser escolhidos.</div></div>
+
+    <div class="bloco"><h3><span class="n">5</span>Responder ao Marketing</h3>
+      <div class="grade">
+        <div class="item"><b>Sugeriram outro horário?</b><p>Fale com o proprietário e toque em <span class="botao-nome">Proprietário aceitou</span> ou <span class="botao-nome">Proprietário não aceitou</span>.</p></div>
+        <div class="item"><b>Pediram informações?</b><p>Escreva o que falta e toque em <span class="botao-nome">Enviar informações</span>.</p></div>
+        <div class="item"><b>Mudou o plano?</b><p>Use <span class="botao-nome">Reagendar</span> ou <span class="botao-nome">Cancelar</span> enquanto a visita não começou.</p></div>
+      </div></div>
+
+    <div class="bloco"><h3><span class="n">6</span>Acompanhar e receber os materiais</h3>
+      <ul class="pode"><li><b>Minhas produções</b>: em que etapa está cada imóvel e o prazo.</li><li><b>Meus materiais</b>: quando o Marketing entrega, o link das fotos e vídeos aparece aqui.</li></ul></div>
+
+    <div class="bloco"><h3><span class="n">7</span>Privacidade</h3>
+      <ul class="naopode"><li>Você não vê os imóveis, agendamentos ou materiais de outros corretores.</li><li>Ninguém de outro corretor vê os seus.</li><li>O arquivo interno do Marketing não aparece para corretores.</li></ul></div>
+  </section>
+
+  <!-- ===================== DÚVIDAS ===================== -->
+  <section class="setor" id="duvidas" style="--cor:#334155;--cor-esc:#0F172A;--cor-clara:#F1F5F9">
+    <div class="capa"><h2>Dúvidas frequentes</h2><p>Se algo não funcionar, fale com a Direção ou com a coordenação de Marketing.</p></div>
+    <details><summary>Toquei em "Primeiro acesso" e apareceu que o e-mail não foi liberado.</summary><p>O seu e-mail ainda não está cadastrado (equipe interna) ou o seu pedido ainda não foi aprovado pela Direção e pelo Marketing (corretores). Confira se digitou o mesmo e-mail do cadastro.</p></details>
+    <details><summary>Não chegou o e-mail de confirmação.</summary><p>Olhe a caixa de spam e a aba "Promoções". Os envios podem levar alguns minutos. Se não chegar, aguarde um pouco e tente "Esqueci a senha" com o mesmo e-mail.</p></details>
+    <details><summary>O horário que eu queria não aparece na agenda.</summary><p>Ele já está ocupado, é feriado, fica fora do horário de atendimento ou está a menos de 24 horas. A agenda nunca deixa dois compromissos no mesmo horário.</p></details>
+    <details><summary>Abri o link de outro setor. Vou ver coisas que não são minhas?</summary><p>Não. O link só muda a tela de entrada. O que você vê é decidido pelo seu cadastro, direto no banco de dados.</p></details>
+    <details><summary>Posso usar no celular?</summary><p>Sim. Abra o link do seu setor no navegador do celular e, se quiser, instale na tela de início (veja "Antes de começar").</p></details>
+  </section>
+</main>
+
+<footer>MPI · Marketing Produção Innovar · Innovar Imobiliária, São Leopoldo/RS · Tecnologia Marca &amp; Estratégia</footer>
+
+<script>
+const base = location.href.replace(/[#?].*$/, '').replace(/[^/]*$/, '');
+document.querySelectorAll('[data-link]').forEach((e) => e.textContent = base + e.dataset.link);
+document.querySelectorAll('[data-abrir]').forEach((a) => a.href = base + a.dataset.abrir);
+document.querySelectorAll('[data-copiar]').forEach((b) => b.onclick = async () => {
+  const t = base + b.dataset.copiar;
+  try { await navigator.clipboard.writeText(t); const o = b.textContent; b.textContent = 'Copiado ✓'; setTimeout(() => b.textContent = o, 1800); }
+  catch { prompt('Copie o link:', t); }
+});
+const abas = [...document.querySelectorAll('[data-aba]')];
+function mostrar(id, rolar) {
+  if (!document.getElementById(id)) id = 'comum';
+  document.querySelectorAll('.setor').forEach((s) => s.classList.toggle('ativo', s.id === id));
+  abas.forEach((b) => b.classList.toggle('ativa', b.dataset.aba === id));
+  if (rolar) document.querySelector('.abas').scrollIntoView({ behavior: 'smooth' });
+}
+abas.forEach((b) => b.onclick = () => { history.replaceState(null, '', '#' + b.dataset.aba); mostrar(b.dataset.aba, false); });
+document.querySelectorAll('[data-ir]').forEach((a) => a.onclick = (e) => { e.preventDefault(); history.replaceState(null, '', '#' + a.dataset.ir); mostrar(a.dataset.ir, true); });
+mostrar(location.hash.slice(1) || 'comum', false);
+</script>
+</body>
+</html>
