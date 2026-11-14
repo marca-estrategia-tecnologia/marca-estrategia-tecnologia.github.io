@@ -167,11 +167,14 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left
           <div><label for="cr-3">E-mail 3</label><input id="cr-3" type="email"></div>
           <div><label for="cr-4">E-mail 4</label><input id="cr-4" type="email"></div>
           <div><label for="cr-senha">Sua senha (confirmação)</label><input id="cr-senha" type="password" autocomplete="current-password" required></div>
-          <div style="flex:0 0 auto"><button class="btn" type="submit">Salvar ordem</button></div></form>
+          <div style="flex:0 0 auto"><button class="btn" type="submit">Salvar ordem</button></div>
+          <label style="flex:1 1 100%;display:flex;gap:8px;align-items:center;font-weight:600"><input id="cr-mesma" type="checkbox" style="width:auto"> Os co-criadores entram com a <b>mesma senha</b> que a minha (as contas que faltam são criadas já confirmadas)</label></form>
         <hr style="border:0;border-top:1px solid #E5E9F0;margin:16px 0">
         <h3>Passar o posto de e-mail principal</h3><p class="muted">Use só se quiser que outro e-mail seu vire o nº 1. Você passa a ser co-criador.</p>
         <form id="f-transf" class="linha"><div><label for="tr-email">Novo e-mail principal</label><select id="tr-email"></select></div><div><label for="tr-senha">Sua senha</label><input id="tr-senha" type="password" autocomplete="current-password" required></div><div style="flex:0 0 auto"><button class="btn linha" type="submit">Passar o posto</button></div></form>
       </div>
+      <div class="cartao" id="box-raiz" hidden style="margin-top:14px"><h3>🔑 Senha raiz</h3><p class="muted">Uma senha mestra, diferente da sua senha normal. Com ela, qualquer e-mail criador (1 a 4) cria uma nova senha na tela de login (Esqueci a senha → <b>Sou criador: usar a senha raiz</b>) e entra na hora, sem esperar código. Cada uso avisa todos os criadores por e-mail. <span id="raiz-st"></span></p>
+        <form id="f-raiz" class="linha"><div><label for="rz-atual">Sua senha atual</label><input id="rz-atual" type="password" autocomplete="current-password" required></div><div><label for="rz-1">Senha raiz (10+ caracteres, letras e números)</label><input id="rz-1" type="password" autocomplete="new-password" minlength="10" required></div><div><label for="rz-2">Repita a senha raiz</label><input id="rz-2" type="password" autocomplete="new-password" minlength="10" required></div><div style="flex:0 0 auto"><button class="btn" type="submit">Salvar senha raiz</button></div></form></div>
       <div class="cartao" id="box-cr-suc" hidden style="margin-top:14px"><h3>Sucessão do e-mail principal</h3><p class="muted" id="suc-txt"></p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="suc-pedir" type="button">Pedir sucessão</button><button class="btn" id="suc-concluir" type="button" hidden>Concluir sucessão</button><button class="btn linha" id="suc-cancelar" type="button" hidden>Cancelar pedido</button></div></div>
     </section>
 
@@ -434,7 +437,8 @@ function carregarCriadores(){
       return '<tr><td><b>' + c.ordem + '</b></td><td>' + esc(c.email) + (c.email === r.eu ? ' <span class="tag">você</span>' : '') + '</td><td>' + (c.ordem === 1 ? '<span class="tag ok">principal (CEO)</span>' : '<span class="tag">co-criador</span>') + '</td>' +
         '<td>' + (c.confirmado ? '<span class="tag ok">conta ativa</span>' : '<span class="tag em">' + (c.contaCriada ? 'falta confirmar' : 'sem conta ainda') + '</span>') + '</td><td>' + (c.ultimoAcesso ? new Date(c.ultimoAcesso).toLocaleString("pt-BR") : "—") + '</td></tr>';
     }).join("");
-    $("box-cr-editar").hidden = !euPrincipal;
+    $("box-cr-editar").hidden = !euPrincipal; $("box-raiz").hidden = !euPrincipal;
+    if(euPrincipal) api({acao:"senhaRaizStatus"}).then(function(x){ $("raiz-st").innerHTML = x.ok && x.definida ? '<span class="tag ok">definida em ' + new Date(x.definidaEm).toLocaleDateString("pt-BR") + '</span>' : '<span class="tag em">ainda não definida</span>'; });
     if(euPrincipal){
       var co = r.criadores.slice(1).map(function(c){ return c.email; });
       ["cr-2", "cr-3", "cr-4"].forEach(function(id, i){ $(id).value = co[i] || ""; });
@@ -452,7 +456,12 @@ function carregarCriadores(){
 $("f-cri").onsubmit = function(e){
   e.preventDefault();
   var lista = ["cr-2", "cr-3", "cr-4"].map(function(id){ return $(id).value.trim(); }).filter(String);
-  api({acao:"criadoresSalvar", senha:$("cr-senha").value, coCriadores:lista}).then(function(r){ $("cr-senha").value = ""; toast(r.mensagem || (r.ok ? "Salvo" : "Erro")); if(r.ok) carregarCriadores(); });
+  api({acao:"criadoresSalvar", senha:$("cr-senha").value, coCriadores:lista, mesmaSenha:$("cr-mesma").checked}).then(function(r){ $("cr-senha").value = ""; toast(r.mensagem || (r.ok ? "Salvo" : "Erro")); if(r.ok) carregarCriadores(); });
+};
+$("f-raiz").onsubmit = function(e){
+  e.preventDefault();
+  if($("rz-1").value !== $("rz-2").value) return toast("As duas senhas raiz estão diferentes.");
+  api({acao:"senhaRaizDefinir", senha:$("rz-atual").value, raiz:$("rz-1").value}).then(function(r){ ["rz-atual", "rz-1", "rz-2"].forEach(function(i){ $(i).value = ""; }); toast(r.mensagem); if(r.ok) carregarCriadores(); });
 };
 $("f-transf").onsubmit = function(e){
   e.preventDefault(); var alvo = $("tr-email").value; if(!alvo) return;
@@ -676,13 +685,32 @@ function telaEsqueci(){
   estado.tela = "esqueci";
   mostrar(caixa("Esqueci a senha", "Informe o e-mail da sua conta. Vamos enviar um código para você criar uma nova senha.",
     '<form id="ca-f"><label for="ca-email">E-mail cadastrado</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
-    '<button class="ca-pri" id="ca-b">Enviar código</button></form><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
+    '<button class="ca-pri" id="ca-b">Enviar código</button></form><button class="ca-link" id="ca-raizlink">Sou criador: usar a senha raiz</button><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
   document.getElementById("ca-voltar").onclick = function(){ telaEntrar(); };
+  document.getElementById("ca-raizlink").onclick = function(){ estado.email = v("ca-email").toLowerCase() || estado.email; telaRaiz(); };
   document.getElementById("ca-f").onsubmit = function(e){
     e.preventDefault(); var b = document.getElementById("ca-b"); estado.email = v("ca-email").toLowerCase();
     if(!estado.email) return msg("erro", "Informe o e-mail.");
     ocupado(b, true);
     api({acao:"esqueciSenha", email:estado.email}).then(function(r){ ocupado(b, false); if(r.ok) return telaCodigo("senha", r.mensagem); msg("erro", r.mensagem); }).catch(function(){ falhaRede(b); });
+  };
+}
+
+function telaRaiz(){
+  estado.tela = "raiz";
+  mostrar(caixa("Entrar com a senha raiz", "Só para os e-mails criadores (1 a 4). Com a senha raiz definida pelo e-mail principal, você cria uma nova senha e entra na hora, sem código.",
+    '<form id="ca-f"><label for="ca-email">E-mail criador</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
+    '<label for="ca-rz">Senha raiz</label><div class="ca-ver"><input id="ca-rz" type="password" autocomplete="off" minlength="10" maxlength="64" required><button type="button" data-ver="ca-rz" aria-label="Mostrar senha raiz">ver</button></div>' +
+    campoSenha("ca-senha", "Nova senha (8+ caracteres, letras e números)", "new-password") + campoSenha("ca-senha2", "Repita a nova senha", "new-password") +
+    '<button class="ca-pri" id="ca-b">Salvar nova senha e entrar</button></form><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
+  document.getElementById("ca-voltar").onclick = function(){ telaEsqueci(); };
+  document.getElementById("ca-f").onsubmit = function(e){
+    e.preventDefault(); var b = document.getElementById("ca-b"), s1 = v("ca-senha"), s2 = v("ca-senha2");
+    estado.email = v("ca-email").toLowerCase();
+    var f = senhaFraca(s1); if(f) return msg("erro", f);
+    if(s1 !== s2) return msg("erro", "As duas senhas estão diferentes.");
+    ocupado(b, true);
+    api({acao:"redefinirComRaiz", email:estado.email, raiz:v("ca-rz"), novaSenha:s1, app:APPID}).then(function(r){ ocupado(b, false); if(r.ok) return entrou(r); msg("erro", r.mensagem); }).catch(function(){ falhaRede(b); });
   };
 }
 

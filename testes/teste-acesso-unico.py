@@ -121,6 +121,36 @@ try:
         ok(res and res["blob"] and res["solta"], "fotos/vídeos (Blob) e configurações preservados")
         ok(si.evaluate("localStorage.getItem('sipro_ui')") is not None, 'memória de tela do Social Imob chegou')
         ok(not [e for e in erros if "favicon" not in e], "sem erros de JavaScript: " + "; ".join(erros[:3]))
+
+        print("Senha raiz e mesma senha (Estação)")
+        pg.bring_to_front(); pg.goto(ON + "/portal/estacao.html#criadores"); pg.wait_for_timeout(1800)
+        ok(pg.is_visible("#box-raiz"), "principal vê o cartão Senha raiz")
+        pg.fill("#rz-atual", "criador123"); pg.fill("#rz-1", "RaizForte2026"); pg.fill("#rz-2", "RaizForte2026"); pg.click("#f-raiz button[type=submit]"); pg.wait_for_timeout(1800)
+        ok("definida" in pg.inner_text("#raiz-st"), "senha raiz salva e marcada como definida")
+        pg.fill("#cr-2", "co2@teste.com"); pg.fill("#cr-3", "kenny@teste.com"); pg.fill("#cr-4", ""); pg.check("#cr-mesma"); pg.fill("#cr-senha", "criador123"); pg.click("#f-cri button[type=submit]"); pg.wait_for_timeout(1800)
+        ok("kenny@teste.com" in pg.inner_text("#tb-criadores"), "co-criadores salvos com a mesma senha")
+
+        print("Login: Sou criador → senha raiz (PRO IMOBILIÁRIA)")
+        c2 = nav.new_context(viewport={"width": 1280, "height": 860}, service_workers="block")
+        pr = c2.new_page(); pr.on("dialog", lambda d: d.accept()); perr = []; pr.on("pageerror", lambda e: perr.append(str(e)))
+        pr.goto(ON + "/pro-imobiliaria.github.io/index.html"); pr.wait_for_selector("#ca-email", timeout=10000)
+        pr.fill("#ca-email", "kenny@teste.com"); pr.fill("#ca-senha", "criador123"); pr.click("#ca-b"); pr.wait_for_timeout(2500)
+        ok(not pr.is_visible("#ca-raiz") or not pr.is_visible("#ca-email"), "co-criador entra com a mesma senha do principal")
+        ok(pr.is_visible("#ca-trazer-reg"), "registro vazio oferece trazer os dados do endereço antigo")
+        pr.evaluate("CentralAcesso.sair && CentralAcesso.sair()"); pr.wait_for_timeout(800)
+        if not pr.is_visible("#ca-email"): pr.evaluate("CentralAcesso.entrar()"); pr.wait_for_timeout(500)
+        pr.click("text=Esqueci"); pr.wait_for_selector("#ca-raizlink"); pr.click("#ca-raizlink"); pr.wait_for_selector("#ca-rz")
+        pr.fill("#ca-email", "co2@teste.com"); pr.fill("#ca-rz", "RaizForte2026"); pr.fill("#ca-senha", "trocada2026"); pr.fill("#ca-senha2", "trocada2026"); pr.click("#ca-b"); pr.wait_for_timeout(2500)
+        ok(not pr.is_visible("#ca-raiz"), "senha raiz redefine a senha do criador e entra na hora")
+
+        print("PIN interno do PRO IMOBILIÁRIA para criador")
+        pr.evaluate("""async () => { const h = 's256:' + Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('PROINNOVAR|1234')))).map(b => b.toString(16).padStart(2,'0')).join('');
+          localStorage.setItem('proinnovar.conta', JSON.stringify({nome:'Anderson Alves', whats:'51984168848', pinHash:h, criado:new Date().toISOString()}));
+          localStorage.setItem('proinnovar.perfilAparelho', JSON.stringify('owner')); sessionStorage.clear(); }""")
+        pr.reload(); pr.wait_for_timeout(3500)
+        ok(not pr.is_visible("#pinForm"), "criador logado na Central abre o perfil principal sem pedir o PIN")
+        ok(not perr, "sem erros no PRO IMOBILIÁRIA: " + "; ".join(perr[:2]))
+        c2.close()
         nav.close()
 finally:
     for pr in procs: pr.kill()

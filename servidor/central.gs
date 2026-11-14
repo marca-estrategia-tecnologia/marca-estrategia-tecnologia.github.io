@@ -25,7 +25,7 @@
  * - Textos limpos antes de gravar (nada começa com = + - @: evita fórmulas na planilha).
  */
 
-var VERSAO = "1.1.0";
+var VERSAO = "1.2.0";
 var MAX_CRIADORES = 4;      // 1 principal (CEO) + até 3 co-criadores
 var SUCESSAO_DIAS = 7;      // prazo para o principal responder a um pedido de sucessão
 var PASSE_MIN = 2;          // validade do passe de entrada entre apps
@@ -135,7 +135,10 @@ var ACOES = {
   transferirPrincipal: transferirPrincipal_,
   pedirSucessao: pedirSucessao_,
   cancelarSucessao: cancelarSucessao_,
-  concluirSucessao: concluirSucessao_
+  concluirSucessao: concluirSucessao_,
+  senhaRaizDefinir: senhaRaizDefinir_,
+  senhaRaizStatus: senhaRaizStatus_,
+  redefinirComRaiz: redefinirComRaiz_
 };
 
 /* ============================== CONTAS ============================== */
@@ -428,13 +431,14 @@ function criadoresSalvar_(d){
   if(invalido.length) return erro_("dados", "E-mail inválido: " + invalido[0]);
   var antes = criadores_(), lista = gravarCriadores_([s.email].concat(outros));
   registrar_(s.email, "criadores", "", lista.join(","));
+  if(d.mesmaSenha) lista.slice(1).forEach(function(e){ copiarSenhaDoPrincipal_(s.email, e); });
   lista.slice(1).forEach(function(e){
     if(antes.indexOf(e) < 0) avisarPorEmail_(e, "Você agora é co-criador da Marca & Estratégia Tecnologia",
       "O e-mail principal " + s.email + " adicionou você como co-criador (" + (lista.indexOf(e) + 1) + "º e-mail).\n\nVocê tem acesso livre a todos os apps e à Estação de Trabalho: " +
       "https://marca-estrategia-tecnologia.github.io/estacao.html\nSe ainda não tem conta, use Criar conta com este mesmo e-mail.");
   });
   antes.forEach(function(e){ if(lista.indexOf(e) < 0) encerrarSessoes_(e); });
-  return {ok:true, criadores:lista, mensagem:"Lista de criadores salva."};
+  return {ok:true, criadores:lista, mensagem:d.mesmaSenha ? "Lista salva. Os co-criadores entram com a mesma senha que a sua." : "Lista de criadores salva."};
 }
 
 function transferirPrincipal_(d){
@@ -487,6 +491,71 @@ function concluirSucessao_(d){
   registrar_(s.email, "sucessao_concluida", "", antigo);
   avisarPorEmail_(lista.join(","), "[Central] Sucessão concluída", s.email + " agora é o e-mail principal. " + antigo + " passou a co-criador.\nNova ordem: " + lista.join(", "));
   return {ok:true, criadores:lista, mensagem:"Pronto: você agora é o e-mail principal."};
+}
+
+
+/* ============================== SENHA RAIZ (recuperação dos criadores) ==============================
+ * O e-mail principal define uma senha raiz (diferente da senha normal). Com ela, qualquer criador
+ * (e-mails 1 a 4) redefine a própria senha na tela de login, sem código por e-mail.
+ * A senha raiz nunca é guardada: só sal + hash nas Propriedades do script. Cada uso avisa todos os criadores. */
+function copiarSenhaDoPrincipal_(principal, email){
+  var sh = aba_("Contas"), np = acharLinha_(sh, "email", principal); if(np < 1) return;
+  var p = lerLinha_(sh, np, "Contas"), n = acharLinha_(sh, "email", email);
+  if(n < 1){
+    var cols = ABAS.Contas, linha = cols.map(function(){ return ""; });
+    var v = {email:email, nome:p.nome || "", sal:p.sal, hash:p.hash, confirmado:"sim", status:"ativo", criado:new Date(), acessos:0, origem:"criador", consentimento:"v1"};
+    cols.forEach(function(c, i){ if(v[c] !== undefined) linha[i] = v[c]; });
+    sh.appendRow(linha);
+  } else {
+    gravarCampos_(sh, n, "Contas", {sal:p.sal, hash:p.hash, confirmado:"sim", status:"ativo"});
+    encerrarSessoes_(email);
+  }
+  limparFalhas_(email);
+  registrar_(principal, "mesma_senha", "", email);
+  avisarPorEmail_(email, "Seu acesso de co-criador está pronto",
+    "O e-mail principal " + principal + " liberou este e-mail como co-criador da Marca & Estratégia Tecnologia.\n\n" +
+    "Entre com este e-mail e a MESMA senha do e-mail principal:\nhttps://marca-estrategia-tecnologia.github.io/estacao.html\n\nSe não reconhece este acesso, responda este e-mail.");
+}
+function raiz_(){ try{ return JSON.parse(PropertiesService.getScriptProperties().getProperty("SENHA_RAIZ") || "null"); }catch(e){ return null; }}
+function senhaRaizStatus_(d){
+  var s = sessaoCriador_(d); if(!s) return erro_("proibido", "Só os criadores veem isto.");
+  var r = raiz_(); return {ok:true, definida:!!r, definidaEm:r ? r.em : "", principal:principal_() === s.email};
+}
+function senhaRaizDefinir_(d){
+  var s = sessaoCriador_(d); if(!s) return erro_("proibido", "Só os criadores podem fazer isto.");
+  if(s.email !== principal_()) return erro_("proibido", "Só o e-mail principal (1) define a senha raiz.");
+  if(!senhaConfere_(s.email, d.senha)) return erro_("senha", "A sua senha atual não confere.");
+  var raiz = String(d.raiz || "");
+  if(raiz.length < 10 || raiz.length > 64 || !/[A-Za-z]/.test(raiz) || !/\d/.test(raiz)) return erro_("senha", "A senha raiz precisa ter de 10 a 64 caracteres, com letras e números.");
+  if(senhaConfere_(s.email, raiz)) return erro_("senha", "A senha raiz precisa ser diferente da sua senha normal.");
+  var sal = Utilities.getUuid();
+  PropertiesService.getScriptProperties().setProperty("SENHA_RAIZ", JSON.stringify({sal:sal, hash:hash_(raiz, sal), em:new Date().toISOString(), por:s.email}));
+  registrar_(s.email, "senha_raiz_definida", "", "");
+  avisarPorEmail_(criadores_().join(","), "[Central] Senha raiz definida", "O e-mail principal " + s.email + " definiu uma nova senha raiz. Ela permite que os criadores (e-mails 1 a 4) redefinam a própria senha na tela de login.");
+  return {ok:true, mensagem:"Senha raiz salva. Guarde-a em lugar seguro: ela não pode ser vista depois."};
+}
+function redefinirComRaiz_(d){
+  var email = limpaEmail_(d.email), chave = "raiz:" + email;
+  if(!email || criadores_().indexOf(email) < 0) return erro_("raiz", "A senha raiz só vale para os e-mails criadores (1 a 4).");
+  var b = bloqueado_(chave); if(b) return b;
+  var r = raiz_(); if(!r) return erro_("raiz", "A senha raiz ainda não foi definida. O e-mail principal define em Estação → Criadores.");
+  if(hash_(String(d.raiz || ""), r.sal) !== r.hash){ falhou_(chave); registrar_(email, "raiz_errada", "", ""); return erro_("raiz", "Senha raiz incorreta."); }
+  limparFalhas_(chave);
+  var nova = String(d.novaSenha || ""), fraca = senhaFraca_(nova); if(fraca) return erro_("senha", fraca);
+  var sh = aba_("Contas"), n = acharLinha_(sh, "email", email), sal = Utilities.getUuid();
+  if(n < 1){
+    var cols = ABAS.Contas, linha = cols.map(function(){ return ""; });
+    var v = {email:email, nome:String(d.nome || "").slice(0, 80), sal:sal, hash:hash_(nova, sal), confirmado:"sim", status:"ativo", criado:new Date(), acessos:0, origem:"raiz", consentimento:"v1"};
+    cols.forEach(function(c, i){ if(v[c] !== undefined) linha[i] = v[c]; });
+    sh.appendRow(linha); n = acharLinha_(sh, "email", email);
+  } else {
+    gravarCampos_(sh, n, "Contas", {sal:sal, hash:hash_(nova, sal), confirmado:"sim", status:"ativo"});
+    encerrarSessoes_(email);
+  }
+  limparFalhas_(email);
+  registrar_(email, "senha_pela_raiz", "", "");
+  avisarPorEmail_(criadores_().join(","), "[Central] Senha redefinida com a senha raiz", "A senha de " + email + " foi redefinida agora usando a senha raiz. Se não foi você, troque a senha raiz em Estação → Criadores.");
+  return abrirSessao_(email, limpaApp_(d.app), sh, n);
 }
 
 /* ============================== PASSE ENTRE APPS (entrar uma vez só) ==============================

@@ -493,13 +493,32 @@ function telaEsqueci(){
   estado.tela = "esqueci";
   mostrar(caixa("Esqueci a senha", "Informe o e-mail da sua conta. Vamos enviar um código para você criar uma nova senha.",
     '<form id="ca-f"><label for="ca-email">E-mail cadastrado</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
-    '<button class="ca-pri" id="ca-b">Enviar código</button></form><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
+    '<button class="ca-pri" id="ca-b">Enviar código</button></form><button class="ca-link" id="ca-raizlink">Sou criador: usar a senha raiz</button><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
   document.getElementById("ca-voltar").onclick = function(){ telaEntrar(); };
+  document.getElementById("ca-raizlink").onclick = function(){ estado.email = v("ca-email").toLowerCase() || estado.email; telaRaiz(); };
   document.getElementById("ca-f").onsubmit = function(e){
     e.preventDefault(); var b = document.getElementById("ca-b"); estado.email = v("ca-email").toLowerCase();
     if(!estado.email) return msg("erro", "Informe o e-mail.");
     ocupado(b, true);
     api({acao:"esqueciSenha", email:estado.email}).then(function(r){ ocupado(b, false); if(r.ok) return telaCodigo("senha", r.mensagem); msg("erro", r.mensagem); }).catch(function(){ falhaRede(b); });
+  };
+}
+
+function telaRaiz(){
+  estado.tela = "raiz";
+  mostrar(caixa("Entrar com a senha raiz", "Só para os e-mails criadores (1 a 4). Com a senha raiz definida pelo e-mail principal, você cria uma nova senha e entra na hora, sem código.",
+    '<form id="ca-f"><label for="ca-email">E-mail criador</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
+    '<label for="ca-rz">Senha raiz</label><div class="ca-ver"><input id="ca-rz" type="password" autocomplete="off" minlength="10" maxlength="64" required><button type="button" data-ver="ca-rz" aria-label="Mostrar senha raiz">ver</button></div>' +
+    campoSenha("ca-senha", "Nova senha (8+ caracteres, letras e números)", "new-password") + campoSenha("ca-senha2", "Repita a nova senha", "new-password") +
+    '<button class="ca-pri" id="ca-b">Salvar nova senha e entrar</button></form><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
+  document.getElementById("ca-voltar").onclick = function(){ telaEsqueci(); };
+  document.getElementById("ca-f").onsubmit = function(e){
+    e.preventDefault(); var b = document.getElementById("ca-b"), s1 = v("ca-senha"), s2 = v("ca-senha2");
+    estado.email = v("ca-email").toLowerCase();
+    var f = senhaFraca(s1); if(f) return msg("erro", f);
+    if(s1 !== s2) return msg("erro", "As duas senhas estão diferentes.");
+    ocupado(b, true);
+    api({acao:"redefinirComRaiz", email:estado.email, raiz:v("ca-rz"), novaSenha:s1, app:APPID}).then(function(r){ ocupado(b, false); if(r.ok) return entrou(r); msg("erro", r.mensagem); }).catch(function(){ falhaRede(b); });
   };
 }
 

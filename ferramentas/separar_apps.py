@@ -118,7 +118,7 @@ def montar(antigo, saida):
 
     # Kit da Central nos apps de uso com login
     kit(saida / "prospectarion.github.io" / "index.html", "prospectarion", "Prospectarion", ["prospectarion"], "prospectarion", "prospectarion")
-    kit(saida / "pro-imobiliaria.github.io" / "index.html", "pro-imobiliaria", "PRO IMOBILIÁRIA", ["proinnovar."], None, "pro-imobiliaria")
+    kit(saida / "pro-imobiliaria.github.io" / "index.html", "pro-imobiliaria", "PRO IMOBILIÁRIA", ["proinnovar."], "pro-imobiliaria", "pro-imobiliaria")
     kit(saida / "social-imob-360.github.io" / "index.html", "social-imob-360", "Social Imob 360", [], "social-imob-360", "social-imob-360")
     kit(saida / "social-imob-360.github.io" / "criador" / "index.html", "social-imob-360", "Social Imob 360 • Criador", [], "social-imob-360", "social-imob-360-criador")
     print("Repositórios montados em", saida)
