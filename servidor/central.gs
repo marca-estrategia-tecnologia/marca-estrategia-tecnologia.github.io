@@ -25,7 +25,7 @@
  * - Textos limpos antes de gravar (nada começa com = + - @: evita fórmulas na planilha).
  */
 
-var VERSAO = "1.2.0";
+var VERSAO = "1.2.1";
 var MAX_CRIADORES = 4;      // 1 principal (CEO) + até 3 co-criadores
 var SUCESSAO_DIAS = 7;      // prazo para o principal responder a um pedido de sucessão
 var PASSE_MIN = 2;          // validade do passe de entrada entre apps
@@ -92,8 +92,9 @@ function doPost(e){
     if(!f) return json_({ok:false, erro:"acao", mensagem:"Ação desconhecida."});
     return json_(f(d));
   }catch(err){
-    registrar_("", "erro", "", String(err && err.message || err).slice(0, 300));
-    return json_({ok:false, erro:"servidor", mensagem:"Falha no servidor. Tente de novo em instantes."});
+    var det = String(err && err.message || err).slice(0, 160);
+    registrar_("", "erro", "", det);
+    return json_({ok:false, erro:"servidor", detalhe:det, mensagem:"Falha no servidor. Tente de novo em instantes. (" + det + ")"});
   }finally{ try{ lock.releaseLock(); }catch(x){} }
 }
 
@@ -829,9 +830,9 @@ function abrirSessao_(email, app, sh, n){
   var token = Utilities.getUuid() + Utilities.getUuid();
   aba_("Sessoes").appendRow([hashToken_(token), email, new Date(), new Date(Date.now() + SESSAO_DIAS * 864e5)]);
   var c = lerLinha_(sh, n, "Contas");
-  gravarCampos_(sh, n, "Contas", {ultimoAcesso:new Date(), acessos:(Number(c.acessos) || 0) + 1});
-  if(app) garantirLicenca_(email, app);
-  if(principal_() === email) cancelarSucessaoSePendente_(email);
+  try{ gravarCampos_(sh, n, "Contas", {ultimoAcesso:new Date(), acessos:(Number(c.acessos) || 0) + 1}); }catch(e){}
+  try{ if(app) garantirLicenca_(email, app); }catch(e){}
+  try{ if(principal_() === email) cancelarSucessaoSePendente_(email); }catch(e){}
   registrar_(email, "entrou", app, "");
   return {ok:true, token:token, conta:contaPublica_(c), licenca:app ? licencaPublica_(email, app) : null};
 }
@@ -853,23 +854,27 @@ function encerrarSessoes_(email){
   for(var i = rows.length - 1; i >= 1; i--) if(String(rows[i][1]) === email) sh.deleteRow(i + 1);
 }
 
+/* O controle de tentativas nunca derruba o login: se a aba Falhas der erro, o login segue. */
 function bloqueado_(email){
-  var sh = aba_("Falhas"), n = acharLinha_(sh, "email", email);
-  if(n < 1) return null;
-  var f = lerLinha_(sh, n, "Falhas");
-  if(f.bloqueadoAte && new Date(f.bloqueadoAte).getTime() > Date.now())
-    return erro_("bloqueio", "Muitas tentativas erradas. Aguarde 15 minutos ou use Esqueci a senha.");
+  try{
+    var sh = aba_("Falhas"), n = acharLinha_(sh, "email", email);
+    if(n < 1) return null;
+    var f = lerLinha_(sh, n, "Falhas");
+    if(f.bloqueadoAte && new Date(f.bloqueadoAte).getTime() > Date.now())
+      return erro_("bloqueio", "Muitas tentativas erradas. Aguarde 15 minutos ou use Esqueci a senha.");
+  }catch(e){}
   return null;
 }
 function falhou_(email){
-  var sh = aba_("Falhas"), n = acharLinha_(sh, "email", email);
-  if(n < 1){ sh.appendRow([email, 1, ""]); return; }
-  var f = lerLinha_(sh, n, "Falhas"), q = (Number(f.falhas) || 0) + 1;
-  gravarCampos_(sh, n, "Falhas", {falhas:q >= 5 ? 0 : q, bloqueadoAte:q >= 5 ? new Date(Date.now() + 15 * 6e4) : ""});
+  try{
+    var sh = aba_("Falhas"), n = acharLinha_(sh, "email", email);
+    if(n < 1){ sh.appendRow([email, 1, ""]); return; }
+    var f = lerLinha_(sh, n, "Falhas"), q = (Number(f.falhas) || 0) + 1;
+    gravarCampos_(sh, n, "Falhas", {falhas:q >= 5 ? 0 : q, bloqueadoAte:q >= 5 ? new Date(Date.now() + 15 * 6e4) : ""});
+  }catch(e){}
 }
 function limparFalhas_(email){
-  var sh = aba_("Falhas"), n = acharLinha_(sh, "email", email);
-  if(n > 0) sh.deleteRow(n);
+  try{ var sh = aba_("Falhas"), n = acharLinha_(sh, "email", email); if(n > 0) sh.deleteRow(n); }catch(e){}
 }
 
 function senhaFraca_(s){
