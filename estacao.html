@@ -159,9 +159,9 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left
 
     <section class="vista" id="v-criadores">
       <h1>Criadores</h1>
-      <p class="muted">O <b>e-mail 1</b> é o principal (CEO): só ele muda esta lista. Os e-mails <b>2, 3 e 4</b> são co-criadores. Todos os quatro têm acesso livre e ilimitado a todos os apps e à Estação. Se o e-mail principal for perdido, um co-criador pede a sucessão: o principal é avisado por e-mail e, se não entrar em <span id="cr-dias">7</span> dias, o co-criador assume como e-mail 1.</p>
+      <p class="muted">O <b>e-mail 1</b> é o principal (<b>CEO • Fundador</b>): só ele muda esta lista. Os e-mails <b>2, 3 e 4</b> são <b>Co-CEO • Co-fundador</b>. Todos os quatro têm acesso livre e ilimitado a todos os apps e à Estação, sem PIN e sem licença. Se o e-mail principal for perdido, um co-criador pede a sucessão: o principal é avisado por e-mail e, se não entrar em <span id="cr-dias">7</span> dias, o co-criador assume como e-mail 1.</p>
       <div class="cartao"><h3>Ordem atual</h3><div class="rolagem"><table><thead><tr><th>Nº</th><th>E-mail</th><th>Função</th><th>Conta</th><th>Último acesso</th></tr></thead><tbody id="tb-criadores"></tbody></table></div></div>
-      <div class="cartao" id="box-cr-editar" hidden style="margin-top:14px"><h3>Definir os co-criadores (2, 3 e 4)</h3><p class="muted">Use e-mails seus, de confiança. Cada um recebe um aviso e cria a conta com o mesmo e-mail. Deixe em branco para não usar.</p>
+      <div class="cartao" id="box-cr-editar" hidden style="margin-top:14px"><h3>Definir os Co-CEOs • Co-fundadores (2, 3 e 4)</h3><p class="muted">Use e-mails seus, de confiança. Cada um recebe um aviso e cria a conta com o mesmo e-mail. Deixe em branco para não usar.</p>
         <form id="f-cri" class="linha">
           <div><label for="cr-2">E-mail 2</label><input id="cr-2" type="email"></div>
           <div><label for="cr-3">E-mail 3</label><input id="cr-3" type="email"></div>
@@ -237,7 +237,7 @@ function entrar(){
     if(!EU.papel){ bloquear("O e-mail " + EU.email + " não faz parte da equipe. Peça acesso a um criador."); return; }
     $("bloqueio").hidden = true; $("casca").hidden = false;
     $("eu-nome").textContent = EU.nome || ""; $("eu-email").textContent = EU.email;
-    $("eu-papel").textContent = EU.papel === "criador" ? (EU.principal ? "criador principal • e-mail 1" : "co-criador • e-mail " + (EU.ordemCriador || "")) : EU.papel;
+    $("eu-papel").textContent = EU.papel === "criador" ? (EU.principal ? "CEO • Fundador • e-mail 1" : "Co-CEO • Co-fundador • e-mail " + (EU.ordemCriador || "")) : EU.papel;
     document.querySelectorAll("#menu a[data-p]").forEach(function(a){ a.hidden = !pode(a.getAttribute("data-p")); });
     $("box-add").hidden = EU.papel !== "criador"; $("box-area").hidden = EU.papel !== "criador";
     $("form-lib-box").hidden = !pode("diretor");
@@ -434,7 +434,7 @@ function carregarCriadores(){
     $("cr-dias").textContent = r.prazoDias;
     var euPrincipal = r.eu === r.principal;
     $("tb-criadores").innerHTML = r.criadores.map(function(c){
-      return '<tr><td><b>' + c.ordem + '</b></td><td>' + esc(c.email) + (c.email === r.eu ? ' <span class="tag">você</span>' : '') + '</td><td>' + (c.ordem === 1 ? '<span class="tag ok">principal (CEO)</span>' : '<span class="tag">co-criador</span>') + '</td>' +
+      return '<tr><td><b>' + c.ordem + '</b></td><td>' + esc(c.email) + (c.email === r.eu ? ' <span class="tag">você</span>' : '') + '</td><td>' + (c.ordem === 1 ? '<span class="tag ok">CEO • Fundador</span>' : '<span class="tag">Co-CEO • Co-fundador</span>') + '</td>' +
         '<td>' + (c.confirmado ? '<span class="tag ok">conta ativa</span>' : '<span class="tag em">' + (c.contaCriada ? 'falta confirmar' : 'sem conta ainda') + '</span>') + '</td><td>' + (c.ultimoAcesso ? new Date(c.ultimoAcesso).toLocaleString("pt-BR") : "—") + '</td></tr>';
     }).join("");
     $("box-cr-editar").hidden = !euPrincipal; $("box-raiz").hidden = !euPrincipal;
