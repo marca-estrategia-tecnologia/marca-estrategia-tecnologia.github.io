@@ -11,13 +11,35 @@
   "background_color": "#0A2263",
   "theme_color": "#0097B2",
   "icons": [
-    {"src": "img/icone-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "img/icone-512.png", "sizes": "512x512", "type": "image/png"},
-    {"src": "img/icone-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+    {
+      "src": "img/estacao-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/estacao-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "img/estacao-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "shortcuts": [
-    {"name": "Chamados", "url": "./estacao.html#chamados"},
-    {"name": "Clientes e licenças", "url": "./estacao.html#clientes"},
-    {"name": "Apps", "url": "./estacao.html#apps"}
+    {
+      "name": "Chamados",
+      "url": "./estacao.html#chamados"
+    },
+    {
+      "name": "Clientes e licenças",
+      "url": "./estacao.html#clientes"
+    },
+    {
+      "name": "Apps",
+      "url": "./estacao.html#apps"
+    }
   ]
 }
