@@ -1,4 +1,4 @@
-/* MPI — service worker: permite instalar na área de trabalho e abrir a tela mesmo com internet instável.
+/* M&E Produção — service worker: permite instalar na área de trabalho e abrir a tela mesmo com internet instável.
    Os dados (banco) sempre vêm do servidor, nunca do cache. */
 const CACHE = 'mpi-{{SLUG}}-v1';
 const BASE = ['./', 'index.html', 'baixar.html', 'guia.html', 'manifest.webmanifest', 'img/icone-192.png', 'img/icone-512.png', 'img/logo-empresa-branca.png'];

@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "MARKETING PRODUÇÃO {{EMPRESA_CURTO_MAIUSC}} (MPI)",
-  "short_name": "MPI",
+  "name": "M&E PRODUÇÃO · {{EMPRESA_CURTO_MAIUSC}}",
+  "short_name": "M&E Produção",
   "description": "Marketing Produção {{EMPRESA_CURTO}} — agenda, produção e entregas do Marketing da {{EMPRESA_COMPLETO}}.",
   "lang": "pt-BR",
   "start_url": "./",
