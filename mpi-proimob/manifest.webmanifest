@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "GPM · PRO IMOB",
-  "short_name": "GPM",
-  "description": "Gestão Produção de Marketing PRO IMOB — agenda, produção e entregas do Marketing da PRO IMOB Imóveis e Investimentos.",
+  "name": "Marketing · PRO IMOB",
+  "short_name": "Marketing PRO IMOB",
+  "description": "Marketing PRO IMOB — agenda, produção e entregas do Marketing da PRO IMOB Imóveis e Investimentos.",
   "lang": "pt-BR",
   "start_url": "./",
   "scope": "./",
