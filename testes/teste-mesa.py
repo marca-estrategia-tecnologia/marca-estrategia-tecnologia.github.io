@@ -8,7 +8,7 @@ MESA = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/home/claude/mesa")
 TMP = pathlib.Path("/tmp/mesa-teste"); SIM, WEB = 8797, 8798
 if TMP.exists(): shutil.rmtree(TMP)
 shutil.copytree(MESA, TMP, ignore=shutil.ignore_patterns(".git"))
-h = (TMP / "index.html").read_text(encoding="utf-8").replace('CENTRAL_URL: "",', f'CENTRAL_URL: "http://127.0.0.1:{SIM}/",').replace("connect-src ", f"connect-src http://127.0.0.1:{SIM} ")
+h = (TMP / "index.html").read_text(encoding="utf-8"); import re as _re; h = _re.sub(r'CENTRAL_URL: "[^"]*",', f'CENTRAL_URL: "http://127.0.0.1:{SIM}/",', h); h = h.replace("connect-src ", f"connect-src http://127.0.0.1:{SIM} ")
 (TMP / "index.html").write_text(h, encoding="utf-8")
 def codigo(email):
     m = [e for e in json.loads(urllib.request.urlopen(f"http://127.0.0.1:{SIM}/__emails").read()) if e["to"] == email and "código" in e["subject"]]
@@ -55,6 +55,20 @@ try:
         pg.click("#p-sair"); pg.fill("#l-email", "carla@teste.com"); pg.fill("#l-senha", "novaSenha1"); pg.click("#l-enviar")
         pg.wait_for_selector("#painel", state="visible"); ok(True, "entra com a nova senha")
         pg.reload(); pg.wait_for_selector("#painel", state="visible"); ok(True, "sessão continua depois de recarregar")
+        print("Criador: chave mestra e dados pessoais")
+        def post(d):
+            rq = urllib.request.Request(f"http://127.0.0.1:{SIM}/", data=json.dumps(d).encode(), method="POST")
+            return json.loads(urllib.request.urlopen(rq).read())
+        post({"acao":"cadastrar","app":"","nome":"Anderson Alves","email":"criador@teste.com","senha":"criador123","consentimento":"v1"})
+        tk = post({"acao":"confirmar","email":"criador@teste.com","codigo":codigo("criador@teste.com")})["token"]
+        post({"acao":"senhaRaizDefinir","token":tk,"senha":"criador123","raiz":"RaizForte2026"})
+        post({"acao":"dadosCriadorDefinir","token":tk,"senha":"criador123","nome":"Anderson Alves Pinto","nascimento":"1980-05-10","whatsapp":"51984168848"})
+        pg.click("#p-sair"); pg.fill("#l-email", "criador@teste.com"); pg.click("#l-criador summary")
+        pg.fill("#l-chave", "RaizForte2026"); pg.click("#l-chave-ok"); pg.wait_for_selector("#painel", state="visible")
+        ok("criador" in pg.inner_text("#p-plano").lower() or not pg.is_hidden("#p-app"), "criador entra na Mesa com a chave mestra")
+        pg.click("#p-sair"); pg.fill("#l-email", "criador@teste.com"); pg.click("#l-criador summary")
+        pg.fill("#l-dnome", "anderson alves pinto"); pg.fill("#l-dnasc", "1980-05-10"); pg.fill("#l-dwhats", "(51) 98416-8848"); pg.click("#l-dados-ok")
+        pg.wait_for_selector("#painel", state="visible"); ok(True, "criador entra na Mesa confirmando os dados pessoais")
         ok(not erros, "nenhum erro de JavaScript")
         nav.close()
 finally:
