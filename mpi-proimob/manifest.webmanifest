@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "M&E PRODUÇÃO · PRO IMOB",
-  "short_name": "M&E Produção",
-  "description": "Marketing Produção PRO IMOB — agenda, produção e entregas do Marketing da PRO IMOB Imóveis e Investimentos.",
+  "name": "GPM · PRO IMOB",
+  "short_name": "GPM",
+  "description": "Gestão Produção de Marketing PRO IMOB — agenda, produção e entregas do Marketing da PRO IMOB Imóveis e Investimentos.",
   "lang": "pt-BR",
   "start_url": "./",
   "scope": "./",
