@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "GPM · {{EMPRESA_CURTO_MAIUSC}}",
-  "short_name": "GPM",
-  "description": "Gestão Produção de Marketing {{EMPRESA_CURTO}} — agenda, produção e entregas do Marketing da {{EMPRESA_COMPLETO}}.",
+  "name": "GMP · {{EMPRESA_CURTO_MAIUSC}}",
+  "short_name": "GMP",
+  "description": "Gestão Marketing e Produção {{EMPRESA_CURTO}} — agenda, produção e entregas do Marketing da {{EMPRESA_COMPLETO}}.",
   "lang": "pt-BR",
   "start_url": "./",
   "scope": "./",
