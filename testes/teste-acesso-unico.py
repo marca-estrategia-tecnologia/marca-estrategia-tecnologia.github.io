@@ -62,7 +62,7 @@ try:
         pg.fill("#cr-2", "co2@teste.com"); pg.fill("#cr-3", "co3@teste.com"); pg.fill("#cr-senha", "criador123"); pg.click("#f-cri button[type=submit]")
         pg.wait_for_timeout(1500)
         linhas = pg.inner_text("#tb-criadores")
-        ok("co2@teste.com" in linhas and "co3@teste.com" in linhas and "principal" in linhas, "salva os co-criadores 2 e 3 na ordem")
+        ok("co2@teste.com" in linhas and "co3@teste.com" in linhas and "fundador" in linhas.lower(), "salva os co-criadores 2 e 3 na ordem")
 
         print("Entrar uma vez só")
         pg.goto(ON + "/portal/estacao.html#apps"); pg.wait_for_timeout(1500)
@@ -140,9 +140,32 @@ try:
         pr.evaluate("CentralAcesso.sair && CentralAcesso.sair()"); pr.wait_for_timeout(800)
         if not pr.is_visible("#ca-email"): pr.evaluate("CentralAcesso.entrar()"); pr.wait_for_timeout(500)
         pr.click("text=Esqueci"); pr.wait_for_selector("#ca-raizlink"); pr.click("#ca-raizlink"); pr.wait_for_selector("#ca-rz")
-        pr.fill("#ca-email", "co2@teste.com"); pr.fill("#ca-rz", "RaizForte2026"); pr.fill("#ca-senha", "trocada2026"); pr.fill("#ca-senha2", "trocada2026"); pr.click("#ca-b"); pr.wait_for_timeout(2500)
+        pr.fill("#ca-email", "co2@teste.com"); pr.fill("#ca-rz", "RaizForte2026"); pr.fill("#ca-senha", "trocada2026"); pr.fill("#ca-senha2", "trocada2026"); pr.click("#ca-b")
+        try: pr.wait_for_selector("#ca-raiz.ca-on", state="detached", timeout=8000)
+        except Exception: pass
+        pr.wait_for_timeout(800)
+        print("   msg:", pr.evaluate("(document.getElementById('ca-msg')||{}).textContent"), "|", pr.evaluate("(document.querySelector('#ca-raiz h2')||{}).textContent"))
         ok(not pr.is_visible("#ca-raiz"), "senha raiz redefine a senha do criador e entra na hora")
 
+        print("3 formas de entrada na tela de login (Social Imob, outro aparelho)")
+        pg.bring_to_front(); pg.goto(ON + "/portal/estacao.html#criadores"); pg.wait_for_timeout(1800)
+        ok(pg.is_visible("#box-dados"), "principal vê o cartão Dados pessoais")
+        pg.fill("#dp-nome", "Anderson Alves Pinto"); pg.fill("#dp-nasc", "1980-05-10"); pg.fill("#dp-whats", "(51) 98416-8848"); pg.fill("#dp-senha", "criador123")
+        pg.click("#f-dados button[type=submit]"); pg.wait_for_timeout(1800)
+        ok("definidos" in pg.inner_text("#dados-st"), "dados de confirmação salvos")
+        for modo in ("chave", "dados"):
+            c3 = nav.new_context(viewport={"width": 390, "height": 844}, service_workers="block")
+            q = c3.new_page(); q.on("dialog", lambda d: d.accept())
+            q.goto(ON + "/social-imob-360.github.io/index.html"); q.wait_for_selector("#ca-outras", timeout=10000)
+            q.fill("#ca-email", "kenny@teste.com"); q.click("#ca-outras"); q.wait_for_selector("#ca-ch")
+            if modo == "chave":
+                q.fill("#ca-ch", "RaizForte2026"); q.click("#ca-b")
+            else:
+                q.click("#ca-dados"); q.wait_for_selector("#ca-dn")
+                q.fill("#ca-dn", "anderson alves pinto"); q.fill("#ca-dd", "1980-05-10"); q.fill("#ca-dw", "51 98416 8848"); q.click("#ca-b")
+            q.wait_for_timeout(2500)
+            ok(not q.is_visible("#ca-raiz"), ("chave mestra" if modo == "chave" else "dados pessoais") + " abre o app num aparelho novo")
+            c3.close()
         print("PIN interno do PRO IMOBILIÁRIA para criador")
         pr.evaluate("""async () => { const h = 's256:' + Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('PROINNOVAR|1234')))).map(b => b.toString(16).padStart(2,'0')).join('');
           localStorage.setItem('proinnovar.conta', JSON.stringify({nome:'Anderson Alves', whats:'51984168848', pinHash:h, criado:new Date().toISOString()}));

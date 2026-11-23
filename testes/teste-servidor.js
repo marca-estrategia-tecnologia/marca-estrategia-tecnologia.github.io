@@ -188,4 +188,30 @@ ok(c({acao:"entrar", email:"co2@teste.com", senha:"outra98765"}).ok && !c({acao:
 ok(sim.emails.some(e => e.to.includes("criador@teste.com") && /senha raiz/.test(e.subject)), "todos os criadores são avisados do uso da raiz");
 for(let i = 0; i < 5; i++) c({acao:"redefinirComRaiz", email:"nova3@teste.com", raiz:"chute" + i + "xxxx", novaSenha:"nova12345"});
 ok(c({acao:"redefinirComRaiz", email:"nova3@teste.com", raiz:"RaizForte2026", novaSenha:"nova12345"}).erro === "bloqueio", "5 tentativas erradas bloqueiam a senha raiz por 15 minutos");
+
+console.log("2ª forma: chave mestra entra direto");
+ok(!c({acao:"entrarComChave", email:"cliente@teste.com", chave:"RaizForte2026"}).ok, "chave mestra não vale para cliente");
+ok(!c({acao:"entrarComChave", email:"co2@teste.com", chave:"errada12345"}).ok, "chave mestra errada é recusada");
+r = c({acao:"entrarComChave", email:"co2@teste.com", chave:"RaizForte2026", app:"pro-imobiliaria"});
+ok(r.ok && r.token && r.licenca.liberado, "criador entra com a chave mestra e já tem o app liberado");
+ok(c({acao:"entrar", email:"co2@teste.com", senha:"outra98765"}).ok, "a senha pessoal continua a mesma");
+ok(sim.emails.some(e => /chave mestra/i.test(e.subject)), "uso da chave mestra avisa os criadores");
+
+console.log("3ª forma: confirmação dos dados pessoais");
+tkP = c({acao:"entrar", email:"criador@teste.com", senha:"criador123"}).token;
+ok(!c({acao:"entrarComDados", email:"criador@teste.com", nome:"Anderson Alves", nascimento:"1980-05-10", whatsapp:"51984168848"}).ok, "sem dados definidos, não entra");
+ok(!c({acao:"dadosCriadorDefinir", token:tkP, senha:"criador123", nome:"Anderson", nascimento:"1980-05-10", whatsapp:"51984168848"}).ok, "exige nome completo");
+r = c({acao:"dadosCriadorDefinir", token:tkP, senha:"criador123", nome:"Anderson Alves Pinto", nascimento:"10/05/1980", whatsapp:"(51) 98416-8848"});
+ok(r.ok && c({acao:"dadosCriadorStatus", token:tkP}).definidos, "principal define os dados de confirmação");
+r = c({acao:"entrarComDados", email:"nova3@teste.com", nome:"anderson alves pinto", nascimento:"1980-05-10", whatsapp:"+55 51 98416-8848", app:"social-imob-360"});
+ok(r.ok && r.token, "entra com os dados pessoais (sem diferença de acento, formato de data ou de telefone)");
+ok(!c({acao:"entrarComDados", email:"nova3@teste.com", nome:"Anderson Alves Pinto", nascimento:"1980-05-11", whatsapp:"51984168848"}).ok, "dado errado é recusado");
+ok(!c({acao:"entrarComDados", email:"cliente@teste.com", nome:"Anderson Alves Pinto", nascimento:"1980-05-10", whatsapp:"51984168848"}).ok, "dados pessoais não valem para cliente");
+const nC = criadoresAtuais = c({acao:"criadoresListar", token:tkP}).criadores.length;
+r = c({acao:"criadoresSalvar", token:tkP, senha:"criador123", coCriadores:["co2@teste.com", "nova3@teste.com", "semconta4@teste.com"]});
+r = c({acao:"entrarComChave", email:"semconta4@teste.com", chave:"RaizForte2026"});
+ok(r.ok && r.conta.criador, "criador que ainda não tinha conta entra pela chave mestra");
+r = c({acao:"validarSessao", token:r.token});
+ok(r.ok && r.conta.email === "semconta4@teste.com" && r.conta.criador, "apps com servidor próprio confirmam o token da Central");
+ok(!c({acao:"validarSessao", token:"x".repeat(64)}).ok, "token falso é recusado");
 console.log("\n" + n + " verificações OK");

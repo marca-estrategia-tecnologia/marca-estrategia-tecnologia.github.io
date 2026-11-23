@@ -48,7 +48,8 @@
 
 /* @pro-imobiliaria */
 (function(){
-  /* Quem entra na Central como criador (e-mails 1 a 4) não precisa do PIN interno do perfil principal:
+  /* Quem entra na Central como criador (e-mails 1 a 4: CEO/fundador e co-CEOs/co-fundadores) não precisa do PIN
+   * nem do registro do perfil principal:
    * a conta da Central já comprovou quem é. Para os demais, o PIN continua valendo. */
   function ehCriador(){ try{ var c = window.CentralAcesso && CentralAcesso.conta(); return !!(c && c.criador); }catch(e){ return false; } }
   function liberarDono(){
@@ -59,6 +60,21 @@
       try{ localStorage.setItem("proinnovar.perfilAparelho", JSON.stringify("owner")); }catch(e){}
       location.reload();
     }
+  }
+  /* Criador num aparelho/perfil novo: registra o perfil principal sozinho, sem PIN, e entra direto. */
+  function registrarCriador(){
+    if(!ehCriador() || !document.getElementById("regForm")) return;
+    try{ if(localStorage.getItem("proinnovar.conta")) return; }catch(e){ return; }
+    var campos = ["nome","titulo","whats","creci","cidade","email","emailImob","emailCons"], c = {};
+    campos.forEach(function(k){ var el = document.getElementById("r_" + k); c[k] = el ? el.value.trim() : ""; });
+    if(!c.nome) c.nome = "Anderson Alves";
+    c.pinHash = null; c.criado = new Date().toISOString(); c.link = ""; c.criador = true;
+    try{
+      localStorage.setItem("proinnovar.conta", JSON.stringify(c));
+      localStorage.setItem("proinnovar.perfilAparelho", JSON.stringify("owner"));
+      sessionStorage.setItem("proinnovar.ok", "1");
+    }catch(e){ return; }
+    location.reload();
   }
   function avisoRegistro(){
     var f = document.getElementById("regForm");
@@ -71,8 +87,8 @@
     d.querySelector("button").onclick = function(){ CentralAcesso.trazerDados(); };
     f.parentNode.insertBefore(d, f);
   }
-  document.addEventListener("central:liberado", function(){ liberarDono(); avisoRegistro(); });
-  document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ liberarDono(); avisoRegistro(); }, 400); });
-  new MutationObserver(function(){ avisoRegistro(); if(document.getElementById("pinForm")) liberarDono(); }).observe(document.documentElement, {childList:true, subtree:true});
+  document.addEventListener("central:liberado", function(){ registrarCriador(); liberarDono(); avisoRegistro(); });
+  document.addEventListener("DOMContentLoaded", function(){ setTimeout(function(){ registrarCriador(); liberarDono(); avisoRegistro(); }, 400); });
+  new MutationObserver(function(){ registrarCriador(); avisoRegistro(); if(document.getElementById("pinForm")) liberarDono(); }).observe(document.documentElement, {childList:true, subtree:true});
 })();
 /* @fim */

@@ -25,7 +25,7 @@
  * - Textos limpos antes de gravar (nada começa com = + - @: evita fórmulas na planilha).
  */
 
-var VERSAO = "1.2.1";
+var VERSAO = "1.3.0";
 var MAX_CRIADORES = 4;      // 1 principal (CEO) + até 3 co-criadores
 var SUCESSAO_DIAS = 7;      // prazo para o principal responder a um pedido de sucessão
 var PASSE_MIN = 2;          // validade do passe de entrada entre apps
@@ -139,7 +139,12 @@ var ACOES = {
   concluirSucessao: concluirSucessao_,
   senhaRaizDefinir: senhaRaizDefinir_,
   senhaRaizStatus: senhaRaizStatus_,
-  redefinirComRaiz: redefinirComRaiz_
+  redefinirComRaiz: redefinirComRaiz_,
+  entrarComChave: entrarComChave_,
+  dadosCriadorDefinir: dadosCriadorDefinir_,
+  dadosCriadorStatus: dadosCriadorStatus_,
+  entrarComDados: entrarComDados_,
+  validarSessao: validarSessao_
 };
 
 /* ============================== CONTAS ============================== */
@@ -557,6 +562,83 @@ function redefinirComRaiz_(d){
   registrar_(email, "senha_pela_raiz", "", "");
   avisarPorEmail_(criadores_().join(","), "[Central] Senha redefinida com a senha raiz", "A senha de " + email + " foi redefinida agora usando a senha raiz. Se não foi você, troque a senha raiz em Estação → Criadores.");
   return abrirSessao_(email, limpaApp_(d.app), sh, n);
+}
+
+
+/* ============================== AS 3 FORMAS DE ENTRADA DOS CRIADORES ==============================
+ * 1º e-mail criador + senha pessoal (entrar);
+ * 2º e-mail criador + CHAVE MESTRA (a mesma senha raiz, igual para todos os apps) → entra direto;
+ * 3º e-mail criador + confirmação dos dados pessoais (nome completo, nascimento e WhatsApp) → entra direto.
+ * Só para os e-mails criadores (1 a 4). Cada uso dos níveis 2 e 3 avisa todos os criadores por e-mail.
+ * Clientes usam e-mail + senha e, se esquecerem, o código enviado ao e-mail (esqueciSenha). */
+function contaCriadorOuCria_(email){
+  var sh = aba_("Contas"), n = acharLinha_(sh, "email", email);
+  if(n < 1){
+    var cols = ABAS.Contas, linha = cols.map(function(){ return ""; }), sal = Utilities.getUuid();
+    var v = {email:email, nome:"", sal:sal, hash:hash_(Utilities.getUuid() + Utilities.getUuid(), sal), confirmado:"sim", status:"ativo", criado:new Date(), acessos:0, origem:"criador", consentimento:"v1"};
+    cols.forEach(function(c, i){ if(v[c] !== undefined) linha[i] = v[c]; });
+    sh.appendRow(linha); n = acharLinha_(sh, "email", email);
+  }
+  return {sh:sh, n:n};
+}
+function entrarComChave_(d){
+  var email = limpaEmail_(d.email), chave = "raiz:" + email;
+  if(!email || criadores_().indexOf(email) < 0) return erro_("raiz", "A chave mestra só vale para os e-mails criadores (1 a 4).");
+  var b = bloqueado_(chave); if(b) return b;
+  var r = raiz_(); if(!r) return erro_("raiz", "A chave mestra ainda não foi definida. O e-mail principal define em Estação → Criadores.");
+  if(hash_(String(d.chave || ""), r.sal) !== r.hash){ falhou_(chave); registrar_(email, "chave_errada", limpaApp_(d.app), ""); return erro_("raiz", "Chave mestra incorreta."); }
+  limparFalhas_(chave); limparFalhas_(email);
+  var c = contaCriadorOuCria_(email);
+  registrar_(email, "entrou_chave_mestra", limpaApp_(d.app), "");
+  try{ avisarPorEmail_(criadores_().join(","), "[Central] Entrada com a chave mestra", email + " entrou com a CHAVE MESTRA" + (d.app ? " no app " + limpaApp_(d.app) : "") + " em " + Utilities.formatDate(new Date(), "America/Sao_Paulo", "dd/MM/yyyy HH:mm") + ".\nSe não foi você, troque a chave mestra em Estação → Criadores."); }catch(e){}
+  return abrirSessao_(email, limpaApp_(d.app), c.sh, c.n);
+}
+
+function normaliza_(t){ return String(t || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/g, ""); }
+function digitos_(t){ var x = String(t || "").replace(/\D/g, ""); return x.length > 11 ? x.slice(-11) : x; }
+function dataISO_(t){
+  var x = String(t || "").trim(), m;
+  if((m = x.match(/^(\d{4})-(\d{2})-(\d{2})/))) return m[1] + m[2] + m[3];
+  if((m = x.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/))) return m[3] + ("0" + m[2]).slice(-2) + ("0" + m[1]).slice(-2);
+  return "";
+}
+function pacoteDados_(nome, nasc, whats){ return normaliza_(nome) + "|" + dataISO_(nasc) + "|" + digitos_(whats); }
+function dadosCriador_(){ try{ return JSON.parse(PropertiesService.getScriptProperties().getProperty("DADOS_CRIADOR") || "null"); }catch(e){ return null; } }
+function dadosCriadorStatus_(d){
+  var s = sessaoCriador_(d); if(!s) return erro_("proibido", "Só os criadores veem isto.");
+  var x = dadosCriador_(); return {ok:true, definidos:!!x, definidosEm:x ? x.em : ""};
+}
+function dadosCriadorDefinir_(d){
+  var s = sessaoCriador_(d); if(!s) return erro_("proibido", "Só os criadores podem fazer isto.");
+  if(s.email !== principal_()) return erro_("proibido", "Só o e-mail principal (1) define os dados de confirmação.");
+  if(!senhaConfere_(s.email, d.senha)) return erro_("senha", "A sua senha atual não confere.");
+  var nome = normaliza_(d.nome), nasc = dataISO_(d.nascimento), w = digitos_(d.whatsapp);
+  if(nome.length < 8 || String(d.nome || "").trim().split(/\s+/).length < 2) return erro_("dados", "Informe o nome completo (nome e sobrenome).");
+  if(!nasc) return erro_("dados", "Informe a data de nascimento.");
+  if(w.length < 10) return erro_("dados", "Informe o WhatsApp com DDD.");
+  var sal = Utilities.getUuid();
+  PropertiesService.getScriptProperties().setProperty("DADOS_CRIADOR", JSON.stringify({sal:sal, hash:hash_(pacoteDados_(d.nome, d.nascimento, d.whatsapp), sal), em:new Date().toISOString()}));
+  registrar_(s.email, "dados_criador_definidos", "", "");
+  try{ avisarPorEmail_(criadores_().join(","), "[Central] Dados de confirmação definidos", "O e-mail principal " + s.email + " definiu os dados pessoais de confirmação (3ª forma de entrada dos criadores)."); }catch(e){}
+  return {ok:true, mensagem:"Dados de confirmação salvos. Eles não ficam visíveis: só servem para conferir na entrada."};
+}
+function entrarComDados_(d){
+  var email = limpaEmail_(d.email), chave = "dados:" + email;
+  if(!email || criadores_().indexOf(email) < 0) return erro_("dados", "A entrada por dados pessoais só vale para os e-mails criadores (1 a 4).");
+  var b = bloqueado_(chave); if(b) return b;
+  var x = dadosCriador_(); if(!x) return erro_("dados", "Os dados de confirmação ainda não foram definidos. O e-mail principal define em Estação → Criadores.");
+  if(hash_(pacoteDados_(d.nome, d.nascimento, d.whatsapp), x.sal) !== x.hash){ falhou_(chave); registrar_(email, "dados_errados", limpaApp_(d.app), ""); return erro_("dados", "Os dados não conferem. Confira nome completo, data de nascimento e WhatsApp."); }
+  limparFalhas_(chave); limparFalhas_(email);
+  var c = contaCriadorOuCria_(email);
+  registrar_(email, "entrou_dados_pessoais", limpaApp_(d.app), "");
+  try{ avisarPorEmail_(criadores_().join(","), "[Central] Entrada pela confirmação de dados pessoais", email + " entrou confirmando os dados pessoais" + (d.app ? " no app " + limpaApp_(d.app) : "") + " em " + Utilities.formatDate(new Date(), "America/Sao_Paulo", "dd/MM/yyyy HH:mm") + ".\nSe não foi você, troque a chave mestra e os dados em Estação → Criadores."); }catch(e){}
+  return abrirSessao_(email, limpaApp_(d.app), c.sh, c.n);
+}
+/* Para apps com servidor próprio (Nãna, MPI...): confirmam se um token da Central é válido e de quem é. */
+function validarSessao_(d){
+  var s = sessaoValida_(d.token); if(!s) return erro_("sessao", "Sessão inválida ou expirada.");
+  var sh = aba_("Contas"), n = acharLinha_(sh, "email", s.email); if(n < 1) return erro_("sessao", "Conta não encontrada.");
+  return {ok:true, conta:contaPublica_(lerLinha_(sh, n, "Contas"))};
 }
 
 /* ============================== PASSE ENTRE APPS (entrar uma vez só) ==============================

@@ -101,8 +101,9 @@ function telaEntrar(aviso){
   mostrar(caixa("Entrar", "Use o e-mail e a senha da sua conta.",
     '<form id="ca-f"><label for="ca-email">E-mail</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
     campoSenha("ca-senha", "Senha", "current-password") + '<button class="ca-pri" id="ca-b">Entrar</button></form>' +
-    '<button class="ca-link" id="ca-esq">Esqueci a senha</button><button class="ca-sec" id="ca-novo">Criar conta</button>', pe()), estado.email ? "#ca-senha" : "#ca-email");
+    '<button class="ca-link" id="ca-esq">Esqueci a senha (código no e-mail)</button><button class="ca-link" id="ca-outras">Sou criador: chave mestra ou dados pessoais</button><button class="ca-sec" id="ca-novo">Criar conta</button>', pe()), estado.email ? "#ca-senha" : "#ca-email");
   if(aviso) msg(aviso[0], aviso[1]);
+  document.getElementById("ca-outras").onclick = function(){ estado.email = v("ca-email").toLowerCase() || estado.email; telaChave(); };
   document.getElementById("ca-esq").onclick = function(){ estado.email = v("ca-email"); telaEsqueci(); };
   document.getElementById("ca-novo").onclick = function(){ estado.email = v("ca-email"); telaCadastro(); };
   document.getElementById("ca-f").onsubmit = function(e){
@@ -183,7 +184,7 @@ function telaEsqueci(){
   estado.tela = "esqueci";
   mostrar(caixa("Esqueci a senha", "Informe o e-mail da sua conta. Vamos enviar um código para você criar uma nova senha.",
     '<form id="ca-f"><label for="ca-email">E-mail cadastrado</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
-    '<button class="ca-pri" id="ca-b">Enviar código</button></form><button class="ca-link" id="ca-raizlink">Sou criador: usar a senha raiz</button><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
+    '<button class="ca-pri" id="ca-b">Enviar código</button></form><button class="ca-link" id="ca-raizlink">Sou criador: criar nova senha com a chave mestra</button><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
   document.getElementById("ca-voltar").onclick = function(){ telaEntrar(); };
   document.getElementById("ca-raizlink").onclick = function(){ estado.email = v("ca-email").toLowerCase() || estado.email; telaRaiz(); };
   document.getElementById("ca-f").onsubmit = function(e){
@@ -194,11 +195,44 @@ function telaEsqueci(){
   };
 }
 
+/* 2ª forma (criadores): e-mail + chave mestra, igual para todos os apps */
+function telaChave(){
+  estado.tela = "chave";
+  mostrar(caixa("Entrar com a chave mestra", "Para os e-mails criadores (1 a 4). A chave mestra é a mesma em todos os apps.",
+    '<form id="ca-f"><label for="ca-email">E-mail criador</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
+    '<label for="ca-ch">Chave mestra</label><div class="ca-ver"><input id="ca-ch" type="password" autocomplete="off" maxlength="64" required><button type="button" data-ver="ca-ch" aria-label="Mostrar chave mestra">ver</button></div>' +
+    '<button class="ca-pri" id="ca-b">Entrar com a chave mestra</button></form>' +
+    '<button class="ca-link" id="ca-dados">Não lembro a chave: confirmar meus dados pessoais</button><button class="ca-link" id="ca-voltar">Voltar</button>'), estado.email ? "#ca-ch" : "#ca-email");
+  document.getElementById("ca-voltar").onclick = function(){ telaEntrar(); };
+  document.getElementById("ca-dados").onclick = function(){ estado.email = v("ca-email").toLowerCase() || estado.email; telaDados(); };
+  document.getElementById("ca-f").onsubmit = function(e){
+    e.preventDefault(); var b = document.getElementById("ca-b"); estado.email = v("ca-email").toLowerCase();
+    ocupado(b, true);
+    api({acao:"entrarComChave", email:estado.email, chave:document.getElementById("ca-ch").value, app:APPID}).then(function(r){ ocupado(b, false); if(r.ok) return entrou(r); msg("erro", r.mensagem); }).catch(function(){ falhaRede(b); });
+  };
+}
+/* 3ª forma (criadores): confirmação dos dados pessoais */
+function telaDados(){
+  estado.tela = "dados";
+  mostrar(caixa("Confirmar meus dados", "Para os e-mails criadores (1 a 4), quando a senha e a chave mestra não funcionarem. Todos os criadores recebem um aviso por e-mail.",
+    '<form id="ca-f"><label for="ca-email">E-mail criador</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
+    '<label for="ca-dn">Nome completo</label><input id="ca-dn" autocomplete="name" required>' +
+    '<label for="ca-dd">Data de nascimento</label><input id="ca-dd" type="date" required>' +
+    '<label for="ca-dw">WhatsApp com DDD</label><input id="ca-dw" type="tel" inputmode="tel" autocomplete="tel" required>' +
+    '<button class="ca-pri" id="ca-b">Confirmar e entrar</button></form><button class="ca-link" id="ca-voltar">Voltar</button>'), estado.email ? "#ca-dn" : "#ca-email");
+  document.getElementById("ca-voltar").onclick = function(){ telaChave(); };
+  document.getElementById("ca-f").onsubmit = function(e){
+    e.preventDefault(); var b = document.getElementById("ca-b"); estado.email = v("ca-email").toLowerCase();
+    ocupado(b, true);
+    api({acao:"entrarComDados", email:estado.email, nome:v("ca-dn"), nascimento:v("ca-dd"), whatsapp:v("ca-dw"), app:APPID}).then(function(r){ ocupado(b, false); if(r.ok) return entrou(r); msg("erro", r.mensagem); }).catch(function(){ falhaRede(b); });
+  };
+}
+
 function telaRaiz(){
   estado.tela = "raiz";
-  mostrar(caixa("Entrar com a senha raiz", "Só para os e-mails criadores (1 a 4). Com a senha raiz definida pelo e-mail principal, você cria uma nova senha e entra na hora, sem código.",
+  mostrar(caixa("Nova senha com a chave mestra", "Só para os e-mails criadores (1 a 4). Com a chave mestra, você cria uma nova senha pessoal e entra na hora, sem código.",
     '<form id="ca-f"><label for="ca-email">E-mail criador</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
-    '<label for="ca-rz">Senha raiz</label><div class="ca-ver"><input id="ca-rz" type="password" autocomplete="off" minlength="10" maxlength="64" required><button type="button" data-ver="ca-rz" aria-label="Mostrar senha raiz">ver</button></div>' +
+    '<label for="ca-rz">Chave mestra</label><div class="ca-ver"><input id="ca-rz" type="password" autocomplete="off" minlength="10" maxlength="64" required><button type="button" data-ver="ca-rz" aria-label="Mostrar senha raiz">ver</button></div>' +
     campoSenha("ca-senha", "Nova senha (8+ caracteres, letras e números)", "new-password") + campoSenha("ca-senha2", "Repita a nova senha", "new-password") +
     '<button class="ca-pri" id="ca-b">Salvar nova senha e entrar</button></form><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
   document.getElementById("ca-voltar").onclick = function(){ telaEsqueci(); };

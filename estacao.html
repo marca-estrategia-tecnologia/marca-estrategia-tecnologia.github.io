@@ -173,8 +173,10 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left
         <h3>Passar o posto de e-mail principal</h3><p class="muted">Use só se quiser que outro e-mail seu vire o nº 1. Você passa a ser co-criador.</p>
         <form id="f-transf" class="linha"><div><label for="tr-email">Novo e-mail principal</label><select id="tr-email"></select></div><div><label for="tr-senha">Sua senha</label><input id="tr-senha" type="password" autocomplete="current-password" required></div><div style="flex:0 0 auto"><button class="btn linha" type="submit">Passar o posto</button></div></form>
       </div>
-      <div class="cartao" id="box-raiz" hidden style="margin-top:14px"><h3>🔑 Senha raiz</h3><p class="muted">Uma senha mestra, diferente da sua senha normal. Com ela, qualquer e-mail criador (1 a 4) cria uma nova senha na tela de login (Esqueci a senha → <b>Sou criador: usar a senha raiz</b>) e entra na hora, sem esperar código. Cada uso avisa todos os criadores por e-mail. <span id="raiz-st"></span></p>
-        <form id="f-raiz" class="linha"><div><label for="rz-atual">Sua senha atual</label><input id="rz-atual" type="password" autocomplete="current-password" required></div><div><label for="rz-1">Senha raiz (10+ caracteres, letras e números)</label><input id="rz-1" type="password" autocomplete="new-password" minlength="10" required></div><div><label for="rz-2">Repita a senha raiz</label><input id="rz-2" type="password" autocomplete="new-password" minlength="10" required></div><div style="flex:0 0 auto"><button class="btn" type="submit">Salvar senha raiz</button></div></form></div>
+      <div class="cartao" id="box-raiz" hidden style="margin-top:14px"><h3>🔑 Chave mestra (2ª forma de entrada)</h3><p class="muted">Uma senha mestra, igual para <b>todos os apps</b> e diferente da sua senha pessoal. Na tela de login de qualquer app: <b>Sou criador: chave mestra ou dados pessoais</b> → e-mail criador + chave mestra, e você entra na hora. Vale para os e-mails 1 a 4; cada uso avisa todos os criadores por e-mail. <span id="raiz-st"></span></p>
+        <form id="f-raiz" class="linha"><div><label for="rz-atual">Sua senha atual</label><input id="rz-atual" type="password" autocomplete="current-password" required></div><div><label for="rz-1">Chave mestra (10+ caracteres, letras e números)</label><input id="rz-1" type="password" autocomplete="new-password" minlength="10" required></div><div><label for="rz-2">Repita a chave mestra</label><input id="rz-2" type="password" autocomplete="new-password" minlength="10" required></div><div style="flex:0 0 auto"><button class="btn" type="submit">Salvar chave mestra</button></div></form></div>
+      <div class="cartao" id="box-dados" hidden style="margin-top:14px"><h3>🪪 Confirmação dos dados pessoais (3ª forma de entrada)</h3><p class="muted">Se a senha e a chave mestra não funcionarem, você entra em qualquer app confirmando estes dados. Eles ficam guardados só como código de conferência: ninguém consegue lê-los depois. Cada uso avisa todos os criadores. <span id="dados-st"></span></p>
+        <form id="f-dados" class="linha"><div><label for="dp-nome">Nome completo</label><input id="dp-nome" autocomplete="name" required></div><div><label for="dp-nasc">Data de nascimento</label><input id="dp-nasc" type="date" required></div><div><label for="dp-whats">WhatsApp com DDD</label><input id="dp-whats" type="tel" inputmode="tel" required></div><div><label for="dp-senha">Sua senha atual</label><input id="dp-senha" type="password" autocomplete="current-password" required></div><div style="flex:0 0 auto"><button class="btn" type="submit">Salvar dados</button></div></form></div>
       <div class="cartao" id="box-cr-suc" hidden style="margin-top:14px"><h3>Sucessão do e-mail principal</h3><p class="muted" id="suc-txt"></p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="suc-pedir" type="button">Pedir sucessão</button><button class="btn" id="suc-concluir" type="button" hidden>Concluir sucessão</button><button class="btn linha" id="suc-cancelar" type="button" hidden>Cancelar pedido</button></div></div>
     </section>
 
@@ -437,7 +439,8 @@ function carregarCriadores(){
       return '<tr><td><b>' + c.ordem + '</b></td><td>' + esc(c.email) + (c.email === r.eu ? ' <span class="tag">você</span>' : '') + '</td><td>' + (c.ordem === 1 ? '<span class="tag ok">CEO • Fundador</span>' : '<span class="tag">Co-CEO • Co-fundador</span>') + '</td>' +
         '<td>' + (c.confirmado ? '<span class="tag ok">conta ativa</span>' : '<span class="tag em">' + (c.contaCriada ? 'falta confirmar' : 'sem conta ainda') + '</span>') + '</td><td>' + (c.ultimoAcesso ? new Date(c.ultimoAcesso).toLocaleString("pt-BR") : "—") + '</td></tr>';
     }).join("");
-    $("box-cr-editar").hidden = !euPrincipal; $("box-raiz").hidden = !euPrincipal;
+    $("box-cr-editar").hidden = !euPrincipal; $("box-raiz").hidden = !euPrincipal; $("box-dados").hidden = !euPrincipal;
+    if(euPrincipal) api({acao:"dadosCriadorStatus"}).then(function(x){ $("dados-st").innerHTML = x.ok && x.definidos ? '<span class="tag ok">definidos em ' + new Date(x.definidosEm).toLocaleDateString("pt-BR") + '</span>' : '<span class="tag em">ainda não definidos</span>'; });
     if(euPrincipal) api({acao:"senhaRaizStatus"}).then(function(x){ $("raiz-st").innerHTML = x.ok && x.definida ? '<span class="tag ok">definida em ' + new Date(x.definidaEm).toLocaleDateString("pt-BR") + '</span>' : '<span class="tag em">ainda não definida</span>'; });
     if(euPrincipal){
       var co = r.criadores.slice(1).map(function(c){ return c.email; });
@@ -460,8 +463,12 @@ $("f-cri").onsubmit = function(e){
 };
 $("f-raiz").onsubmit = function(e){
   e.preventDefault();
-  if($("rz-1").value !== $("rz-2").value) return toast("As duas senhas raiz estão diferentes.");
+  if($("rz-1").value !== $("rz-2").value) return toast("As duas chaves estão diferentes.");
   api({acao:"senhaRaizDefinir", senha:$("rz-atual").value, raiz:$("rz-1").value}).then(function(r){ ["rz-atual", "rz-1", "rz-2"].forEach(function(i){ $(i).value = ""; }); toast(r.mensagem); if(r.ok) carregarCriadores(); });
+};
+$("f-dados").onsubmit = function(e){
+  e.preventDefault();
+  api({acao:"dadosCriadorDefinir", senha:$("dp-senha").value, nome:$("dp-nome").value, nascimento:$("dp-nasc").value, whatsapp:$("dp-whats").value}).then(function(r){ $("dp-senha").value = ""; toast(r.mensagem); if(r.ok){ ["dp-nome", "dp-nasc", "dp-whats"].forEach(function(i){ $(i).value = ""; }); carregarCriadores(); } });
 };
 $("f-transf").onsubmit = function(e){
   e.preventDefault(); var alvo = $("tr-email").value; if(!alvo) return;
@@ -603,8 +610,9 @@ function telaEntrar(aviso){
   mostrar(caixa("Entrar", "Use o e-mail e a senha da sua conta.",
     '<form id="ca-f"><label for="ca-email">E-mail</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
     campoSenha("ca-senha", "Senha", "current-password") + '<button class="ca-pri" id="ca-b">Entrar</button></form>' +
-    '<button class="ca-link" id="ca-esq">Esqueci a senha</button><button class="ca-sec" id="ca-novo">Criar conta</button>', pe()), estado.email ? "#ca-senha" : "#ca-email");
+    '<button class="ca-link" id="ca-esq">Esqueci a senha (código no e-mail)</button><button class="ca-link" id="ca-outras">Sou criador: chave mestra ou dados pessoais</button><button class="ca-sec" id="ca-novo">Criar conta</button>', pe()), estado.email ? "#ca-senha" : "#ca-email");
   if(aviso) msg(aviso[0], aviso[1]);
+  document.getElementById("ca-outras").onclick = function(){ estado.email = v("ca-email").toLowerCase() || estado.email; telaChave(); };
   document.getElementById("ca-esq").onclick = function(){ estado.email = v("ca-email"); telaEsqueci(); };
   document.getElementById("ca-novo").onclick = function(){ estado.email = v("ca-email"); telaCadastro(); };
   document.getElementById("ca-f").onsubmit = function(e){
@@ -685,7 +693,7 @@ function telaEsqueci(){
   estado.tela = "esqueci";
   mostrar(caixa("Esqueci a senha", "Informe o e-mail da sua conta. Vamos enviar um código para você criar uma nova senha.",
     '<form id="ca-f"><label for="ca-email">E-mail cadastrado</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
-    '<button class="ca-pri" id="ca-b">Enviar código</button></form><button class="ca-link" id="ca-raizlink">Sou criador: usar a senha raiz</button><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
+    '<button class="ca-pri" id="ca-b">Enviar código</button></form><button class="ca-link" id="ca-raizlink">Sou criador: criar nova senha com a chave mestra</button><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
   document.getElementById("ca-voltar").onclick = function(){ telaEntrar(); };
   document.getElementById("ca-raizlink").onclick = function(){ estado.email = v("ca-email").toLowerCase() || estado.email; telaRaiz(); };
   document.getElementById("ca-f").onsubmit = function(e){
@@ -696,11 +704,44 @@ function telaEsqueci(){
   };
 }
 
+/* 2ª forma (criadores): e-mail + chave mestra, igual para todos os apps */
+function telaChave(){
+  estado.tela = "chave";
+  mostrar(caixa("Entrar com a chave mestra", "Para os e-mails criadores (1 a 4). A chave mestra é a mesma em todos os apps.",
+    '<form id="ca-f"><label for="ca-email">E-mail criador</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
+    '<label for="ca-ch">Chave mestra</label><div class="ca-ver"><input id="ca-ch" type="password" autocomplete="off" maxlength="64" required><button type="button" data-ver="ca-ch" aria-label="Mostrar chave mestra">ver</button></div>' +
+    '<button class="ca-pri" id="ca-b">Entrar com a chave mestra</button></form>' +
+    '<button class="ca-link" id="ca-dados">Não lembro a chave: confirmar meus dados pessoais</button><button class="ca-link" id="ca-voltar">Voltar</button>'), estado.email ? "#ca-ch" : "#ca-email");
+  document.getElementById("ca-voltar").onclick = function(){ telaEntrar(); };
+  document.getElementById("ca-dados").onclick = function(){ estado.email = v("ca-email").toLowerCase() || estado.email; telaDados(); };
+  document.getElementById("ca-f").onsubmit = function(e){
+    e.preventDefault(); var b = document.getElementById("ca-b"); estado.email = v("ca-email").toLowerCase();
+    ocupado(b, true);
+    api({acao:"entrarComChave", email:estado.email, chave:document.getElementById("ca-ch").value, app:APPID}).then(function(r){ ocupado(b, false); if(r.ok) return entrou(r); msg("erro", r.mensagem); }).catch(function(){ falhaRede(b); });
+  };
+}
+/* 3ª forma (criadores): confirmação dos dados pessoais */
+function telaDados(){
+  estado.tela = "dados";
+  mostrar(caixa("Confirmar meus dados", "Para os e-mails criadores (1 a 4), quando a senha e a chave mestra não funcionarem. Todos os criadores recebem um aviso por e-mail.",
+    '<form id="ca-f"><label for="ca-email">E-mail criador</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
+    '<label for="ca-dn">Nome completo</label><input id="ca-dn" autocomplete="name" required>' +
+    '<label for="ca-dd">Data de nascimento</label><input id="ca-dd" type="date" required>' +
+    '<label for="ca-dw">WhatsApp com DDD</label><input id="ca-dw" type="tel" inputmode="tel" autocomplete="tel" required>' +
+    '<button class="ca-pri" id="ca-b">Confirmar e entrar</button></form><button class="ca-link" id="ca-voltar">Voltar</button>'), estado.email ? "#ca-dn" : "#ca-email");
+  document.getElementById("ca-voltar").onclick = function(){ telaChave(); };
+  document.getElementById("ca-f").onsubmit = function(e){
+    e.preventDefault(); var b = document.getElementById("ca-b"); estado.email = v("ca-email").toLowerCase();
+    ocupado(b, true);
+    api({acao:"entrarComDados", email:estado.email, nome:v("ca-dn"), nascimento:v("ca-dd"), whatsapp:v("ca-dw"), app:APPID}).then(function(r){ ocupado(b, false); if(r.ok) return entrou(r); msg("erro", r.mensagem); }).catch(function(){ falhaRede(b); });
+  };
+}
+
 function telaRaiz(){
   estado.tela = "raiz";
-  mostrar(caixa("Entrar com a senha raiz", "Só para os e-mails criadores (1 a 4). Com a senha raiz definida pelo e-mail principal, você cria uma nova senha e entra na hora, sem código.",
+  mostrar(caixa("Nova senha com a chave mestra", "Só para os e-mails criadores (1 a 4). Com a chave mestra, você cria uma nova senha pessoal e entra na hora, sem código.",
     '<form id="ca-f"><label for="ca-email">E-mail criador</label><input id="ca-email" type="email" autocomplete="email" required value="' + esc(estado.email) + '">' +
-    '<label for="ca-rz">Senha raiz</label><div class="ca-ver"><input id="ca-rz" type="password" autocomplete="off" minlength="10" maxlength="64" required><button type="button" data-ver="ca-rz" aria-label="Mostrar senha raiz">ver</button></div>' +
+    '<label for="ca-rz">Chave mestra</label><div class="ca-ver"><input id="ca-rz" type="password" autocomplete="off" minlength="10" maxlength="64" required><button type="button" data-ver="ca-rz" aria-label="Mostrar senha raiz">ver</button></div>' +
     campoSenha("ca-senha", "Nova senha (8+ caracteres, letras e números)", "new-password") + campoSenha("ca-senha2", "Repita a nova senha", "new-password") +
     '<button class="ca-pri" id="ca-b">Salvar nova senha e entrar</button></form><button class="ca-link" id="ca-voltar">Voltar</button>'), "#ca-email");
   document.getElementById("ca-voltar").onclick = function(){ telaEsqueci(); };

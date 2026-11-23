@@ -45,7 +45,7 @@ try:
         pg = pagina(); pg.goto(url)
         criar_conta(pg, "Anderson Alves", "criador@teste.com", "criador123")
         pg.wait_for_selector("#casca:not([hidden])")
-        ok("criador" in pg.inner_text("#eu-papel").lower(), "criador entra e vê o próprio perfil")
+        ok("fundador" in pg.inner_text("#eu-papel").lower(), "criador entra e vê o próprio perfil")
         pg.click('#menu a[data-v="apps"]'); pg.wait_for_selector("#grade-apps .app")
         ok(pg.locator("#grade-apps .app").count() == 6, "aba Apps mostra os 6 apps para abrir")
         pg.click('#menu a[data-v="equipe"]'); pg.wait_for_selector("#grade-areas .cartao")
