@@ -22,7 +22,10 @@ def ok(c, m):
 def criar_conta(pg, nome, email, senha):
     pg.click("#bloq-entrar"); pg.click("#ca-novo")
     pg.fill("#ca-nome", nome); pg.fill("#ca-email", email); pg.fill("#ca-senha", senha); pg.fill("#ca-senha2", senha); pg.check("#ca-aceite"); pg.click("#ca-b")
-    pg.wait_for_selector("#ca-cod"); pg.fill("#ca-cod", codigo(email)); pg.click("#ca-b")
+    try: pg.wait_for_selector("#ca-cod", timeout=8000)
+    except Exception: print("   DEBUG:", pg.evaluate("[(document.querySelector('#ca-raiz h2')||{}).textContent, (document.getElementById('ca-msg')||{}).textContent, document.getElementById('ca-b') && document.getElementById('ca-b').textContent].join(' | ')")); raise; pg.wait_for_timeout(600); pg.fill("#ca-cod", codigo(email)); pg.wait_for_timeout(100)
+    if not pg.input_value("#ca-cod"): pg.fill("#ca-cod", codigo(email))
+    pg.click("#ca-b")
 
 sim = subprocess.Popen(["node", str(RAIZ / "testes/simulador-apps-script.js"), str(SIM)], stdout=subprocess.DEVNULL)
 web = subprocess.Popen([sys.executable, "-m", "http.server", str(WEB), "-d", str(TMP)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -38,7 +41,8 @@ try:
         pc = pagina(); pc.goto(url)
         ok(pc.is_visible("#bloqueio") and not pc.is_visible("#casca"), "Estação abre bloqueada")
         criar_conta(pc, "Carlos Cliente", "carlos@teste.com", "carlos123")
-        pc.wait_for_function("document.getElementById('bloq-txt').textContent.indexOf('não faz parte') >= 0")
+        try: pc.wait_for_function("document.getElementById('bloq-txt').textContent.indexOf('não faz parte') >= 0", timeout=10000)
+        except Exception: print("   DEBUG bloq:", pc.inner_text("#bloq-txt"), "| erros:", pc.erros, "| raiz:", pc.evaluate("(document.querySelector('#ca-raiz h2')||{}).textContent + ' // ' + (document.getElementById('ca-msg')||{}).textContent + ' // cod=' + (document.getElementById('ca-cod')||{}).value")); raise
         ok(not pc.is_visible("#casca"), "cliente comum não entra na Estação")
 
         print("Criador")
@@ -47,7 +51,7 @@ try:
         pg.wait_for_selector("#casca:not([hidden])")
         ok("fundador" in pg.inner_text("#eu-papel").lower(), "criador entra e vê o próprio perfil")
         pg.click('#menu a[data-v="apps"]'); pg.wait_for_selector("#grade-apps .app")
-        ok(pg.locator("#grade-apps .app").count() == 6, "aba Apps mostra os 6 apps para abrir")
+        ok(pg.locator("#grade-apps .app").count() == 7, "aba Apps mostra os 7 apps para abrir")
         pg.click('#menu a[data-v="equipe"]'); pg.wait_for_selector("#grade-areas .cartao")
         ok(pg.locator("#grade-areas .cartao").count() == 7, "7 áreas sugeridas aparecem")
         pg.fill("#m-email", "bia@teste.com"); pg.fill("#m-nome", "Bia Atendimento"); pg.select_option("#m-papel", "atendente"); pg.select_option("#m-areas", ["atendimento"])
