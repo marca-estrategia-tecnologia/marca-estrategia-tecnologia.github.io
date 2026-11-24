@@ -78,7 +78,8 @@ var APPS_PADRAO = [
   ["musicalis","Musicalis","Método musical no celular, com acompanhamento do aluno.","https://musicalis-br.github.io/","https://musicalis-br.github.io/pagar/","ativo",0,"sim",4],
   ["mesa-de-editais","Mesa de Editais","Radar de editais culturais e apoio à escrita de projetos.","https://mesa-de-editais-br.github.io/","","lista",0,"sim",5],
   ["imoveis-e-investimentos-rs","Imóveis e Investimentos RS","Site imobiliário com microsites por cidade (modelo do serviço de sites).","https://imoveis-e-investimentos-rs.github.io/","","ativo",0,"sim",6],
-  ["gmp","GMP — Gestão Marketing e Produção","Estação de marketing para empresas controlarem a demanda da equipe: agenda, produção, prazos e entregas. Planos de 2 a 30 pessoas.","https://gestao-marketing-e-producao.github.io/","","analise",0,"sim",7]
+  ["nana","Nãna","Organização, gestão e vendas para artesãs: ateliê, encomendas, clientes e finanças no celular.","https://aap29.github.io/nana/","","teste",7,"sim",7],
+  ["gmp","GMP — Gestão Marketing e Produção","Estação de marketing para empresas controlarem a demanda da equipe: agenda, produção, prazos, entregas e agentes de IA. Em construção.","https://gestao-marketing-e-producao.github.io/","","lista",0,"sim",8]
 ];
 
 /* ============================== ENTRADA ============================== */

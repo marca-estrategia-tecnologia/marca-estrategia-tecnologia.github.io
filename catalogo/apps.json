@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-11-09",
+  "atualizado_em": "2026-11-23",
   "observacao": "Classificação a partir da auditoria do código. Nenhum app está liberado para venda pela Central até a Fase 3.",
   "apps": [
     {
@@ -85,6 +85,35 @@
       "fase_na_central": 1,
       "organizacao_github": "imoveis-e-investimentos-rs",
       "endereco_novo": "https://imoveis-e-investimentos-rs.github.io/"
+    },
+    {
+      "id": "nana",
+      "nome": "Nãna",
+      "linha": "Gestão e vendas para artesãs",
+      "publico": "Artesãs e ateliês",
+      "origem": "aap29/nana",
+      "classificacao": "EM OPERAÇÃO",
+      "papel": "App de organização, gestão e vendas para artesãs",
+      "fase_na_central": 1,
+      "endereco_novo": "https://aap29.github.io/nana/",
+      "instalacao": "https://aap29.github.io/nana/instalar.html"
+    },
+    {
+      "id": "gmp",
+      "nome": "GMP · Gestão Marketing e Produção",
+      "linha": "Gestão de marketing e produção",
+      "publico": "Empresas com equipe de marketing de 1 a 10 pessoas",
+      "origem": "Projeto GMP (sucessor do MPI)",
+      "classificacao": "EM CONSTRUÇÃO",
+      "papel": "Gestão da equipe de marketing: agenda, quadro de produção, entregas e agentes de IA",
+      "pendencias": [
+        "Aplicar a plataforma multiempresa no banco",
+        "Publicar em /gmp/",
+        "Função de IA (Gemini) no servidor"
+      ],
+      "fase_na_central": 1,
+      "endereco_novo": "https://gestao-marketing-e-producao.github.io/",
+      "organizacao_github": "gestao-marketing-e-producao"
     }
   ],
   "arquivados": [

@@ -188,8 +188,12 @@ var CATALOGO = [
   {app:"social-imob-360", nome:"Social Imob 360", descricao:"Planejamento e produção de conteúdo para redes sociais.", url:"https://social-imob-360.github.io/", diasTeste:7},
   {app:"musicalis", nome:"Musicalis", descricao:"Método musical no celular, com acompanhamento do aluno.", url:"https://musicalis-br.github.io/", venda:"https://musicalis-br.github.io/pagar/", diasTeste:0},
   {app:"mesa-de-editais", nome:"Mesa de Editais", descricao:"Radar de editais culturais e apoio à escrita de projetos.", url:"https://mesa-de-editais-br.github.io/", diasTeste:0},
-  {app:"gmp", nome:"GMP — Gestão Marketing e Produção", descricao:"Estação de marketing para empresas controlarem a demanda da equipe: agenda, produção, prazos e entregas. Planos de 2 a 30 pessoas.", url:"https://gestao-marketing-e-producao.github.io/", diasTeste:0}
+  {app:"nana", nome:"Nãna", descricao:"Organização, gestão e vendas para artesãs: ateliê, encomendas, clientes e finanças no celular.", url:"https://aap29.github.io/nana/", diasTeste:7},
+  {app:"gmp", nome:"GMP — Gestão Marketing e Produção", descricao:"Estação de marketing para empresas controlarem a demanda da equipe: agenda, produção, prazos, entregas e agentes de IA.", url:"https://gestao-marketing-e-producao.github.io/", diasTeste:0, construcao:true}
 ];
+/* Apps que aparecem sempre, mesmo antes de entrarem na aba Apps da planilha. */
+var SEMPRE = CATALOGO.filter(function(a){ return a.app === "nana" || a.app === "gmp"; });
+var EM_CONSTRUCAO = {gmp:true};
 var $ = function(id){ return document.getElementById(id); };
 var C = window.CentralAcesso;
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
@@ -197,12 +201,16 @@ function dataBR(iso){ return iso ? new Date(iso).toLocaleDateString("pt-BR") : "
 var ROT = {ativo:["Liberado","ok"], teste:["Em teste","ok"], analise:["Em análise","em"], lista:["Lista de lançamento","em"], vencido:["Vencido","no"], bloqueado:["Suspenso","no"], sem_licenca:["Sem acesso","em"]};
 
 function cartaoCatalogo(a){
+  if(a.construcao || EM_CONSTRUCAO[a.app]) return '<div class="cartao"><span class="tag em">Em construção</span><h3>' + esc(a.nome) + '</h3><p>' + esc(a.descricao) + '</p><div class="acoes">' +
+    '<button class="btn btn-escuro quero" data-app="' + esc(a.app) + '" type="button">Entrar na lista de lançamento</button>' +
+    (a.url ? '<a class="btn btn-linha" href="' + esc(a.url) + '" target="_blank" rel="noopener">Conhecer</a>' : '') + '</div></div>';
   var tag = a.diasTeste ? '<span class="tag ok">Teste grátis de ' + a.diasTeste + ' dias</span>' : '<span class="tag">Acesso por liberação</span>';
   return '<div class="cartao">' + tag + '<h3>' + esc(a.nome) + '</h3><p>' + esc(a.descricao) + '</p><div class="acoes">' +
     '<button class="btn btn-escuro quero" data-app="' + esc(a.app) + '" type="button">' + (a.diasTeste ? "Testar grátis" : "Quero acesso") + '</button>' +
     (a.venda ? '<a class="btn btn-linha" href="' + esc(a.venda) + '" target="_blank" rel="noopener">Ver planos</a>' : '') + '</div></div>';
 }
 function desenharCatalogo(lista){
+  SEMPRE.forEach(function(x){ if(!lista.some(function(a){ return a.app === x.app; })) lista = lista.concat([x]); });
   CATALOGO = lista; $("grade-apps").innerHTML = lista.map(cartaoCatalogo).join("");
   $("l-app").innerHTML = lista.map(function(a){ return '<option value="' + esc(a.app) + '">' + esc(a.nome) + '</option>'; }).join("");
 }
