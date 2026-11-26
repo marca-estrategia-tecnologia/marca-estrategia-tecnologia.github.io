@@ -74,12 +74,13 @@ var PERMISSOES = {
 var APPS_PADRAO = [
   ["prospectarion","Prospectarion","CRM e prospecção para corretores, consultores e pequenas empresas.","https://prospectarion.github.io/","","teste",7,"sim",1],
   ["pro-imobiliaria","PRO IMOBILIÁRIA","Prospecção, agenda e atendimento para corretores e imobiliárias.","https://pro-imobiliaria.github.io/","","analise",0,"sim",2],
-  ["social-imob-360","Social Imob 360","Planejamento e produção de conteúdo para redes sociais.","https://social-imob-360.github.io/","","teste",7,"sim",3],
+  ["social-imob-360","Social Imob 360","Conteúdo para o mercado imobiliário: corretores, investidores, consórcios e equipes de vendas. Calendário, roteiros e estúdio de gravação com teleprompter.","https://social-imob-360.github.io/","","teste",7,"sim",3],
   ["musicalis","Musicalis","Método musical no celular, com acompanhamento do aluno.","https://musicalis-br.github.io/","https://musicalis-br.github.io/pagar/","ativo",0,"sim",4],
   ["mesa-de-editais","Mesa de Editais","Radar de editais culturais e apoio à escrita de projetos.","https://mesa-de-editais-br.github.io/","","lista",0,"sim",5],
   ["imoveis-e-investimentos-rs","Imóveis e Investimentos RS","Site imobiliário com microsites por cidade (modelo do serviço de sites).","https://imoveis-e-investimentos-rs.github.io/","","ativo",0,"sim",6],
   ["nana","Nãna","Organização, gestão e vendas para artesãs: ateliê, encomendas, clientes e finanças no celular.","https://aap29.github.io/nana/","","teste",7,"sim",7],
-  ["gmp","GMP — Gestão Marketing e Produção","Gestão da equipe de marketing da empresa (1 a 10 pessoas): agenda, quadro de produção, entregas e agentes de IA. Em construção.","https://gestao-marketing-e-producao.github.io/","","lista",0,"sim",8]
+  ["gmp","GMP — Gestão Marketing e Produção","Gestão da equipe de marketing da empresa (1 a 10 pessoas): agenda, quadro de produção, entregas e agentes de IA. Em construção.","https://gestao-marketing-e-producao.github.io/","","lista",0,"sim",8],
+  ["gravaitube","GRAVAITUBE","Planejamento, roteiros e estúdio de gravação para as redes sociais de qualquer área: teleprompter, texto flutuante sobre a câmera e calendário.","https://gravaitube.github.io/","","ativo",0,"sim",9]
 ];
 
 /* ============================== ENTRADA ============================== */

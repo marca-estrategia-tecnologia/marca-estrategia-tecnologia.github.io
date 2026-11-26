@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-11-23",
+  "atualizado_em": "2026-11-26",
   "observacao": "Classificação a partir da auditoria do código. Nenhum app está liberado para venda pela Central até a Fase 3.",
   "apps": [
     {
@@ -39,8 +39,8 @@
     {
       "id": "social-imob-360",
       "nome": "Social Imob 360",
-      "linha": "Conteúdo e redes sociais",
-      "origem": "aap29/prospectarion/social-imob (versão pessoal, com painel do criador) e /social-imob-pro (versão de venda gerada por script)",
+      "linha": "Conteúdo para o mercado imobiliário",
+      "origem": "social-imob-360/social-imob-360.github.io (criador em /criador/ e versão de venda na raiz, gerada por script)",
       "classificacao": "NECESSITA DE AJUSTES",
       "pendencias": [
         "Trocar códigos de ativação locais pela licença central"
@@ -51,7 +51,8 @@
       "versoes": [
         "Social Imob (pessoal)",
         "Social Imob 360 PRO (venda)"
-      ]
+      ],
+      "publico": "Corretores, investidores, consultores de consórcio e equipes de vendas imobiliárias"
     },
     {
       "id": "musicalis",
@@ -114,6 +115,19 @@
       "fase_na_central": 1,
       "endereco_novo": "https://gestao-marketing-e-producao.github.io/",
       "organizacao_github": "gestao-marketing-e-producao"
+    },
+    {
+      "id": "gravaitube",
+      "nome": "GRAVAITUBE",
+      "linha": "Conteúdo e redes sociais (todas as áreas)",
+      "publico": "Criadores de conteúdo e profissionais de qualquer área",
+      "origem": "gravaitube/gravaitube.github.io (nasceu do Social Imob 360 PRO em 26/11/2026)",
+      "classificacao": "EM OPERAÇÃO",
+      "papel": "Planejamento, roteiros e estúdio de gravação para as redes sociais",
+      "fase_na_central": 1,
+      "organizacao_github": "gravaitube",
+      "endereco_novo": "https://gravaitube.github.io/",
+      "instalacao": "https://gravaitube.github.io/?instalar"
     }
   ],
   "arquivados": [

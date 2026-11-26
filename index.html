@@ -185,14 +185,15 @@ document.addEventListener("DOMContentLoaded", function(){
 var CATALOGO = [
   {app:"prospectarion", nome:"Prospectarion", descricao:"CRM e prospecção para corretores, consultores e pequenas empresas.", url:"https://prospectarion.github.io/", diasTeste:7},
   {app:"pro-imobiliaria", nome:"PRO IMOBILIÁRIA", descricao:"Prospecção, agenda e atendimento para corretores e imobiliárias.", url:"https://pro-imobiliaria.github.io/", diasTeste:0},
-  {app:"social-imob-360", nome:"Social Imob 360", descricao:"Planejamento e produção de conteúdo para redes sociais.", url:"https://social-imob-360.github.io/", diasTeste:7},
+  {app:"social-imob-360", nome:"Social Imob 360", descricao:"Conteúdo para o mercado imobiliário: corretores, investidores, consórcios e equipes de vendas. Calendário, roteiros e estúdio de gravação com teleprompter.", url:"https://social-imob-360.github.io/", diasTeste:7},
+  {app:"gravaitube", nome:"GRAVAITUBE", descricao:"Planejamento, roteiros e estúdio de gravação para as redes sociais de qualquer área: teleprompter, texto flutuante sobre a câmera e calendário.", url:"https://gravaitube.github.io/", diasTeste:0},
   {app:"musicalis", nome:"Musicalis", descricao:"Método musical no celular, com acompanhamento do aluno.", url:"https://musicalis-br.github.io/", venda:"https://musicalis-br.github.io/pagar/", diasTeste:0},
   {app:"mesa-de-editais", nome:"Mesa de Editais", descricao:"Radar de editais culturais e apoio à escrita de projetos.", url:"https://mesa-de-editais-br.github.io/", diasTeste:0},
   {app:"nana", nome:"Nãna", descricao:"Organização, gestão e vendas para artesãs: ateliê, encomendas, clientes e finanças no celular.", url:"https://aap29.github.io/nana/", diasTeste:7},
   {app:"gmp", nome:"GMP — Gestão Marketing e Produção", descricao:"Gestão da equipe de marketing da empresa (1 a 10 pessoas): agenda, quadro de produção, entregas e agentes de IA.", url:"https://gestao-marketing-e-producao.github.io/", diasTeste:0, construcao:true}
 ];
 /* Apps que aparecem sempre, mesmo antes de entrarem na aba Apps da planilha. */
-var SEMPRE = CATALOGO.filter(function(a){ return a.app === "nana" || a.app === "gmp"; });
+var SEMPRE = CATALOGO.filter(function(a){ return a.app === "nana" || a.app === "gmp" || a.app === "gravaitube"; });
 var EM_CONSTRUCAO = {gmp:true};
 var $ = function(id){ return document.getElementById(id); };
 var C = window.CentralAcesso;
@@ -209,7 +210,11 @@ function cartaoCatalogo(a){
     '<button class="btn btn-escuro quero" data-app="' + esc(a.app) + '" type="button">' + (a.diasTeste ? "Testar grátis" : "Quero acesso") + '</button>' +
     (a.venda ? '<a class="btn btn-linha" href="' + esc(a.venda) + '" target="_blank" rel="noopener">Ver planos</a>' : '') + '</div></div>';
 }
+/* Descrições que valem mesmo quando a planilha ainda tem o texto antigo. */
+var DESC_FIXA = {"social-imob-360": true, "gravaitube": true};
 function desenharCatalogo(lista){
+  var base = {}; CATALOGO.forEach(function(x){ base[x.app] = x; });
+  lista = lista.map(function(a){ return (DESC_FIXA[a.app] && base[a.app]) ? Object.assign({}, a, {descricao: base[a.app].descricao}) : a; });
   SEMPRE.forEach(function(x){ if(!lista.some(function(a){ return a.app === x.app; })) lista = lista.concat([x]); });
   CATALOGO = lista; $("grade-apps").innerHTML = lista.map(cartaoCatalogo).join("");
   $("l-app").innerHTML = lista.map(function(a){ return '<option value="' + esc(a.app) + '">' + esc(a.nome) + '</option>'; }).join("");

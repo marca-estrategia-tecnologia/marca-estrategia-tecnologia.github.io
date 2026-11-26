@@ -83,7 +83,7 @@ ok(!JSON.stringify(contas).includes("novaSenha99") && !JSON.stringify(contas).in
 ok(!JSON.stringify(sim.abas.Codigos.rows).match(/\b\d{6}\b/), "códigos guardados só como hash");
 ok(!JSON.stringify(sim.abas.Sessoes.rows).includes(tokenCriador), "tokens de sessão guardados só como hash");
 r = c({acao:"catalogo"});
-ok(r.ok && r.apps.length === 8, "catálogo público com 8 apps (com Nãna e GMP)");
+ok(r.ok && r.apps.length === 9, "catálogo público com 9 apps (com Nãna, GMP e GRAVAITUBE)");
 
 console.log("Equipe, áreas e edição dos apps");
 r = c({acao:"equipeListar", token:tokenCriador});
@@ -134,7 +134,7 @@ ok(sim.emails.some(e => e.to === "co3@teste.com" && /co-criador/.test(e.subject)
 r = c({acao:"acesso", token:tkCo, app:"pro-imobiliaria"});
 ok(r.liberado && r.licenca.plano === "criador", "co-criador tem acesso livre a qualquer app");
 r = c({acao:"meusApps", token:tkCo});
-ok(r.apps.length === 8 && r.apps.every(a => a.liberado), "criador vê todos os apps em Meus apps, todos liberados");
+ok(r.apps.length === 9 && r.apps.every(a => a.liberado), "criador vê todos os apps em Meus apps, todos liberados");
 let rc = c({acao:"criadoresListar", token:tokenCriador});
 ok(rc.ok && rc.criadores[0].email === "criador@teste.com" && rc.criadores.length === 4, "lista mostra a ordem dos criadores");
 ok(c({acao:"sessao", token:tokenCriador}).conta.principal && !c({acao:"sessao", token:tkCo}).conta.principal, "conta indica quem é o principal");

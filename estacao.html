@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function(){
 "use strict";
 var C = window.CentralAcesso, $ = function(id){ return document.getElementById(id); };
 var EU = null, APPS = [], AREAS = [], CONTAS = [];
-var CORES = {"prospectarion":["#E8541E","P"],"pro-imobiliaria":["#1F4FD1","PI"],"social-imob-360":["#F07B22","S"],"musicalis":["#E9B10B","M"],"mesa-de-editais":["#F26522","ME"],"imoveis-e-investimentos-rs":["#14234A","IR"]};
+var CORES = {"prospectarion":["#E8541E","P"],"pro-imobiliaria":["#1F4FD1","PI"],"social-imob-360":["#F07B22","S"],"gravaitube":["#2196F3","G"],"musicalis":["#E9B10B","M"],"mesa-de-editais":["#F26522","ME"],"imoveis-e-investimentos-rs":["#14234A","IR"]};
 var ROT = {ativo:["Liberado","ok"],teste:["Em teste","ok"],analise:["Em análise","em"],lista:["Lista","em"],vencido:["Vencido","no"],bloqueado:["Suspenso","no"],sem_licenca:["Sem acesso","em"]};
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
 function dataBR(i){ return i ? new Date(i).toLocaleDateString("pt-BR") : ""; }
