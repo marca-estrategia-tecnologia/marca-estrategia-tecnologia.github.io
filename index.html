@@ -65,8 +65,26 @@ section{padding:80px 0}.cinza{background:var(--papel)}
 .grade{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
 .cartao{background:#fff;border:1px solid var(--borda);border-radius:16px;padding:24px;display:flex;flex-direction:column}
 .cartao p{margin:0 0 16px;color:#46546A;flex:1}.cartao .tag{align-self:flex-start;font:700 11px Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:#EEF2F8;color:var(--royal);margin-bottom:12px}
-.cartao .tag.ok{background:#E8F5EC;color:#1E5B32}.cartao .tag.em{background:#FFF6E0;color:#6B4E00}.cartao .tag.no{background:#FDECEC;color:#8A1C1C}
+.cartao .tag.ok,.pv .tag.ok{background:#E8F5EC;color:#1E5B32}.cartao .tag.em,.pv .tag.em{background:#FFF6E0;color:#6B4E00}
+.pv .tag{display:inline-block;font:700 11px Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:#EEF2F8;color:var(--royal)}.cartao .tag.no{background:#FDECEC;color:#8A1C1C}
 .cartao .acoes{display:flex;gap:8px;flex-wrap:wrap}.cartao .btn{padding:10px 14px;font-size:14px}
+.cartao .cab-app{display:flex;align-items:center;gap:12px;margin:0 0 8px}.cartao .cab-app h3{margin:0}
+.ic-app{flex:0 0 auto;width:48px;height:48px;border-radius:13px;border:0;padding:0;cursor:pointer;background:#EEF2F8 center/cover no-repeat;box-shadow:0 2px 8px rgba(10,30,87,.18);transition:transform .15s,box-shadow .15s}
+.ic-app:hover,.ic-app:focus-visible{transform:translateY(-2px) scale(1.05);box-shadow:0 6px 16px rgba(10,30,87,.28);outline:none}
+.pv-fundo{position:fixed;inset:0;z-index:60;background:rgba(8,16,40,.62);display:flex;align-items:center;justify-content:center;padding:16px;animation:pvf .18s ease}
+.pv{background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:92vh;overflow:auto;padding:26px;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.35);animation:pvs .22s ease}
+@keyframes pvf{from{opacity:0}}@keyframes pvs{from{transform:translateY(14px);opacity:0}}
+.pv-fechar{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:0;background:#EEF2F8;font-size:20px;cursor:pointer;line-height:1}
+.pv-cab{display:flex;align-items:center;gap:14px;margin-bottom:12px;padding-right:36px}.pv-cab img{width:64px;height:64px;border-radius:16px;box-shadow:0 2px 10px rgba(10,30,87,.2)}
+.pv-cab h3{margin:0;font-size:22px;line-height:1.2}.pv-cab .tag{margin:6px 0 0!important}
+.pv .resumo{font-size:16px;color:#2A3547;margin:0 0 16px}
+.pv h4{font:700 12px Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase;color:var(--royal);margin:16px 0 8px}
+.pv ol{margin:0;padding:0;list-style:none;counter-reset:pv;display:grid;gap:8px}
+.pv ol li{counter-increment:pv;position:relative;padding:10px 12px 10px 46px;background:#F5F8FC;border-radius:12px;color:#2A3547;font-size:15px}
+.pv ol li::before{content:counter(pv);position:absolute;left:12px;top:9px;width:24px;height:24px;border-radius:7px;background:var(--royal);color:#fff;font:700 13px/24px Inter,sans-serif;text-align:center}
+.pv .publico{margin:0;color:#46546A;font-size:15px}
+.pv .pv-acoes{display:grid;gap:8px;margin-top:20px}.pv .pv-acoes .btn{justify-content:center;width:100%;padding:13px 16px}
+.pv .nota{font-size:13px;color:#6B778C;text-align:center;margin:10px 0 0}
 .passos{counter-reset:p;display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
 .passo{padding:22px;border-left:3px solid var(--ouro);background:#fff;border-radius:0 12px 12px 0}
 .passo::before{counter-increment:p;content:"0" counter(p);font:900 30px "Plus Jakarta Sans",sans-serif;color:var(--ouro);display:block}
@@ -184,9 +202,9 @@ document.addEventListener("DOMContentLoaded", function(){
 /* Catálogo de reserva (vale enquanto a Central não responde). A versão oficial vem da aba Apps da planilha. */
 var CATALOGO = [
   {app:"prospectarion", nome:"Prospectarion", descricao:"CRM e prospecção para corretores, consultores e pequenas empresas.", url:"https://prospectarion.github.io/", diasTeste:7},
-  {app:"pro-imobiliaria", nome:"PRO IMOBILIÁRIA", descricao:"Prospecção, agenda e atendimento para corretores e imobiliárias.", url:"https://pro-imobiliaria.github.io/", diasTeste:0},
+  {app:"pro-imobiliaria", nome:"Pro Imobiliária", descricao:"Prospecção, agenda e atendimento para corretores e imobiliárias.", url:"https://pro-imobiliaria.github.io/", diasTeste:0},
   {app:"social-imob-360", nome:"Social Imob 360", descricao:"Conteúdo para o mercado imobiliário: corretores, investidores, consórcios e equipes de vendas. Calendário, roteiros e estúdio de gravação com teleprompter.", url:"https://social-imob-360.github.io/", diasTeste:7},
-  {app:"gravaitube", nome:"GRAVAITUBE", descricao:"Planejamento, roteiros e estúdio de gravação para as redes sociais de qualquer área: teleprompter, texto flutuante sobre a câmera e calendário.", url:"https://gravaitube.github.io/", diasTeste:0},
+  {app:"gravaitube", nome:"Gravaitube", descricao:"Planejamento, roteiros e estúdio de gravação para as redes sociais de qualquer área: teleprompter, texto flutuante sobre a câmera e calendário.", url:"https://gravaitube.github.io/", diasTeste:0},
   {app:"musicalis", nome:"Musicalis", descricao:"Método musical no celular, com acompanhamento do aluno.", url:"https://musicalis-br.github.io/", venda:"https://musicalis-br.github.io/pagar/", diasTeste:0},
   {app:"mesa-de-editais", nome:"Mesa de Editais", descricao:"Radar de editais culturais e apoio à escrita de projetos.", url:"https://mesa-de-editais-br.github.io/", diasTeste:0},
   {app:"nana", nome:"Nãna", descricao:"Organização, gestão e vendas para artesãs: ateliê, encomendas, clientes e finanças no celular.", url:"https://aap29.github.io/nana/", diasTeste:7},
@@ -195,20 +213,67 @@ var CATALOGO = [
 /* Apps que aparecem sempre, mesmo antes de entrarem na aba Apps da planilha. */
 var SEMPRE = CATALOGO.filter(function(a){ return a.app === "nana" || a.app === "gmp" || a.app === "gravaitube"; });
 var EM_CONSTRUCAO = {gmp:true};
+/* Nomes no mesmo padrão (a planilha pode ainda ter o nome antigo em maiúsculas). */
+var NOME_PADRAO = {"pro-imobiliaria":"Pro Imobiliária", "gravaitube":"Gravaitube"};
+function nomeApp(a){ return NOME_PADRAO[a.app] || a.nome; }
+function iconeApp(id){ return "img/apps/" + id + ".png"; }
+/* Prévia de cada app: o que é, como funciona e para quem é. */
+var PREVIA = {
+  "prospectarion": {resumo:"Seu CRM de prospecção no celular: organiza contatos, mostra quem precisa de retorno hoje e não deixa nenhum lead esfriar.",
+    passos:["Cadastre ou importe seus contatos e leads.","Acompanhe cada um no funil, do primeiro contato ao fechamento.","Receba a lista do dia com retornos, visitas e follow-ups.","Veja seus números e saiba onde está perdendo negócios."], publico:"Corretores, consultores de consórcio e investimentos e pequenas empresas."},
+  "pro-imobiliaria": {resumo:"A rotina completa do corretor em um app: prospecção, agenda e atendimento organizados para vender mais imóveis.",
+    passos:["Monte a sua carteira de clientes e proprietários.","Organize visitas, retornos e compromissos na agenda.","Registre cada atendimento e o próximo passo.","Acompanhe metas e resultados da semana."], publico:"Corretores de imóveis e imobiliárias."},
+  "social-imob-360": {resumo:"Conteúdo para o mercado imobiliário sem travar: calendário, roteiros prontos e estúdio de gravação com teleprompter.",
+    passos:["Escolha o seu perfil e as redes que você usa.","Receba o calendário com temas e roteiros do mês.","Grave no próprio celular com o teleprompter.","Publique e acompanhe o que mais deu resultado."], publico:"Corretores, investidores, consultores de consórcio e equipes de vendas."},
+  "gravaitube": {resumo:"Planejamento e gravação para as redes de qualquer área: roteiro, teleprompter e texto flutuante sobre a câmera.",
+    passos:["Planeje os vídeos da semana no calendário.","Escreva ou gere o roteiro de cada vídeo.","Grave com o texto passando na tela, olhando para a câmera.","Organize o que já foi gravado e publicado."], publico:"Profissionais e empresas de qualquer área que produzem vídeos."},
+  "musicalis": {resumo:"Método musical no celular, com exercícios, partituras e acompanhamento do aluno do início à evolução.",
+    passos:["Faça o diagnóstico e comece no seu nível.","Estude com exercícios e partituras guiadas.","Toque e receba orientação sobre as notas.","Acompanhe a sua evolução semana a semana."], publico:"Alunos de saxofone e música, do iniciante ao avançado."},
+  "mesa-de-editais": {resumo:"Radar de editais culturais: encontre as oportunidades certas e receba apoio para escrever o seu projeto.",
+    passos:["Informe a sua área e a sua cidade.","Veja os editais abertos que combinam com você.","Organize prazos e documentos de cada edital.","Escreva o projeto com o apoio do método da Mesa."], publico:"Artistas, produtores e coletivos culturais."},
+  "nana": {resumo:"Organização, gestão e vendas para artesãs: ateliê, encomendas, clientes e finanças na palma da mão.",
+    passos:["Cadastre peças, materiais e preços.","Controle encomendas e prazos de entrega.","Guarde os contatos e o histórico das clientes.","Veja quanto entrou, quanto saiu e o seu lucro."], publico:"Artesãs, ateliês e pequenos negócios de artesanato."},
+  "imoveis-e-investimentos-rs": {resumo:"Modelo do nosso serviço de sites: site imobiliário com páginas por cidade para aparecer no Google e captar clientes.",
+    passos:["Conheça o site em funcionamento.","Veja as páginas por cidade e por tipo de imóvel.","Teste os formulários de contato e o simulador.","Peça um site como este para o seu negócio."], publico:"Corretores, imobiliárias e empresas que querem um site que gera contatos."},
+  "gmp": {resumo:"A equipe de marketing da empresa organizada do pedido à entrega, com agentes de IA que já conhecem o seu negócio.",
+    passos:["Os setores pedem produções com horário na agenda do Marketing.","Cada pedido vira um cartão no quadro, com prazo e responsável.","Os agentes de IA criam planos, posts, roteiros e briefings.","A Direção acompanha entregas e atrasos no painel."], publico:"Empresas com equipe de marketing de 1 a 10 pessoas. Em construção: entre na lista de lançamento."}
+};
 var $ = function(id){ return document.getElementById(id); };
 var C = window.CentralAcesso;
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
 function dataBR(iso){ return iso ? new Date(iso).toLocaleDateString("pt-BR") : ""; }
 var ROT = {ativo:["Liberado","ok"], teste:["Em teste","ok"], analise:["Em análise","em"], lista:["Lista de lançamento","em"], vencido:["Vencido","no"], bloqueado:["Suspenso","no"], sem_licenca:["Sem acesso","em"]};
 
+function tagApp(a){
+  if(a.construcao || EM_CONSTRUCAO[a.app]) return '<span class="tag em">Em construção</span>';
+  return a.diasTeste ? '<span class="tag ok">Teste grátis de ' + a.diasTeste + ' dias</span>' : '<span class="tag">Acesso por liberação</span>';
+}
 function cartaoCatalogo(a){
-  if(a.construcao || EM_CONSTRUCAO[a.app]) return '<div class="cartao"><span class="tag em">Em construção</span><h3>' + esc(a.nome) + '</h3><p>' + esc(a.descricao) + '</p><div class="acoes">' +
-    '<button class="btn btn-escuro quero" data-app="' + esc(a.app) + '" type="button">Entrar na lista de lançamento</button>' +
-    (a.url ? '<a class="btn btn-linha" href="' + esc(a.url) + '" target="_blank" rel="noopener">Conhecer</a>' : '') + '</div></div>';
-  var tag = a.diasTeste ? '<span class="tag ok">Teste grátis de ' + a.diasTeste + ' dias</span>' : '<span class="tag">Acesso por liberação</span>';
-  return '<div class="cartao">' + tag + '<h3>' + esc(a.nome) + '</h3><p>' + esc(a.descricao) + '</p><div class="acoes">' +
-    '<button class="btn btn-escuro quero" data-app="' + esc(a.app) + '" type="button">' + (a.diasTeste ? "Testar grátis" : "Quero acesso") + '</button>' +
-    (a.venda ? '<a class="btn btn-linha" href="' + esc(a.venda) + '" target="_blank" rel="noopener">Ver planos</a>' : '') + '</div></div>';
+  var id = esc(a.app);
+  return '<div class="cartao">' + tagApp(a) + '<div class="cab-app"><button class="ic-app previa" data-app="' + id + '" type="button" style="background-image:url(\'' + iconeApp(a.app) + '\')" aria-label="Ver como funciona o ' + esc(nomeApp(a)) + '" title="Ver como funciona"></button><h3>' + esc(nomeApp(a)) + '</h3></div><p>' + esc(a.descricao) + '</p><div class="acoes">' +
+    '<button class="btn btn-escuro previa" data-app="' + id + '" type="button">Ver como funciona</button></div></div>';
+}
+function abrirPrevia(id){
+  var a = CATALOGO.filter(function(x){ return x.app === id; })[0]; if(!a) return;
+  var p = PREVIA[id] || {resumo:a.descricao, passos:[], publico:""};
+  var construcao = a.construcao || EM_CONSTRUCAO[id];
+  var planos = a.venda || a.url;
+  var f = document.createElement("div"); f.className = "pv-fundo";
+  f.innerHTML = '<div class="pv" role="dialog" aria-modal="true" aria-labelledby="pv-t"><button class="pv-fechar" type="button" aria-label="Fechar">×</button>' +
+    '<div class="pv-cab"><img src="' + iconeApp(id) + '" alt=""><div><h3 id="pv-t">' + esc(nomeApp(a)) + '</h3>' + tagApp(a) + '</div></div>' +
+    '<p class="resumo">' + esc(p.resumo) + '</p>' +
+    (p.passos.length ? '<h4>Como funciona</h4><ol>' + p.passos.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join("") + '</ol>' : '') +
+    (p.publico ? '<h4>Para quem é</h4><p class="publico">' + esc(p.publico) + '</p>' : '') +
+    '<div class="pv-acoes">' +
+      (planos ? '<a class="btn btn-escuro" href="' + esc(planos) + '" target="_blank" rel="noopener">' + (construcao ? "Conhecer o " + esc(nomeApp(a)) : "Baixar o app e conhecer os planos") + '</a>' : '') +
+      (a.venda && a.url ? '<a class="btn btn-linha" href="' + esc(a.url) + '" target="_blank" rel="noopener">Abrir o app</a>' : '') +
+      '<button class="btn btn-linha quero" data-app="' + esc(id) + '" type="button">' + (construcao ? "Entrar na lista de lançamento" : a.diasTeste ? "Testar grátis por " + a.diasTeste + " dias" : "Pedir meu acesso") + '</button>' +
+    '</div><p class="nota">Uma só conta da Marca &amp; Estratégia dá acesso a todos os apps.</p></div>';
+  function fechar(){ f.remove(); document.removeEventListener("keydown", esc_); }
+  function esc_(e){ if(e.key === "Escape") fechar(); }
+  f.addEventListener("click", function(e){ if(e.target === f || e.target.closest(".pv-fechar") || e.target.closest(".quero")) setTimeout(fechar, 0); });
+  document.addEventListener("keydown", esc_);
+  document.body.appendChild(f); f.querySelector(".pv-fechar").focus();
 }
 /* Descrições que valem mesmo quando a planilha ainda tem o texto antigo. */
 var DESC_FIXA = {"social-imob-360": true, "gravaitube": true};
@@ -217,13 +282,14 @@ function desenharCatalogo(lista){
   lista = lista.map(function(a){ return (DESC_FIXA[a.app] && base[a.app]) ? Object.assign({}, a, {descricao: base[a.app].descricao}) : a; });
   SEMPRE.forEach(function(x){ if(!lista.some(function(a){ return a.app === x.app; })) lista = lista.concat([x]); });
   CATALOGO = lista; $("grade-apps").innerHTML = lista.map(cartaoCatalogo).join("");
-  $("l-app").innerHTML = lista.map(function(a){ return '<option value="' + esc(a.app) + '">' + esc(a.nome) + '</option>'; }).join("");
+  $("l-app").innerHTML = lista.map(function(a){ return '<option value="' + esc(a.app) + '">' + esc(nomeApp(a)) + '</option>'; }).join("");
 }
 desenharCatalogo(CATALOGO);
 if(C && C.configurado) C.api({acao:"catalogo"}).then(function(r){ if(r.ok && r.apps.length) desenharCatalogo(r.apps); }).catch(function(){});
 
 document.addEventListener("click", function(e){
-  var q = e.target.closest(".quero"), p = e.target.closest(".pedir");
+  var q = e.target.closest(".quero"), p = e.target.closest(".pedir"), v = e.target.closest(".previa");
+  if(v){ abrirPrevia(v.getAttribute("data-app")); return; }
   if(q) pedir(q.getAttribute("data-app"));
   if(p) servico(p.getAttribute("data-servico"));
 });
@@ -257,7 +323,7 @@ function carregarMeus(){
     if(!r.ok){ C.sair(); return; }
     $("grade-meus").innerHTML = r.apps.length ? r.apps.map(function(a){
       var t = ROT[a.status] || [a.status, ""];
-      return '<div class="cartao"><span class="tag ' + t[1] + '">' + esc(t[0]) + (a.vencimento && a.liberado ? " até " + dataBR(a.vencimento) : "") + '</span><h3>' + esc(a.nome) + '</h3><p>' + esc(a.mensagem || a.descricao) + '</p><div class="acoes">' +
+      return '<div class="cartao"><span class="tag ' + t[1] + '">' + esc(t[0]) + (a.vencimento && a.liberado ? " até " + dataBR(a.vencimento) : "") + '</span><div class="cab-app"><span class="ic-app" style="background-image:url(\'' + iconeApp(a.app) + '\');cursor:default"></span><h3>' + esc(nomeApp(a)) + '</h3></div><p>' + esc(a.mensagem || a.descricao) + '</p><div class="acoes">' +
         (a.liberado ? '<button class="btn btn-ouro abrir-app" data-url="' + esc(a.url) + '" data-app="' + esc(a.app) + '" type="button">Abrir app</button>' : '<button class="btn btn-escuro quero" data-app="' + esc(a.app) + '" type="button">Pedir liberação</button>') +
         (a.venda ? '<a class="btn btn-linha" href="' + esc(a.venda) + '" target="_blank" rel="noopener">Planos</a>' : '') + '</div></div>';
     }).join("") : '<p>Você ainda não tem apps. Escolha um no catálogo abaixo.</p>';
