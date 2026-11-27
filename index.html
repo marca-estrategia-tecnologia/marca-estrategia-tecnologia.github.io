@@ -280,6 +280,8 @@ var DESC_FIXA = {"social-imob-360": true, "gravaitube": true};
 function desenharCatalogo(lista){
   var base = {}; CATALOGO.forEach(function(x){ base[x.app] = x; });
   lista = lista.map(function(a){ return (DESC_FIXA[a.app] && base[a.app]) ? Object.assign({}, a, {descricao: base[a.app].descricao}) : a; });
+  /* Endereço e nome do MGP valem mesmo quando a planilha ainda tem os antigos. */
+  lista = lista.map(function(a){ return (a.app === "gmp" && base.gmp) ? Object.assign({}, a, {nome: base.gmp.nome, url: base.gmp.url, descricao: base.gmp.descricao, construcao: true}) : a; });
   SEMPRE.forEach(function(x){ if(!lista.some(function(a){ return a.app === x.app; })) lista = lista.concat([x]); });
   CATALOGO = lista; $("grade-apps").innerHTML = lista.map(cartaoCatalogo).join("");
   $("l-app").innerHTML = lista.map(function(a){ return '<option value="' + esc(a.app) + '">' + esc(nomeApp(a)) + '</option>'; }).join("");
